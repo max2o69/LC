@@ -95,6 +95,9 @@ class ChessBoardUI {
           if ((this.lastMove.from.r === r && this.lastMove.from.c === c) ||
               (this.lastMove.to.r === r && this.lastMove.to.c === c)) {
             sq.classList.add('last-move');
+            if (this.lastMove.isBot) {
+              sq.classList.add('bot-move');
+            }
           }
         }
 
@@ -199,15 +202,20 @@ class ChessBoardUI {
 
   executeMove(from, to, moveData, isBotMove = false) {
     const piece = this.boardState[from.r][from.c];
+    if (!piece) return;
     const target = this.boardState[to.r][to.c];
 
-    // Play appropriate sound
-    if (target === '*') {
-      sounds.playStar();
-    } else if (target && target !== '*') {
-      sounds.playCapture();
-    } else {
-      sounds.playMove();
+    // Play appropriate sound safely
+    try {
+      if (target === '*') {
+        sounds.playStar();
+      } else if (target && target !== '*') {
+        sounds.playCapture();
+      } else {
+        sounds.playMove();
+      }
+    } catch (e) {
+      console.warn('Audio play error ignored:', e);
     }
 
     // Update board state
@@ -267,13 +275,14 @@ class ChessBoardUI {
     // Handle Pawn Promotion (Pawn reaches 8th rank)
     if (piece === 'P' && to.r === 0) {
       this.boardState[to.r][to.c] = 'Q'; // Auto-promote to Queen for fun & simplicity
-      sounds.playWin();
+      try { sounds.playWin(); } catch (e) {}
     }
     if (piece === 'p' && to.r === 7) {
       this.boardState[to.r][to.c] = 'q';
+      try { sounds.playCapture(); } catch (e) {}
     }
 
-    this.lastMove = { from, to };
+    this.lastMove = { from, to, isBot: isBotMove };
     this.selectedSquare = null;
     this.validMoves = [];
     this.render();

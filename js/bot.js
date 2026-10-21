@@ -22,7 +22,7 @@ const CENTER_BONUS = [
   [0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
-class CoachBot {
+class CoachBotEngine {
   constructor() {
     this.name = 'Coach Pawny';
     this.difficulty = 'gentle'; // 'gentle' | 'playful' | 'clever'
@@ -76,14 +76,34 @@ class CoachBot {
     const legalMoves = this.getAllLegalMoves(board, 'b', options);
     if (legalMoves.length === 0) return null;
 
-    // Gentle mode: 40% random, 60% capture / advance
-    if (this.difficulty === 'gentle') {
-      // Prioritize captures of high value or advancing pawns
-      const captures = legalMoves.filter(m => m.capture);
-      if (captures.length > 0 && Math.random() < 0.7) {
+    // 1. Immediate winning promotion
+    const winningMove = legalMoves.find(m => m.piece === 'p' && m.to.r === 7);
+    if (winningMove) return winningMove;
+
+    // 2. Immediate capture (eat attacking piece)
+    const captures = legalMoves.filter(m => m.capture);
+    if (captures.length > 0) {
+      // 80% of the time, capture immediately to teach player to protect pieces
+      if (Math.random() < 0.85) {
         return captures[Math.floor(Math.random() * captures.length)];
       }
-      // Otherwise pick a random legal move
+    }
+
+    // 3. Pawn Race / Mini-game logic: advance pawns towards promotion
+    const pawnAdvances = legalMoves.filter(m => m.piece === 'p' && m.to.r > m.from.r);
+    if (pawnAdvances.length > 0 && legalMoves.every(m => m.piece.toLowerCase() === 'p')) {
+      // In Pawn Wars, sort by most advanced pawn
+      pawnAdvances.sort((a, b) => b.to.r - a.to.r);
+      const furthest = pawnAdvances[0].to.r;
+      const topAdvances = pawnAdvances.filter(m => m.to.r === furthest);
+      return topAdvances[Math.floor(Math.random() * topAdvances.length)];
+    }
+
+    // Gentle mode for full game: 40% random, 60% capture / advance
+    if (this.difficulty === 'gentle') {
+      if (captures.length > 0) {
+        return captures[Math.floor(Math.random() * captures.length)];
+      }
       return legalMoves[Math.floor(Math.random() * legalMoves.length)];
     }
 
@@ -103,7 +123,6 @@ class CoachBot {
       }
 
       let evalScore = this.evaluate(clone);
-      // Small random noise so bot doesn't play identical games
       evalScore += (Math.random() * 20 - 10);
 
       if (evalScore > bestScore) {
@@ -154,4 +173,10 @@ class CoachBot {
   }
 }
 
-window.CoachBot = new CoachBot();
+// Single shared bot instance
+const _coachBotInstance = new CoachBotEngine();
+
+// Export as CoachBot so both CoachBot.method() and window.CoachBot.method() work everywhere
+var CoachBot = _coachBotInstance;
+window.CoachBot = _coachBotInstance;
+window.CoachBotEngine = CoachBotEngine;
