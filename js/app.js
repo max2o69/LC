@@ -201,24 +201,30 @@ class ChessGameApp {
     document.getElementById('turn-indicator').textContent = '🐾 Bot thinking...';
 
     setTimeout(() => {
-      const level = LEVELS[this.currentLevelIndex];
-      const botMove = CoachBot.chooseMove(this.boardUI.boardState, level ? level.options : {});
-      if (botMove) {
-        this.boardUI.executeMove(botMove.from, botMove.to, botMove, true);
-      }
-      this.boardUI.interactive = true;
-      document.getElementById('turn-indicator').textContent = '🌟 Your Turn!';
-
-      // Check if bot win triggered
-      if (level && level.isMiniGame && level.validateGameEnd) {
-        const outcome = level.validateGameEnd(this.boardUI.boardState);
-        if (outcome === 'loss') {
-          sounds.playError();
-          this.showHint("The black pawn promoted first! Tap 🔄 Restart to try again!");
-          this.boardUI.interactive = false;
+      try {
+        const level = LEVELS[this.currentLevelIndex];
+        const botMove = CoachBot.chooseMove(this.boardUI.boardState, (level && level.options) || {});
+        if (botMove) {
+          this.boardUI.executeMove(botMove.from, botMove.to, botMove, true);
         }
+
+        // Check if bot win triggered
+        if (level && level.isMiniGame && level.validateGameEnd) {
+          const outcome = level.validateGameEnd(this.boardUI.boardState);
+          if (outcome === 'loss') {
+            sounds.playError();
+            this.showHint("The black pawn promoted first! Tap 🔄 Restart to try again!");
+            this.boardUI.interactive = false;
+            return;
+          }
+        }
+      } catch (err) {
+        console.error('Error during bot turn:', err);
+      } finally {
+        this.boardUI.interactive = true;
+        document.getElementById('turn-indicator').textContent = '🌟 Your Turn!';
       }
-    }, 500);
+    }, 450);
   }
 
   handleVictory() {
@@ -307,25 +313,29 @@ class ChessGameApp {
     document.getElementById('turn-indicator').textContent = '🐾 Coach Pawny is thinking...';
 
     setTimeout(() => {
-      const move = CoachBot.chooseMove(this.boardUI.boardState);
-      if (move) {
-        this.boardUI.executeMove(move.from, move.to, move, true);
-      }
-
-      // Check if bot checkmated white
-      const whiteLegalMoves = CoachBot.getAllLegalMoves(this.boardUI.boardState, 'w');
-      if (whiteLegalMoves.length === 0) {
-        if (ChessRules.isCheck(this.boardUI.boardState, 'w')) {
-          sounds.playError();
-          alert("Checkmate! Coach Pawny won this time. Tap restart to play again!");
-        } else {
-          alert("🤝 Stalemate! It's a draw!");
+      try {
+        const move = CoachBot.chooseMove(this.boardUI.boardState);
+        if (move) {
+          this.boardUI.executeMove(move.from, move.to, move, true);
         }
-      }
 
-      this.boardUI.interactive = true;
-      document.getElementById('turn-indicator').textContent = '🌟 Your Turn!';
-    }, 600);
+        // Check if bot checkmated white
+        const whiteLegalMoves = CoachBot.getAllLegalMoves(this.boardUI.boardState, 'w');
+        if (whiteLegalMoves.length === 0) {
+          if (ChessRules.isCheck(this.boardUI.boardState, 'w')) {
+            sounds.playError();
+            alert("Checkmate! Coach Pawny won this time. Tap restart to play again!");
+          } else {
+            alert("🤝 Stalemate! It's a draw!");
+          }
+        }
+      } catch (err) {
+        console.error('Error during freeplay bot turn:', err);
+      } finally {
+        this.boardUI.interactive = true;
+        document.getElementById('turn-indicator').textContent = '🌟 Your Turn!';
+      }
+    }, 500);
   }
 
   // Level Drawer
