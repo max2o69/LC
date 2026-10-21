@@ -88,7 +88,16 @@ const SOLUTIONS = {
   21: ['e1-g1'],
   22: ['e5-f6'],
   23: ['c2-c4'],
-  24: ['b4-b8']
+  24: ['b4-b8'],
+  25: ['d5-c7'],
+  26: ['a1-e1'],
+  27: ['a1-a4'],
+  28: ['d4-c6'],
+  29: ['d1-d8'],
+  30: ['e2-e4'],
+  31: ['g1-f3'],
+  32: ['g2-g3'],
+  33: ['a1-a8']
 };
 
 let allLevelsOk = true;
@@ -174,5 +183,5 @@ if (!allLevelsOk) {
   console.error('\n❌ SOME LEVELS FAILED VERIFICATION.');
   process.exit(1);
 } else {
-  console.log('\n🎉 ALL 24 LEVELS ARE 100% MATHEMATICALLY & CHESS-LEGAL VERIFIED!');
+  console.log(`\n🎉 ALL ${LEVELS.length} LEVELS ARE 100% MATHEMATICALLY & CHESS-LEGAL VERIFIED!`);
 }

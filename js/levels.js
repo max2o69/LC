@@ -6,7 +6,9 @@ const CHAPTERS = [
   { id: 2, title: 'Chapter 2: Captures & Values', icon: '⚔️', desc: 'Learn who is worth more points and how to win trades.' },
   { id: 3, title: 'Chapter 3: King in Danger (Check & Checkmate)', icon: '👑', desc: 'Learn C.P.R. to escape checks and how to deliver checkmate!' },
   { id: 4, title: 'Chapter 4: Secret Superpowers', icon: '✨', desc: 'Castling, Pawn Promotion, and the sneaky En Passant!' },
-  { id: 5, title: 'Chapter 5: Mini-Games & Practice', icon: '🏆', desc: 'Fun mini-battles and playing against Coach Bot!' }
+  { id: 5, title: 'Chapter 5: Mini-Games & Practice', icon: '🏆', desc: 'Fun mini-battles and playing against Coach Bot!' },
+  { id: 6, title: 'Chapter 6: Tactical Superpowers', icon: '⚡', desc: 'The Fork, The Pin, The Skewer, Discovered Attack & Back-Rank Mate!' },
+  { id: 7, title: 'Chapter 7: Master the Opening & Endgames', icon: '🎓', desc: 'Center Control, Development, Busting Scholar’s Mate, and Lawnmower Mate!' }
 ];
 
 const LEVELS = [
@@ -580,6 +582,247 @@ const LEVELS = [
       const isCheck = ChessRules.isCheck(board, 'b');
       const moves = ChessRules.getLegalMoves(board, 0, 3);
       return isCheck && moves.length === 0;
+    }
+  },
+
+  // ================= CHAPTER 6: TACTICAL SUPERPOWERS =================
+  {
+    id: 25,
+    chapterId: 6,
+    title: 'The Knight Fork: Royal Double Strike!',
+    piece: 'N',
+    badge: '⚡ The Fork',
+    parMoves: 1,
+    story: '<b>The Fork</b> is one of the most feared tricks in chess! Like a dinner fork sticking into two meatballs at once, one of your pieces attacks two enemy pieces simultaneously.<br><br>' +
+           'The Knight is the absolute king of forks because it jumps in an L-shape over other pieces!<br><br>' +
+           'Jump your Knight from <b>d5</b> to <b>c7</b>: you will attack the Black King on e8 (CHECK!) and the Black Queen on a8 at the exact same moment! Black must save the King, leaving the Queen helpless!',
+    goal: 'Jump your Knight from d5 to c7 to deliver the Royal Fork on the King and Queen!',
+    hint: 'Tap your Knight on d5, then click the highlighted square on c7!',
+    board: [
+      ['q',  null, null, null, 'k',  null, null, 'r' ],
+      ['p',  'p',  null, 'p',  'p',  'p',  'p',  'p' ],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, 'N',  null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, 'K',  null, null, null]
+    ],
+    validateMove: (from, to, board) => {
+      const isCheck = ChessRules.isCheck(board, 'b');
+      return to.r === 1 && to.c === 2 && isCheck;
+    }
+  },
+  {
+    id: 26,
+    chapterId: 6,
+    title: 'The Pin: Frozen Like an Ice Cube!',
+    piece: 'R',
+    badge: '🧊 The Pin',
+    parMoves: 1,
+    story: '<b>The Pin</b> freezes enemy pieces right in their tracks! 🧊<br><br>' +
+           'When your piece aims through an enemy piece toward their King, that enemy piece is <b>pinned</b>. It is illegal for it to step aside because that would expose its King to danger!<br><br>' +
+           'Slide your White Rook across to <b>e1</b>. Now the Black Queen on e5 is pinned directly in front of the Black King on e8—she is completely frozen!',
+    goal: 'Slide your Rook from a1 to e1 to pin the Black Queen against her King!',
+    hint: 'Click your Rook on a1 and slide across to e1 on the same file as the Black King!',
+    board: [
+      [null, null, null, null, 'k',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, 'q',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ['R',  null, null, null, null, null, 'K',  null]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 7 && to.c === 4;
+    }
+  },
+  {
+    id: 27,
+    chapterId: 6,
+    title: 'The Skewer: The X-Ray Attack!',
+    piece: 'R',
+    badge: '🍢 The Skewer',
+    parMoves: 1,
+    story: '<b>The Skewer</b> is like a shish kebab! 🍢 Unlike a pin where the valuable piece hides in the back, in a skewer the <b>big boss (the King) is in front</b>!<br><br>' +
+           'Slide your White Rook up from <b>a1 to a4</b>! You will say CHECK to the Black King on e4. When the King runs away, the Black Queen on h4 is completely exposed for the taking!',
+    goal: 'Move your Rook from a1 to a4 to skewer the King and Queen on the 4th rank!',
+    hint: 'Zoom your Rook straight up to a4. The King will be checked and forced to abandon the Queen!',
+    board: [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, 'k',  null, null, 'q' ],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ['R',  null, null, null, null, null, 'K',  null]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 4 && to.c === 0 && ChessRules.isCheck(board, 'b');
+    }
+  },
+  {
+    id: 28,
+    chapterId: 6,
+    title: 'Discovered Attack: The Ninja Ambush!',
+    piece: 'N',
+    badge: '🥷 Ambush',
+    parMoves: 1,
+    story: 'A <b>Discovered Attack</b> is chess’s greatest ninja surprise! 🥷<br><br>' +
+           'Your White Rook on d1 wants to blast the Black Queen on d8, but your own Knight on d4 is standing in the way!<br><br>' +
+           'Jump your Knight to <b>c6</b> to deliver CHECK to the King on b8! Because the King is in danger, Black has no time to save the Queen from your Rook’s newly opened laser beam!',
+    goal: 'Jump your Knight from d4 to c6 with check to uncover your Rook’s attack on the Queen!',
+    hint: 'Click the Knight on d4 and jump to c6! Watch the Rook’s line of fire open up!',
+    board: [
+      [null, 'k',  null, 'q',  null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, 'N',  null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, 'R',  null, null, 'K',  null]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 2 && to.c === 2 && ChessRules.isCheck(board, 'b');
+    }
+  },
+  {
+    id: 29,
+    chapterId: 6,
+    title: 'Back-Rank Mate: The Castle Trap!',
+    piece: 'R',
+    badge: '🏰 Trap Mate',
+    parMoves: 1,
+    story: 'The <b>Back-Rank Checkmate</b> is one of the most common ways beginner games end!<br><br>' +
+           'The Black King castled safely behind three pawns on f7, g7, and h7, but forgot to open a window (called <i>"Luft"</i>)! The King is trapped against the back wall!<br><br>' +
+           'Zoom your White Rook straight into <b>d8</b> on the back rank for an instant CHECKMATE!',
+    goal: 'Move your Rook from d1 all the way up to d8 to deliver the Back-Rank Checkmate!',
+    hint: 'Zoom your Rook to d8! The Black King cannot step forward because of its own pawns!',
+    board: [
+      [null, null, null, null, null, null, 'k',  null],
+      [null, null, null, null, null, 'p',  'p',  'p' ],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, 'K',  'R',  null, 'P',  'P',  'P' ]
+    ],
+    validateMove: (from, to, board) => {
+      const isCheck = ChessRules.isCheck(board, 'b');
+      const moves = ChessRules.getLegalMoves(board, 0, 6);
+      return to.r === 0 && to.c === 3 && isCheck && moves.length === 0;
+    }
+  },
+
+  // ================= CHAPTER 7: MASTER THE OPENING & ENDGAMES =================
+  {
+    id: 30,
+    chapterId: 7,
+    title: 'Rule of the Center: The Golden Hilltop!',
+    piece: 'P',
+    badge: '⛰️ Center Hill',
+    parMoves: 1,
+    story: 'Why do grandmasters always open with the <b>e</b> or <b>d</b> pawns? Because the center four squares (<b>e4, d4, e5, d5</b>) are the hilltop of the chessboard!<br><br>' +
+           'From the center, your pieces can see and reach every corner of the board.<br><br>' +
+           'Start the game like a master: step your King’s Pawn two squares forward from <b>e2 to e4</b>!',
+    goal: 'March your e2 pawn 2 steps forward to e4 to claim the center hilltop!',
+    hint: 'Click the pawn in front of King on e2, then click the glowing dot on e4!',
+    board: [
+      ['r',  'n',  'b',  'q',  'k',  'b',  'n',  'r' ],
+      ['p',  'p',  'p',  'p',  'p',  'p',  'p',  'p' ],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ['P',  'P',  'P',  'P',  'P',  'P',  'P',  'P' ],
+      ['R',  'N',  'B',  'Q',  'K',  'B',  'N',  'R' ]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 4 && to.c === 4;
+    }
+  },
+  {
+    id: 31,
+    chapterId: 7,
+    title: 'Develop Your Army: Knights Before Bishops!',
+    piece: 'N',
+    badge: '🐎 Development',
+    parMoves: 1,
+    story: '<b>Golden Rule of Openings:</b> Bring out your Knights before your Bishops!<br><br>' +
+           'Why? Knights only have one best square to control the center (f3 or c3), while Bishops need to wait to see which diagonal opens up.<br><br>' +
+           'Both sides have pushed their pawns to e4 and e5. Bring your Knight out from <b>g1 to f3</b> to attack Black’s e5 pawn and prepare for King castling!',
+    goal: 'Develop your Knight from g1 to f3 to attack the center!',
+    hint: 'Click the Knight on g1 and jump to f3!',
+    board: [
+      ['r',  'n',  'b',  'q',  'k',  'b',  'n',  'r' ],
+      ['p',  'p',  'p',  'p',  null, 'p',  'p',  'p' ],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, 'p',  null, null, null],
+      [null, null, null, null, 'P',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ['P',  'P',  'P',  'P',  null, 'P',  'P',  'P' ],
+      ['R',  'N',  'B',  'Q',  'K',  'B',  'N',  'R' ]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 5 && to.c === 5;
+    }
+  },
+  {
+    id: 32,
+    chapterId: 7,
+    title: 'Bust the Scholar’s Mate! (Defend the Trick)',
+    piece: 'P',
+    badge: '🛡️ Defense',
+    parMoves: 1,
+    story: '<b>The Scholar’s Mate Trap:</b> The most famous beginner trick in the world! Black brought their Queen to h4 and Bishop to c5, both aiming right at your weak <b>f2 pawn</b> for an instant checkmate!<br><br>' +
+           '<b>Don’t panic!</b> You don’t need to give up. Push your pawn from <b>g2 to g3</b>! This puts up a sturdy shield in front of f2 AND attacks Black’s Queen, forcing her to run away in embarrassment!',
+    goal: 'Push your g2 pawn to g3 to shut down the Scholar’s Mate attack!',
+    hint: 'Click the pawn on g2 and step forward to g3 to block the Queen’s laser beam!',
+    board: [
+      ['r',  'n',  'b',  null, 'k',  null, 'n',  'r' ],
+      ['p',  'p',  'p',  'p',  null, 'p',  'p',  'p' ],
+      [null, null, null, null, null, null, null, null],
+      [null, null, 'b',  null, null, null, null, null],
+      [null, null, null, null, 'P',  null, null, 'q' ],
+      [null, null, null, 'P',  null, null, null, null],
+      ['P',  'P',  'P',  null, null, 'P',  'P',  'P' ],
+      ['R',  'N',  'B',  'Q',  'K',  'B',  'N',  'R' ]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 5 && to.c === 6;
+    }
+  },
+  {
+    id: 33,
+    chapterId: 7,
+    title: 'The Lawnmower Mate (Two Rooks Staircase)',
+    piece: 'R',
+    badge: '🚜 Lawnmower',
+    parMoves: 1,
+    story: 'The <b>Lawnmower Mate</b> (or Staircase Mate) is the smoothest endgame in chess! 🚜<br><br>' +
+           'Two Rooks work like a tag team: One Rook guards row 7 so the King can never step forward, while the other Rook rolls into the King’s rank to deliver the knockout blow!<br><br>' +
+           'Your Rook on b7 holds the guard rail on rank 7. Roll your second Rook from <b>a1 all the way to a8</b> to mow down the back rank for CHECKMATE!',
+    goal: 'Drive your a1 Rook straight up to a8 to deliver the Lawnmower Checkmate!',
+    hint: 'Zoom your a1 Rook to a8. The King is trapped between the board edge and your b7 Rook!',
+    board: [
+      [null, null, null, null, 'k',  null, null, null],
+      [null, 'R',  null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ['R',  null, null, null, null, null, null, 'K' ]
+    ],
+    validateMove: (from, to, board) => {
+      const isCheck = ChessRules.isCheck(board, 'b');
+      const moves = ChessRules.getLegalMoves(board, 0, 4);
+      return to.r === 0 && to.c === 0 && isCheck && moves.length === 0;
     }
   }
 ];
