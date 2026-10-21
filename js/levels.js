@@ -1,0 +1,576 @@
+// Chess Curriculum for Absolute Beginners (Ages 3 to 103!)
+// Progressive, story-based interactive lessons
+
+const CHAPTERS = [
+  { id: 1, title: 'Chapter 1: Meet the Heroes', icon: '⭐', desc: 'Learn how each piece moves by collecting shiny stars!' },
+  { id: 2, title: 'Chapter 2: Captures & Values', icon: '⚔️', desc: 'Learn who is worth more points and how to win trades.' },
+  { id: 3, title: 'Chapter 3: King in Danger (Check & Checkmate)', icon: '👑', desc: 'Learn C.P.R. to escape checks and how to deliver checkmate!' },
+  { id: 4, title: 'Chapter 4: Secret Superpowers', icon: '✨', desc: 'Castling, Pawn Promotion, and the sneaky En Passant!' },
+  { id: 5, title: 'Chapter 5: Mini-Games & Practice', icon: '🏆', desc: 'Fun mini-battles and playing against Coach Bot!' }
+];
+
+const LEVELS = [
+  // ================= CHAPTER 1: MEET THE HEROES =================
+  {
+    id: 1,
+    chapterId: 1,
+    title: 'The Rook Rocket!',
+    piece: 'R',
+    badge: '♖ Rook',
+    parMoves: 1,
+    story: 'Meet <b>Rocky the Rook</b>! He lives in the castle towers and zooms straight like a rocket across empty squares.',
+    goal: 'Zoom straight up to collect the shiny star! ⭐',
+    hint: 'Click Rocky, then tap the glowing green dot on the star!',
+    board: [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, '*',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, 'R',  null, null, null]
+    ]
+  },
+  {
+    id: 2,
+    chapterId: 1,
+    title: 'Rook: Turn the Corner!',
+    piece: 'R',
+    badge: '♖ Rook',
+    parMoves: 2,
+    story: 'Rooks can drive straight forward, backward, left, or right! After one straight move, you can turn sideways on your next turn.',
+    goal: 'Grab the first star, then turn right to grab the second star!',
+    hint: 'Move up to row 4 first, then drive right across row 4!',
+    board: [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, '*',  null, null, null, '*',  null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, 'R',  null, null, null, null, null]
+    ]
+  },
+  {
+    id: 3,
+    chapterId: 1,
+    title: 'The Bishop\'s Diagonal Magic!',
+    piece: 'B',
+    badge: '♗ Bishop',
+    parMoves: 2,
+    story: 'Meet <b>Barnaby the Bishop</b>! He is a magician who slides diagonally like an "X". Notice how he starts on a light square—he can NEVER step on a dark square!',
+    goal: 'Slide diagonally to collect both stars!',
+    hint: 'Bishops slide along diagonals. Follow the light-colored path!',
+    board: [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, '*',  null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, '*',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, 'B',  null, null, null, null, null, null]
+    ]
+  },
+  {
+    id: 4,
+    chapterId: 1,
+    title: 'The Dark-Square Magician!',
+    piece: 'B',
+    badge: '♗ Bishop',
+    parMoves: 2,
+    story: 'Every kingdom has TWO Bishops! One stays on light squares forever, and this one stays on dark squares forever!',
+    goal: 'Zig-zag along the dark diagonal tiles to collect both stars!',
+    hint: 'Slide up-left to the first star, then up-right to the second star!',
+    board: [
+      [null, null, null, null, null, '*',  null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, '*',  null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, 'B',  null, null]
+    ]
+  },
+  {
+    id: 5,
+    chapterId: 1,
+    title: 'The Queen: The Superhero!',
+    piece: 'Q',
+    badge: '♕ Queen',
+    parMoves: 3,
+    story: 'Meet <b>Queen Quick</b>! She has the powers of BOTH the Rook and the Bishop combined. She can zoom straight OR diagonally as far as she wants!',
+    goal: 'Use your superhero moves to collect all 3 stars in 3 moves!',
+    hint: 'You can go straight, then diagonal, or any direction you want!',
+    board: [
+      [null, null, null, null, null, null, null, null],
+      [null, '*',  null, null, null, null, '*',  null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, 'Q',  null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, '*',  null]
+    ]
+  },
+  {
+    id: 6,
+    chapterId: 1,
+    title: 'Grandpa King\'s Baby Steps!',
+    piece: 'K',
+    badge: '♔ King',
+    parMoves: 3,
+    story: 'Meet <b>Grandpa King</b>! He is the most important leader of the kingdom, but he is old and walks with a cane: only 1 baby step in any direction.',
+    goal: 'Help Grandpa King walk step-by-step to collect all 3 stars!',
+    hint: 'King moves exactly 1 square at a time: up, down, left, right, or diagonal.',
+    board: [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, '*',  null, null, null],
+      [null, null, null, '*',  null, null, null, null],
+      [null, null, '*',  null, null, null, null, null],
+      [null, 'K',  null, null, null, null, null, null]
+    ]
+  },
+  {
+    id: 7,
+    chapterId: 1,
+    title: 'The Knight: Gallop, Gallop, Turn!',
+    piece: 'N',
+    badge: '♘ Knight',
+    parMoves: 2,
+    story: 'Meet <b>Knight Gallop</b>! The horse has a funny dance move: 2 squares forward, then 1 square turn to make an "L" shape! <i>Neighhh!</i>',
+    goal: 'Gallop in an L-shape to collect the carrots/stars!',
+    hint: 'Count: 1 step, 2 steps, then turn left or right!',
+    board: [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, '*',  null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, '*',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, 'N',  null, null, null, null, null]
+    ]
+  },
+  {
+    id: 8,
+    chapterId: 1,
+    title: 'The Knight Jumps Over Walls!',
+    piece: 'N',
+    badge: '♘ Knight',
+    parMoves: 1,
+    story: 'Here is the Knight\'s magical superpower: <b>HE CAN JUMP OVER ANY PIECE!</b> No piece can block a horse. Look at those stones blocking the way—just leap right over them!',
+    goal: 'Jump over the stone wall and grab the star!',
+    hint: 'The pawns in front cannot stop the horse! Leap right over to f5!',
+    board: [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, '*',  null, null],
+      [null, null, null, 'p',  'p',  'p',  null, null],
+      [null, null, null, null, 'N',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null]
+    ]
+  },
+  {
+    id: 9,
+    chapterId: 1,
+    title: 'The Brave Pawn Marches Forward!',
+    piece: 'P',
+    badge: '♙ Pawn',
+    parMoves: 2,
+    story: 'Meet <b>Peter the Pawn</b>! Pawns are the brave little foot-soldiers. They walk 1 step forward. But on their VERY FIRST move from home, they have enough energy for a giant 2-step leap!',
+    goal: 'Use your 2-step starting leap, then take 1 more step forward to reach the star!',
+    hint: 'Pawns only march straight ahead. First move: jump 2 squares forward!',
+    board: [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, '*',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, 'P',  null, null, null],
+      [null, null, null, null, null, null, null, null]
+    ]
+  },
+  {
+    id: 10,
+    chapterId: 1,
+    title: 'Pawn Attack: Diagonal High-Five!',
+    piece: 'P',
+    badge: '♙ Pawn',
+    parMoves: 2,
+    story: 'Pawns are tricky! They <b>walk straight forward</b>, but they <b>CAPTURE diagonally</b> like giving a sideways high-five! They cannot capture straight ahead.',
+    goal: 'Capture the black pieces by striking diagonally!',
+    hint: 'Pawns capture 1 square diagonally forward. Tap the diagonal targets!',
+    board: [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, 'p',  null, null],
+      [null, null, null, null, 'p',  null, null, null],
+      [null, null, null, 'P',  null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null]
+    ]
+  },
+  {
+    id: 11,
+    chapterId: 1,
+    title: 'Pawn Superpower: Promotion!',
+    piece: 'P',
+    badge: '♙ Pawn',
+    parMoves: 1,
+    story: 'If a brave little Pawn marches all the way across the board to the other end (rank 8), magic happens! 🌟 <b>PROMOTION!</b> He can transform into a mighty Queen!',
+    goal: 'Step forward onto the 8th row to transform into a Queen!',
+    hint: 'Just take 1 step forward into the crown square!',
+    board: [
+      [null, null, null, null, '*',  null, null, null],
+      [null, null, null, null, 'P',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null]
+    ]
+  },
+
+  // ================= CHAPTER 2: CAPTURES & VALUES =================
+  {
+    id: 12,
+    chapterId: 2,
+    title: 'Combat 101: Free Snack!',
+    piece: 'R',
+    badge: '⚔️ Capturing',
+    parMoves: 1,
+    story: 'When an enemy piece is standing in your path and nobody is guarding it, you can capture it! You take its place on the square.',
+    goal: 'Use your Rook to capture the undefended black Knight!',
+    hint: 'Drive your Rook straight up into the square where the black horse is sitting!',
+    board: [
+      [null, null, null, null, null, null, null, null],
+      [null, null, 'n',  null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, 'R',  null, null, null, null, null]
+    ]
+  },
+  {
+    id: 13,
+    chapterId: 2,
+    title: 'Piece Points: The Smart Trade!',
+    piece: 'B',
+    badge: '💰 Point Values',
+    parMoves: 1,
+    story: 'In chess, every piece has point values!<br><b>Pawn = 1 point</b> ♙<br><b>Knight/Bishop = 3 points</b> ♘♗<br><b>Rook = 5 points</b> ♖<br><b>Queen = 9 points</b> ♕<br>Don\'t capture a 1-point pawn if you can get a 5-point Rook!',
+    goal: 'Your Bishop can capture the 1-point pawn OR the 5-point Rook. Capture the high-value Rook!',
+    hint: 'The black Rook is worth 5 points! Slide your Bishop up-right to take it!',
+    board: [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, 'r',  null],
+      [null, null, null, null, null, null, null, null],
+      [null, 'p',  null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, 'B',  null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null]
+    ],
+    targetPiece: 'r'
+  },
+  {
+    id: 14,
+    chapterId: 2,
+    title: 'Guard Your Friends!',
+    piece: 'B',
+    badge: '🛡️ Defending',
+    parMoves: 1,
+    story: 'A good kingdom protects its friends! Look at your Knight on c3—the black Rook on c8 is staring at him with laser eyes! Bring your Bishop to defend the Knight so Black won\'t dare capture it!',
+    goal: 'Move your Bishop to b2 or d2 to protect your Knight friend!',
+    hint: 'Move your Bishop to d2 or b2 so it aims directly at the Knight to protect it!',
+    board: [
+      [null, null, 'r',  null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, 'N',  null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, 'B',  null, null, null, null, null, null]
+    ],
+    validateMove: (from, to) => (to.r === 6 && (to.c === 1 || to.c === 3)) || (to.r === 7 && to.c === 3)
+  },
+
+  // ================= CHAPTER 3: KING IN DANGER =================
+  {
+    id: 15,
+    chapterId: 3,
+    title: 'Say "CHECK!"',
+    piece: 'Q',
+    badge: '⚠️ Check!',
+    parMoves: 1,
+    story: 'When you aim directly at the enemy King, that is called <b>CHECK!</b> It means: <i>"Look out King, you are under attack!"</i>',
+    goal: 'Move your Queen to deliver CHECK to the black King!',
+    hint: 'Move your Queen onto the same diagonal or same straight line as the black King!',
+    board: [
+      [null, null, null, null, 'k',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, 'Q',  null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null]
+    ],
+    validateMove: (from, to, board) => {
+      // White delivers check to black king
+      return ChessRules.isCheck(board, 'b');
+    }
+  },
+  {
+    id: 16,
+    chapterId: 3,
+    title: 'C.P.R. Escape #1: RUN!',
+    piece: 'K',
+    badge: '🏃 Run Away',
+    parMoves: 1,
+    story: 'When you are in CHECK, remember <b>C.P.R.</b>:<br><b>C</b> = Capture the attacker<br><b>P</b> = Protect (block with a piece)<br><b>R</b> = Run away!<br>Here, the enemy Rook is attacking Grandpa King. Run away to a safe square!',
+    goal: 'Move Grandpa King to a safe square where the Rook cannot hit him!',
+    hint: 'Don\'t stay on the "e" file! Step sideways to d1 or f1.',
+    board: [
+      [null, null, null, null, 'r',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, 'K',  null, null, null]
+    ],
+    validateMove: (from, to, board) => {
+      return !ChessRules.isCheck(board, 'w');
+    }
+  },
+  {
+    id: 17,
+    chapterId: 3,
+    title: 'C.P.R. Escape #2: BLOCK!',
+    piece: 'R',
+    badge: '🛡️ Block & Shield',
+    parMoves: 1,
+    story: 'Grandpa King is in check from a far-away enemy Rook, but Grandpa cannot run away easily! Use <b>P = Protect</b>: slide your own Rook in the middle to block the laser beam!',
+    goal: 'Slide your Rook between the enemy Rook and your King to shield him!',
+    hint: 'Move your Rook to e4 to intercept the attack line!',
+    board: [
+      [null, null, null, null, 'r',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, 'R',  null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, 'K',  null, null, null]
+    ],
+    validateMove: (from, to, board) => {
+      return !ChessRules.isCheck(board, 'w');
+    }
+  },
+  {
+    id: 18,
+    chapterId: 3,
+    title: 'C.P.R. Escape #3: CAPTURE!',
+    piece: 'B',
+    badge: '😋 Chomp!',
+    parMoves: 1,
+    story: 'The most fun way to escape check is <b>C = CAPTURE!</b> A rude black Queen is checking your King. Can your Bishop eat her? Yes! Chomp!',
+    goal: 'Use your Bishop to capture the attacking black Queen!',
+    hint: 'Slide your Bishop diagonally right into the black Queen!',
+    board: [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, 'q',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, 'B',  null, null, null, null, null, null],
+      [null, null, null, null, 'K',  null, null, null]
+    ],
+    targetPiece: 'q'
+  },
+  {
+    id: 19,
+    chapterId: 3,
+    title: 'CHECKMATE! The Victory Trap!',
+    piece: 'Q',
+    badge: '🏆 Checkmate',
+    parMoves: 1,
+    story: 'When the enemy King is attacked (Check) AND cannot Run, Block, or Capture: that is <b>CHECKMATE!</b> The game ends instantly and you win! 🎉',
+    goal: 'Deliver checkmate with your Queen with backup from your King!',
+    hint: 'Move your Queen to b7 right in front of the King. The King is trapped in the corner and cannot eat the Queen because your White King protects her!',
+    board: [
+      ['k',  null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ['K',  null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, 'Q',  null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null]
+    ],
+    validateMove: (from, to, board) => {
+      // Must be checkmate
+      const isCheck = ChessRules.isCheck(board, 'b');
+      // Black king has no moves
+      const moves = ChessRules.getLegalMoves(board, 0, 0);
+      return isCheck && moves.length === 0;
+    }
+  },
+  {
+    id: 20,
+    chapterId: 3,
+    title: 'Beware of Stalemate! (The Oopsie Tie)',
+    piece: 'Q',
+    badge: '⚠️ Stalemate Warning',
+    parMoves: 1,
+    story: 'Watch out! If the enemy King is <b>NOT in check</b>, but has <b>ZERO legal moves</b>, that is a <b>Stalemate</b> (a tie game)! To win, you MUST attack the King on the final move. Don\'t trap him without check!',
+    goal: 'Deliver true CHECKMATE on c8! (If you went to c7 instead, that would be stalemate!)',
+    hint: 'Move your Queen to c8 to check the King on a8!',
+    board: [
+      ['k',  null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, 'K',  null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, 'Q',  null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null]
+    ],
+    validateMove: (from, to, board) => {
+      const isCheck = ChessRules.isCheck(board, 'b');
+      const moves = ChessRules.getLegalMoves(board, 0, 0);
+      return isCheck && moves.length === 0;
+    }
+  },
+
+  // ================= CHAPTER 4: SPECIAL SUPERPOWERS =================
+  {
+    id: 21,
+    chapterId: 4,
+    title: 'Castling: King\'s Castle Bedtime!',
+    piece: 'K',
+    badge: '🏰 Castling',
+    parMoves: 1,
+    story: 'Castling is the only time you move TWO pieces in one turn! Grandpa King takes 2 steps toward the corner tower, and Rocky the Rook leaps over him to tuck him safely into bed!',
+    goal: 'Castle Kingside! Click Grandpa King, then tap the highlighted square on g1.',
+    hint: 'Click King on e1, then tap g1. The Rook will automatically jump over to f1!',
+    options: { castling: { K: true, Q: false } },
+    board: [
+      [null, null, null, null, 'k',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ['P',  'P',  'P',  'P',  'P',  'P',  'P',  'P'],
+      ['R',  null, null, null, 'K',  null, null, 'R']
+    ],
+    validateMove: (from, to, board, moveData) => {
+      return moveData && moveData.castling === 'K';
+    }
+  },
+  {
+    id: 22,
+    chapterId: 4,
+    title: 'En Passant: The Ghost Capture!',
+    piece: 'P',
+    badge: '👻 En Passant',
+    parMoves: 1,
+    story: 'French for "In Passing"! When an enemy pawn tries to sprint 2 squares forward right past your pawn, you can strike diagonally behind it on the next turn, as if it only moved 1 square!',
+    goal: 'Capture the black pawn "en passant" by stepping diagonally to f6!',
+    hint: 'Click your pawn on e5, then step diagonally into f6 to capture the black pawn on f5!',
+    options: { enPassant: { r: 2, c: 5 } },
+    board: [
+      [null, null, null, null, 'k',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, '*',  null, null],
+      [null, null, null, null, 'P',  'p',  null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, 'K',  null, null, null]
+    ],
+    validateMove: (from, to, board, moveData) => {
+      return moveData && moveData.enPassant;
+    }
+  },
+
+  // ================= CHAPTER 5: MINI-GAMES =================
+  {
+    id: 23,
+    chapterId: 5,
+    title: 'Pawn Wars Mini-Game!',
+    piece: 'P',
+    badge: '⚔️ Pawn Battle',
+    parMoves: 10,
+    story: 'A mini battle! 4 White Pawns vs 4 Black Pawns. The first player to march a pawn all the way to the other end and crown a Queen wins!',
+    goal: 'Push your pawns forward, make smart captures, and be the first to promote!',
+    hint: 'Pass pawns that have no enemy pawns in front of them!',
+    isMiniGame: true,
+    board: [
+      [null, null, null, null, null, null, null, null],
+      [null, null, 'p',  'p',  'p',  'p',  null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, 'P',  'P',  'P',  'P',  null, null],
+      [null, null, null, null, null, null, null, null]
+    ],
+    validateGameEnd: (board) => {
+      // White wins if white pawn reaches row 0
+      for (let c = 0; c < 8; c++) {
+        if (board[0][c] === 'P' || board[0][c] === 'Q') return 'win';
+        if (board[7][c] === 'p' || board[7][c] === 'q') return 'loss';
+      }
+      return null;
+    }
+  },
+  {
+    id: 24,
+    chapterId: 5,
+    title: 'Corner the King (Queen + King Mate)',
+    piece: 'Q',
+    badge: '👑 Royal Finish',
+    parMoves: 2,
+    story: 'Teamwork makes the dream work! Queen and King work together to corner the enemy King against the edge of the board and deliver checkmate!',
+    goal: 'Deliver checkmate to the black King in 2 moves or less!',
+    hint: 'Trap the King on the back rank, then deliver the final blow!',
+    board: [
+      [null, null, null, 'k',  null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, 'K',  null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, 'Q',  null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null]
+    ],
+    validateMove: (from, to, board) => {
+      const isCheck = ChessRules.isCheck(board, 'b');
+      const moves = ChessRules.getLegalMoves(board, 0, 3);
+      return isCheck && moves.length === 0;
+    }
+  }
+];
+
+window.CHAPTERS = CHAPTERS;
+window.LEVELS = LEVELS;

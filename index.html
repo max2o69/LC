@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kingdom Chess: Learn Step-by-Step</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏰</text></svg>">
+</head>
+<body>
+
+  <!-- Game Header -->
+  <header class="game-header">
+    <div class="logo-area">
+      <span class="logo-icon">🏰</span>
+      <h1 class="logo-title">Kingdom Chess</h1>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-pill stars" id="total-stars" title="Stars collected">⭐ 0</div>
+      <div class="stat-pill" title="Moves made this level">
+        <span>🔄</span> <span id="move-count">0</span> moves
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn btn-secondary btn-icon" id="btn-sound" title="Toggle Sound">🔊</button>
+      <button class="btn btn-secondary" id="btn-levels">🗺️ Levels</button>
+      <button class="btn btn-secondary" id="btn-guide">📖 Heroes</button>
+      <button class="btn btn-accent" id="btn-freeplay">🎮 Free Play</button>
+    </div>
+  </header>
+
+  <!-- Primary Game Layout -->
+  <main class="game-layout">
+    
+    <!-- Sidebar: Story & Controls -->
+    <aside class="sidebar-panel">
+      <div class="lesson-card">
+        <div class="lesson-header">
+          <span class="lesson-badge" id="level-badge">♖ Level 1</span>
+          <span class="turn-badge" id="turn-indicator">🌟 Your Turn!</span>
+        </div>
+
+        <h2 class="lesson-title" id="level-title">The Rook Rocket!</h2>
+        <div class="lesson-story" id="level-story">
+          Meet <b>Rocky the Rook</b>! He lives in the castle towers and zooms straight like a rocket across empty squares.
+        </div>
+
+        <div class="lesson-goal" id="level-goal">
+          🎯 <b>Goal:</b> Zoom straight up to collect the shiny star! ⭐
+        </div>
+
+        <div class="hint-box hidden" id="hint-box">
+          <p id="hint-text">💡 Tap Rocky, then click the glowing green dot on the star!</p>
+        </div>
+
+        <div class="controls-grid">
+          <button class="btn btn-secondary" id="btn-hint">💡 Need a Hint?</button>
+          <button class="btn btn-secondary" id="btn-restart">🔄 Restart</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Chessboard Stage -->
+    <section class="board-stage">
+      <div id="board-container">
+        <!-- Rendered by ChessBoardUI -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Victory Celebration Modal -->
+  <div class="modal-overlay hidden" id="victory-modal">
+    <div class="modal-card">
+      <div class="victory-stars" id="victory-stars">⭐⭐⭐</div>
+      <h2 class="victory-title" id="victory-title">Awesome Job! 🎉</h2>
+      <p class="victory-msg" id="victory-msg">You collected the star and mastered this move!</p>
+      <div class="victory-actions">
+        <button class="btn btn-primary" id="btn-next-level">Next Lesson ➡️</button>
+        <button class="btn btn-secondary" id="btn-replay-level">Replay Level 🔄</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Level Select Drawer -->
+  <div class="modal-overlay hidden" id="level-drawer">
+    <div class="drawer-content">
+      <div class="drawer-header">
+        <h2 class="drawer-title">🗺️ Learning Journey</h2>
+        <button class="btn btn-secondary btn-icon" id="btn-close-drawer">✕</button>
+      </div>
+      <div class="drawer-body" id="drawer-level-list">
+        <!-- Injected by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Piece Guide Modal -->
+  <div class="modal-overlay hidden" id="piece-guide-modal">
+    <div class="drawer-content">
+      <div class="drawer-header">
+        <h2 class="drawer-title">📖 Kingdom Heroes Encyclopedia</h2>
+        <button class="btn btn-secondary btn-icon" id="btn-close-guide">✕</button>
+      </div>
+      <div class="drawer-body" id="guide-cards-container">
+        <!-- Injected by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Game Scripts -->
+  <script src="js/sound.js"></script>
+  <script src="js/pieces.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/bot.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

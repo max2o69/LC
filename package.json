@@ -1,0 +1,11 @@
+{
+  "name": "kingdom-chess-teaching-game",
+  "version": "1.0.0",
+  "description": "A beginner-friendly browser chess teaching game designed for absolute beginners.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["chess", "educational", "teaching", "beginner", "game"],
+  "author": "",
+  "license": "MIT"
+}

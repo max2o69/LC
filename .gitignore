@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Logs & temp
+*.log
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+
+# IDEs
+.vscode/
+.idea/
