@@ -2,7 +2,9 @@
 
 An interactive, gamified browser chess teacher designed for **absolute beginners** (from toddlers to adults) to learn chess from scratch!
 
-![Kingdom Chess](https://img.shields.io/badge/Chess-Beginner%20Curriculum-4f46e5)
+[![Play Online](https://img.shields.io/badge/Play_Online-Live_on_GitHub_Pages-10b981?style=for-the-badge&logo=github)](https://max2o69.github.io/LC/)
+
+👉 **Play directly in your browser:** [https://max2o69.github.io/LC/](https://max2o69.github.io/LC/)
 
 ---
 
