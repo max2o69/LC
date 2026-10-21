@@ -65,9 +65,10 @@ class ChessBoardUI {
 
   setBoard(matrix, options = {}) {
     this.boardState = matrix.map(row => [...row]);
-    this.options = { ...this.options, ...options };
+    this.options = { ...options };
     this.selectedSquare = null;
     this.validMoves = [];
+    this.lastMove = null;
     this.checkSquare = null;
     this.render();
   }

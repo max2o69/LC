@@ -130,6 +130,7 @@ class ChessGameApp {
     this.moveCountEl.textContent = this.moveCount;
     this.hintBox.classList.add('hidden');
     this.boardUI.interactive = true;
+    document.getElementById('turn-indicator').textContent = '🌟 Your Turn!';
 
     const level = LEVELS[index];
     this.levelTitleEl.textContent = `Level ${level.id}: ${level.title}`;

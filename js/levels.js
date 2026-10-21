@@ -469,9 +469,12 @@ const LEVELS = [
     piece: 'K',
     badge: '🏰 Castling',
     parMoves: 1,
-    story: 'Castling is the only time you move TWO pieces in one turn! Grandpa King takes 2 steps toward the corner tower, and Rocky the Rook leaps over him to tuck him safely into bed!',
-    goal: 'Castle Kingside! Click Grandpa King, then tap the highlighted square on g1.',
-    hint: 'Click King on e1, then tap g1. The Rook will automatically jump over to f1!',
+    story: '<b>Castling</b> is the ONLY time in all of chess you move <b>TWO pieces in one single turn</b>!<br><br>' +
+           '<b>1. How it works:</b> Grandpa King takes 2 steps toward the corner (e1 to g1), and Rocky the Rook leaps over him to land on f1!<br>' +
+           '<b>2. Why do it?</b> It tucks Grandpa King safely behind a shield of pawns and brings the powerful Rook into the battle!<br>' +
+           '<i>(Rules: Neither piece can have moved yet, no pieces in between, and King cannot castle out of, through, or into Check).</i>',
+    goal: 'Castle Kingside! Click Grandpa King on e1, then tap the highlighted square on g1.',
+    hint: 'Click King on e1, then tap g1. Notice how Rocky the Rook automatically jumps over him to f1!',
     options: { castling: { K: true, Q: false } },
     board: [
       [null, null, null, null, 'k',  null, null, null],
@@ -494,9 +497,12 @@ const LEVELS = [
     piece: 'P',
     badge: '👻 En Passant',
     parMoves: 1,
-    story: 'French for "In Passing"! When an enemy pawn tries to sprint 2 squares forward right past your pawn, you can strike diagonally behind it on the next turn, as if it only moved 1 square!',
-    goal: 'Capture the black pawn "en passant" by stepping diagonally to f6!',
-    hint: 'Click your pawn on e5, then step diagonally into f6 to capture the black pawn on f5!',
+    story: '<b>En Passant</b> (*ahn-pah-SAHN*) is French for <i>"in passing"</i>—the most surprising rule in chess!<br><br>' +
+           '<b>The Story:</b> When pawns were given the 2-step boost, players tried to sprint past defending pawns without getting eaten. The rule makers said: <i>"You cannot sprint past a guard!"</i><br><br>' +
+           '<b>How it works:</b> The black pawn on f5 just leaped 2 steps from f7 right past your pawn on e5. You can strike <b>diagonally into f6</b> (the square it leaped over) as if it had only moved 1 step! The black pawn on f5 vanishes!<br><br>' +
+           '<b>⚠️ Golden Rule:</b> You must do it on the <b>very next turn</b> ("use it or lose it")!',
+    goal: 'Perform En Passant! Click your White pawn on e5 and step diagonally into f6 to capture the black pawn!',
+    hint: 'Click your White pawn on e5, then tap the highlighted square on f6! The black pawn on f5 will disappear!',
     options: { enPassant: { r: 2, c: 5 } },
     board: [
       [null, null, null, null, 'k',  null, null, null],
@@ -520,10 +526,16 @@ const LEVELS = [
     title: 'Pawn Wars Mini-Game!',
     piece: 'P',
     badge: '⚔️ Pawn Battle',
-    parMoves: 10,
-    story: 'A mini battle! 4 White Pawns vs 4 Black Pawns. The first player to march a pawn all the way to the other end and crown a Queen wins!',
-    goal: 'Push your pawns forward, make smart captures, and be the first to promote!',
-    hint: 'Pass pawns that have no enemy pawns in front of them!',
+    parMoves: 8,
+    story: 'Welcome to your first real battle against Coach Pawny! This is the famous <b>Pawn Race</b> mini-game:<br><br>' +
+           '<b>The Setup:</b> 4 White Pawns vs 4 Black Pawns. No other pieces!<br>' +
+           '<b>The Winning Rule:</b> The first player to march <b>ANY ONE PAWN</b> all the way to the other end (Row 8) and transform into a Queen wins immediately!<br><br>' +
+           '<b>🧠 3 Winning Tips:</b><br>' +
+           '1. <b>Protect your friends:</b> Keep your pawns diagonal to each other so they guard each other.<br>' +
+           '2. <b>Block enemy pawns:</b> Stand directly in front of enemy pawns to freeze them in place.<br>' +
+           '3. <b>Create a "Passed Pawn":</b> Once a pawn has a clear highway with no enemy pawns in front of it, SPRINT to the finish line!',
+    goal: 'Be the first to march any pawn to Row 8 and crown a Queen! Take your time and make smart captures.',
+    hint: 'Advance your pawns together. If Black captures one of your pawns, recapture immediately with your supporting pawn!',
     isMiniGame: true,
     board: [
       [null, null, null, null, null, null, null, null],
