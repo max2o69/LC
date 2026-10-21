@@ -12,127 +12,30 @@ const PIECE_INFO = {
 
 // Clean, high-contrast SVG pieces
 const PIECE_SVGS = {
-  // White Pieces
-  P: `<svg viewBox="0 0 45 45" class="chess-piece">
-    <path d="m 22.5,9 c -2.21,0 -4,1.79 -4,4 0,0.89 0.29,1.71 0.78,2.38 C 17.33,16.5 16,18.59 16,21 c 0,2.03 0.94,3.84 2.41,5.03 C 15.41,27.09 11,31.58 11,39.5 l 23,0 c 0,-7.92 -4.41,-12.41 -7.41,-13.47 C 28.06,24.84 29,23.03 29,21 29,18.59 27.67,16.5 25.72,15.38 26.21,14.71 26.5,13.89 26.5,13 c 0,-2.21 -1.79,-4 -4,-4 z"
-      fill="#ffffff" stroke="#222222" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>`,
+  P: `<svg class="chess-piece" xmlns="http://www.w3.org/2000/svg" style="color-scheme:light only" width="45" height="45" viewBox="0 0 45 45"><path fill="#fff" stroke="#000" stroke-linecap="round" stroke-width="1.5" d="M22.5 9c-2.21 0-4 1.79-4 4 0 .89.29 1.71.78 2.38C17.33 16.5 16 18.59 16 21c0 2.03.94 3.84 2.41 5.03-3 1.06-7.41 5.55-7.41 13.47h23c0-7.92-4.41-12.41-7.41-13.47 1.47-1.19 2.41-3 2.41-5.03 0-2.41-1.33-4.5-3.28-5.62.49-.67.78-1.49.78-2.38 0-2.21-1.79-4-4-4z"/></svg>`,
 
-  R: `<svg viewBox="0 0 45 45" class="chess-piece">
-    <g fill="#ffffff" stroke="#222222" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M 9,39 L 36,39 L 36,36 L 9,36 z"/>
-      <path d="M 12,36 L 12,32 L 33,32 L 33,36 z"/>
-      <path d="M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14"/>
-      <path d="M 34,14 L 31,17 L 14,17 L 11,14"/>
-      <path d="M 14,17 L 14,29.5 L 31,29.5 L 31,17"/>
-      <path d="M 14,29.5 L 11,32 L 34,32 L 31,29.5"/>
-      <circle cx="17.5" cy="22" r="1.5" fill="#222222"/>
-      <circle cx="27.5" cy="22" r="1.5" fill="#222222"/>
-    </g>
-  </svg>`,
+  R: `<svg class="chess-piece" xmlns="http://www.w3.org/2000/svg" style="color-scheme:light only" width="45" height="45" viewBox="0 0 45 45"><g fill="#fff" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path stroke-linecap="butt" d="M9 39h27v-3H9zm3-3v-4h21v4zm-1-22V9h4v2h5V9h5v2h5V9h4v5"/><path d="m34 14-3 3H14l-3-3"/><path stroke-linecap="butt" stroke-linejoin="miter" d="M31 17v12.5H14V17"/><path d="m31 29.5 1.5 2.5h-20l1.5-2.5"/><path fill="none" stroke-linejoin="miter" d="M11 14h23"/></g></svg>`,
 
-  N: `<svg viewBox="0 0 45 45" class="chess-piece">
-    <g fill="#ffffff" stroke="#222222" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" />
-      <path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.95,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.99,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,7.4 17.5,7 18,10 C 20,9 22.5,9.5 24,11.5" />
-      <circle cx="15.5" cy="17.5" r="1.5" fill="#222222"/>
-    </g>
-  </svg>`,
+  N: `<svg class="chess-piece" xmlns="http://www.w3.org/2000/svg" style="color-scheme:light only" width="45" height="45" viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path fill="#fff" d="M22 10c10.5 1 16.5 8 16 29H15c0-9 10-6.5 8-21"/><path fill="#fff" d="M24 18c.38 2.91-5.55 7.37-8 9-3 2-2.82 4.34-5 4-1.042-.94 1.41-3.04 0-3-1 0 .19 1.23-1 2-1 0-4.003 1-4-4 0-2 6-12 6-12s1.89-1.9 2-3.5c-.73-.994-.5-2-.5-3 1-1 3 2.5 3 2.5h2s.78-1.992 2.5-3c1 0 1 3 1 3"/><path fill="#000" d="M9.5 25.5a.5.5 0 1 1-1 0 .5.5 0 1 1 1 0m5.433-9.75a.5 1.5 30 1 1-.866-.5.5 1.5 30 1 1 .866.5"/></g></svg>`,
 
-  B: `<svg viewBox="0 0 45 45" class="chess-piece">
-    <g fill="#ffffff" stroke="#222222" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M 9,36 C 12.33,35 17.67,34.5 22.5,34.5 C 27.33,34.5 32.67,35 36,36 L 36,39 L 9,39 L 9,36 z"/>
-      <path d="M 15,32 C 17.5,34.5 27.5,34.5 30,32 C 30.5,30.5 30,22 28,17 C 26,12 25,9 22.5,9 C 20,9 19,12 17,17 C 15,22 14.5,30.5 15,32 z"/>
-      <path d="M 22.5,6 L 22.5,9"/>
-      <path d="M 21,7.5 L 24,7.5"/>
-      <path d="M 17.5,26 L 27.5,26" stroke-width="1.2"/>
-      <circle cx="22.5" cy="20" r="1.5" fill="#222222"/>
-    </g>
-  </svg>`,
+  B: `<svg class="chess-piece" xmlns="http://www.w3.org/2000/svg" style="color-scheme:light only" width="45" height="45" viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><g fill="#fff" stroke-linecap="butt"><path d="M9 36c3.39-.97 10.11.43 13.5-2 3.39 2.43 10.11 1.03 13.5 2 0 0 1.65.54 3 2-.68.97-1.65.99-3 .5-3.39-.97-10.11.46-13.5-1-3.39 1.46-10.11.03-13.5 1-1.35.49-2.32.47-3-.5 1.35-1.94 3-2 3-2z"/><path d="M15 32c2.5 2.5 12.5 2.5 15 0 .5-1.5 0-2 0-2 0-2.5-2.5-4-2.5-4 5.5-1.5 6-11.5-5-15.5-11 4-10.5 14-5 15.5 0 0-2.5 1.5-2.5 4 0 0-.5.5 0 2z"/><path d="M25 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 1 1 5 0z"/></g><path stroke-linejoin="miter" d="M17.5 26h10M15 30h15m-7.5-14.5v5M20 18h5"/></g></svg>`,
 
-  Q: `<svg viewBox="0 0 45 45" class="chess-piece">
-    <g fill="#ffffff" stroke="#222222" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M 9,26 C 17.5,24.5 30,24.5 36,26 L 38.5,13.5 L 31,25 L 30.7,10.5 L 25.5,24.5 L 22.5,10 L 19.5,24.5 L 14.3,10.5 L 14,25 L 6.5,13.5 z"/>
-      <path d="M 9,26 C 9,28 10.5,28 11.5,30 C 12.5,31.5 12.5,31 12,33.5 C 10.5,34.5 10.5,36 10,39 L 35,39 C 34.5,36 34.5,34.5 33,33.5 C 32.5,31 32.5,31.5 33.5,30 C 34.5,28 36,28 36,26 z"/>
-      <circle cx="6" cy="12" r="2" fill="#ffffff" stroke="#222222"/>
-      <circle cx="14" cy="9" r="2" fill="#ffffff" stroke="#222222"/>
-      <circle cx="22.5" cy="8" r="2" fill="#ffffff" stroke="#222222"/>
-      <circle cx="31" cy="9" r="2" fill="#ffffff" stroke="#222222"/>
-      <circle cx="39" cy="12" r="2" fill="#ffffff" stroke="#222222"/>
-    </g>
-  </svg>`,
+  Q: `<svg class="chess-piece" xmlns="http://www.w3.org/2000/svg" style="color-scheme:light only" width="45" height="45" viewBox="0 0 45 45"><g fill="#fff" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M8 12a2 2 0 1 1-4 0 2 2 0 1 1 4 0m16.5-4.5a2 2 0 1 1-4 0 2 2 0 1 1 4 0M41 12a2 2 0 1 1-4 0 2 2 0 1 1 4 0M16 8.5a2 2 0 1 1-4 0 2 2 0 1 1 4 0M33 9a2 2 0 1 1-4 0 2 2 0 1 1 4 0"/><path stroke-linecap="butt" d="M9 26c8.5-1.5 21-1.5 27 0l2-12-7 11V11l-5.5 13.5-3-15-3 15-5.5-14V25L7 14z"/><path stroke-linecap="butt" d="M9 26c0 2 1.5 2 2.5 4 1 1.5 1 1 .5 3.5-1.5 1-1.5 2.5-1.5 2.5-1.5 1.5.5 2.5.5 2.5 6.5 1 16.5 1 23 0 0 0 1.5-1 0-2.5 0 0 .5-1.5-1-2.5-.5-2.5-.5-2 .5-3.5 1-2 2.5-2 2.5-4-8.5-1.5-18.5-1.5-27 0z"/><path fill="none" d="M11.5 30c3.5-1 18.5-1 22 0M12 33.5c6-1 15-1 21 0"/></g></svg>`,
 
-  K: `<svg viewBox="0 0 45 45" class="chess-piece">
-    <g fill="#ffffff" stroke="#222222" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M 22.5,11.63 L 22.5,6"/>
-      <path d="M 20,8 L 25,8"/>
-      <path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 24,11.5 21,11.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25"/>
-      <path d="M 11.5,37 C 17,40.5 28,40.5 33.5,37 C 36.5,35 37.5,30 35.5,25.5 C 33.5,21 31,19 28.5,19 C 26,19 24.5,21 22.5,23 C 20.5,21 19,19 16.5,19 C 14,19 11.5,21 9.5,25.5 C 7.5,30 8.5,35 11.5,37 z"/>
-      <path d="M 11.5,30 C 17,27 28,27 33.5,30"/>
-      <path d="M 11.5,33.5 C 17,30.5 28,30.5 33.5,33.5"/>
-      <path d="M 11.5,37 C 17,34 28,34 33.5,37"/>
-    </g>
-  </svg>`,
+  K: `<svg class="chess-piece" xmlns="http://www.w3.org/2000/svg" style="color-scheme:light only" viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path stroke-linejoin="miter" d="M22.5 11.63V6M20 8h5"/><path fill="#fff" stroke-linecap="butt" stroke-linejoin="miter" d="M22.5 25s4.5-7.5 3-10.5c0 0-1-2.5-3-2.5s-3 2.5-3 2.5c-1.5 3 3 10.5 3 10.5"/><path fill="#fff" d="M11.5 37c5.5 3.5 15.5 3.5 21 0v-7s9-4.5 6-10.5c-4-6.5-13.5-3.5-16 4V27v-3.5c-3.5-7.5-13-10.5-16-4-3 6 5 10 5 10z"/><path d="M11.5 30c5.5-3 15.5-3 21 0m-21 3.5c5.5-3 15.5-3 21 0m-21 3.5c5.5-3 15.5-3 21 0"/></g></svg>`,
 
-  // Black Pieces
-  p: `<svg viewBox="0 0 45 45" class="chess-piece">
-    <path d="m 22.5,9 c -2.21,0 -4,1.79 -4,4 0,0.89 0.29,1.71 0.78,2.38 C 17.33,16.5 16,18.59 16,21 c 0,2.03 0.94,3.84 2.41,5.03 C 15.41,27.09 11,31.58 11,39.5 l 23,0 c 0,-7.92 -4.41,-12.41 -7.41,-13.47 C 28.06,24.84 29,23.03 29,21 29,18.59 27.67,16.5 25.72,15.38 26.21,14.71 26.5,13.89 26.5,13 c 0,-2.21 -1.79,-4 -4,-4 z"
-      fill="#292724" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>`,
+  p: `<svg class="chess-piece" xmlns="http://www.w3.org/2000/svg" style="color-scheme:light only" width="45" height="45" viewBox="0 0 45 45"><path stroke="#000" stroke-linecap="round" stroke-width="1.5" d="M22.5 9a4 4 0 0 0-3.22 6.38 6.48 6.48 0 0 0-.87 10.65c-3 1.06-7.41 5.55-7.41 13.47h23c0-7.92-4.41-12.41-7.41-13.47a6.46 6.46 0 0 0-.87-10.65A4.01 4.01 0 0 0 22.5 9z"/></svg>`,
 
-  r: `<svg viewBox="0 0 45 45" class="chess-piece">
-    <g fill="#292724" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M 9,39 L 36,39 L 36,36 L 9,36 z"/>
-      <path d="M 12,36 L 12,32 L 33,32 L 33,36 z"/>
-      <path d="M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14"/>
-      <path d="M 34,14 L 31,17 L 14,17 L 11,14"/>
-      <path d="M 14,17 L 14,29.5 L 31,29.5 L 31,17"/>
-      <path d="M 14,29.5 L 11,32 L 34,32 L 31,29.5"/>
-    </g>
-  </svg>`,
+  r: `<svg class="chess-piece" xmlns="http://www.w3.org/2000/svg" style="color-scheme:light only" width="45" height="45" viewBox="0 0 45 45"><g fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path stroke-linecap="butt" d="M9 39h27v-3H9zm3.5-7 1.5-2.5h17l1.5 2.5zm-.5 4v-4h21v4z"/><path stroke-linecap="butt" stroke-linejoin="miter" d="M14 29.5v-13h17v13z"/><path stroke-linecap="butt" d="M14 16.5 11 14h23l-3 2.5zM11 14V9h4v2h5V9h5v2h5V9h4v5z"/><path fill="none" stroke="#ececec" stroke-linejoin="miter" stroke-width="1" d="M12 35.5h21m-20-4h19m-18-2h17m-17-13h17M11 14h23"/></g></svg>`,
 
-  n: `<svg viewBox="0 0 45 45" class="chess-piece">
-    <g fill="#292724" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" />
-      <path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.95,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.99,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,7.4 17.5,7 18,10 C 20,9 22.5,9.5 24,11.5" />
-      <circle cx="15.5" cy="17.5" r="1.5" fill="#ffffff"/>
-    </g>
-  </svg>`,
+  n: `<svg class="chess-piece" xmlns="http://www.w3.org/2000/svg" style="color-scheme:light only" width="45" height="45" viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path fill="#000" d="M22 10c10.5 1 16.5 8 16 29H15c0-9 10-6.5 8-21"/><path fill="#000" d="M24 18c.38 2.91-5.55 7.37-8 9-3 2-2.82 4.34-5 4-1.04-.94 1.41-3.04 0-3-1 0 .19 1.23-1 2-1 0-4 1-4-4 0-2 6-12 6-12s1.89-1.9 2-3.5c-.73-1-.5-2-.5-3 1-1 3 2.5 3 2.5h2s.78-2 2.5-3c1 0 1 3 1 3"/><path fill="#ececec" stroke="#ececec" d="M9.5 25.5a.5.5 0 1 1-1 0 .5.5 0 1 1 1 0m5.43-9.75a.5 1.5 30 1 1-.86-.5.5 1.5 30 1 1 .86.5"/><path fill="#ececec" stroke="none" d="m24.55 10.4-.45 1.45.5.15c3.15 1 5.65 2.49 7.9 6.75S35.75 29.06 35.25 39l-.05.5h2.25l.05-.5c.5-10.06-.88-16.85-3.25-21.34s-5.79-6.64-9.19-7.16z"/></g></svg>`,
 
-  b: `<svg viewBox="0 0 45 45" class="chess-piece">
-    <g fill="#292724" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M 9,36 C 12.33,35 17.67,34.5 22.5,34.5 C 27.33,34.5 32.67,35 36,36 L 36,39 L 9,39 L 9,36 z"/>
-      <path d="M 15,32 C 17.5,34.5 27.5,34.5 30,32 C 30.5,30.5 30,22 28,17 C 26,12 25,9 22.5,9 C 20,9 19,12 17,17 C 15,22 14.5,30.5 15,32 z"/>
-      <path d="M 22.5,6 L 22.5,9"/>
-      <path d="M 21,7.5 L 24,7.5"/>
-    </g>
-  </svg>`,
+  b: `<svg class="chess-piece" xmlns="http://www.w3.org/2000/svg" style="color-scheme:light only" width="45" height="45" viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><g fill="#000" stroke-linecap="butt"><path d="M9 36c3.4-1 10.1.4 13.5-2 3.4 2.4 10.1 1 13.5 2 0 0 1.6.5 3 2-.7 1-1.6 1-3 .5-3.4-1-10.1.5-13.5-1-3.4 1.5-10.1 0-13.5 1-1.4.5-2.3.5-3-.5 1.4-2 3-2 3-2z"/><path d="M15 32c2.5 2.5 12.5 2.5 15 0 .5-1.5 0-2 0-2 0-2.5-2.5-4-2.5-4 5.5-1.5 6-11.5-5-15.5-11 4-10.5 14-5 15.5 0 0-2.5 1.5-2.5 4 0 0-.5.5 0 2z"/><path d="M25 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 1 1 5 0z"/></g><path stroke="#ececec" stroke-linejoin="miter" d="M17.5 26h10M15 30h15m-7.5-14.5v5M20 18h5"/></g></svg>`,
 
-  q: `<svg viewBox="0 0 45 45" class="chess-piece">
-    <g fill="#292724" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M 9,26 C 17.5,24.5 30,24.5 36,26 L 38.5,13.5 L 31,25 L 30.7,10.5 L 25.5,24.5 L 22.5,10 L 19.5,24.5 L 14.3,10.5 L 14,25 L 6.5,13.5 z"/>
-      <path d="M 9,26 C 9,28 10.5,28 11.5,30 C 12.5,31.5 12.5,31 12,33.5 C 10.5,34.5 10.5,36 10,39 L 35,39 C 34.5,36 34.5,34.5 33,33.5 C 32.5,31 32.5,31.5 33.5,30 C 34.5,28 36,28 36,26 z"/>
-      <circle cx="6" cy="12" r="2" fill="#ffffff"/>
-      <circle cx="14" cy="9" r="2" fill="#ffffff"/>
-      <circle cx="22.5" cy="8" r="2" fill="#ffffff"/>
-      <circle cx="31" cy="9" r="2" fill="#ffffff"/>
-      <circle cx="39" cy="12" r="2" fill="#ffffff"/>
-    </g>
-  </svg>`,
+  q: `<svg class="chess-piece" xmlns="http://www.w3.org/2000/svg" style="color-scheme:light only" width="45" height="45" viewBox="0 0 45 45"><g fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><g stroke="none"><circle cx="6" cy="12" r="2.75"/><circle cx="14" cy="9" r="2.75"/><circle cx="22.5" cy="8" r="2.75"/><circle cx="31" cy="9" r="2.75"/><circle cx="39" cy="12" r="2.75"/></g><path stroke-linecap="butt" d="M9 26c8.5-1.5 21-1.5 27 0l2.5-12.5L31 25l-.3-14.1-5.2 13.6-3-14.5-3 14.5-5.2-13.6L14 25 6.5 13.5z"/><path stroke-linecap="butt" d="M9 26c0 2 1.5 2 2.5 4 1 1.5 1 1 .5 3.5-1.5 1-1.5 2.5-1.5 2.5-1.5 1.5.5 2.5.5 2.5 6.5 1 16.5 1 23 0 0 0 1.5-1 0-2.5 0 0 .5-1.5-1-2.5-.5-2.5-.5-2 .5-3.5 1-2 2.5-2 2.5-4-8.5-1.5-18.5-1.5-27 0z"/><path fill="none" stroke-linecap="butt" d="M11 38.5a35 35 1 0 0 23 0"/><path fill="none" stroke="#ececec" d="M11 29a35 35 1 0 1 23 0m-21.5 2.5h20m-21 3a35 35 1 0 0 22 0m-23 3a35 35 1 0 0 24 0"/></g></svg>`,
 
-  k: `<svg viewBox="0 0 45 45" class="chess-piece">
-    <g fill="#292724" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M 22.5,11.63 L 22.5,6"/>
-      <path d="M 20,8 L 25,8"/>
-      <path d="M 22.5,25 C 22.5,25 27,17.5 25.5,14.5 C 24,11.5 21,11.5 19.5,14.5 C 18,17.5 22.5,25 22.5,25"/>
-      <path d="M 11.5,37 C 17,40.5 28,40.5 33.5,37 C 36.5,35 37.5,30 35.5,25.5 C 33.5,21 31,19 28.5,19 C 26,19 24.5,21 22.5,23 C 20.5,21 19,19 16.5,19 C 14,19 11.5,21 9.5,25.5 C 7.5,30 8.5,35 11.5,37 z"/>
-      <path d="M 11.5,30 C 17,27 28,27 33.5,30"/>
-      <path d="M 11.5,33.5 C 17,30.5 28,30.5 33.5,33.5"/>
-      <path d="M 11.5,37 C 17,34 28,34 33.5,37"/>
-    </g>
-  </svg>`,
+  k: `<svg class="chess-piece" xmlns="http://www.w3.org/2000/svg" style="color-scheme:light only" viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path stroke-linejoin="miter" d="M22.5 11.6V6"/><path fill="#000" stroke-linecap="butt" stroke-linejoin="miter" d="M22.5 25s4.5-7.5 3-10.5c0 0-1-2.5-3-2.5s-3 2.5-3 2.5c-1.5 3 3 10.5 3 10.5"/><path fill="#000" d="M11.5 37a22.3 22.3 0 0 0 21 0v-7s9-4.5 6-10.5c-4-6.5-13.5-3.5-16 4V27v-3.5c-3.5-7.5-13-10.5-16-4-3 6 5 10 5 10z"/><path stroke-linejoin="miter" d="M20 8h5"/><path stroke="#ececec" d="M32 29.5s8.5-4 6-9.7C34.1 14 25 18 22.5 24.6v2.1-2.1C20 18 9.9 14 7 19.9c-2.5 5.6 4.8 9 4.8 9"/><path stroke="#ececec" d="M11.5 30c5.5-3 15.5-3 21 0m-21 3.5c5.5-3 15.5-3 21 0m-21 3.5c5.5-3 15.5-3 21 0"/></g></svg>`,
 
-  // Special Items for Lessons
   star: `<svg viewBox="0 0 24 24" class="board-star animate-bounce">
     <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9"
       fill="#facc15" stroke="#ca8a04" stroke-width="1.5" stroke-linejoin="round"/>
