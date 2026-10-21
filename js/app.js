@@ -380,9 +380,13 @@ class ChessGameApp {
         <div class="guide-piece-details">
           <div class="guide-piece-header">
             <h3>${info.name} <span class="guide-nickname">"${info.nickname}"</span></h3>
-            <span class="guide-points">${info.points === 1000 ? 'Priceless' : info.points + ' Points'}</span>
+            <span class="guide-points">${info.points === 1000 ? 'Priceless' : info.points + ' Point' + (info.points > 1 ? 's' : '')}</span>
           </div>
-          <p class="guide-tip">${info.tip}</p>
+          <div class="guide-rule-row"><b>🚶 How it Moves:</b> ${info.howItMoves}</div>
+          <div class="guide-rule-row"><b>⚔️ How it Attacks:</b> ${info.howItCaptures}</div>
+          <div class="guide-rule-row"><b>🔄 Can go backwards?</b> ${info.canGoBackwards}</div>
+          <div class="guide-rule-row"><b>🦘 Can it jump?</b> ${info.canJump}</div>
+          <div class="guide-myth-box">${info.mythBuster}</div>
         </div>
       `;
       guideContent.appendChild(card);

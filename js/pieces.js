@@ -2,12 +2,78 @@
 // Designed for crystal-clear rendering on any display
 
 const PIECE_INFO = {
-  P: { name: 'Pawn', nickname: 'The Brave Soldier', points: 1, symbol: '♙', role: 'Soldier', tip: 'Steps 1 square forward (or 2 on move 1). Captures diagonally!' },
-  N: { name: 'Knight', nickname: 'The Jumping Horse', points: 3, symbol: '♘', role: 'Horse', tip: 'Gallop, gallop, turn! Moves in an L-shape and hops over anything!' },
-  B: { name: 'Bishop', nickname: 'The Sneaky Magician', points: 3, symbol: '♗', role: 'Magician', tip: 'Zooms diagonally in an X. Stays on its own tile color forever!' },
-  R: { name: 'Rook', nickname: 'The Castle Rocket', points: 5, symbol: '♖', role: 'Tower', tip: 'Drives straight like a rocket: forward, backward, left, or right!' },
-  Q: { name: 'Queen', nickname: 'The Superhero', points: 9, symbol: '♕', role: 'Superhero', tip: 'The most powerful friend! Moves any distance, straight or diagonal!' },
-  K: { name: 'King', nickname: 'Grandpa King', points: 1000, symbol: '♔', role: 'King', tip: 'The Boss! Moves 1 baby step in any direction. Protect him at all costs!' }
+  P: {
+    name: 'Pawn',
+    nickname: 'The Brave Foot-Soldier',
+    points: 1,
+    symbol: '♙',
+    role: 'Soldier',
+    howItMoves: 'Steps 1 square straight forward. Only on its first move from home does it have a special one-time option to leap 2 squares forward!',
+    howItCaptures: 'Captures 1 square DIAGONALLY forward (up-left or up-right). It can NEVER capture straight forward!',
+    canGoBackwards: 'NO! The only piece in chess that can never walk backwards or retreat.',
+    canJump: 'NO! If any piece is directly in front of it, the pawn is completely blocked like hitting a brick wall.',
+    mythBuster: '❌ Myth: "Can a pawn eat the piece right in front of it?" NO! If an enemy stands in front of your pawn, neither can walk forward. Pawns only strike diagonally!'
+  },
+  N: {
+    name: 'Knight',
+    nickname: 'The Jumping Horse',
+    points: 3,
+    symbol: '♘',
+    role: 'Horse',
+    howItMoves: 'Moves in an "L" shape: 2 squares in one direction, then 1 square to the side (e.g., 2 up, 1 right). Always lands on a different color square!',
+    howItCaptures: 'Lands directly on an enemy piece to capture it. It does NOT capture pieces it jumps over!',
+    canGoBackwards: 'YES! Can jump in all directions (forward, backward, left, right).',
+    canJump: 'YES! The ONLY piece in the entire game that can leap over other pieces.',
+    mythBuster: '❌ Myth: "Do I jump and eat like in Checkers?" NO! In chess, you only capture the piece on your exact landing square.'
+  },
+  B: {
+    name: 'Bishop',
+    nickname: 'The Diagonal Magician',
+    points: 3,
+    symbol: '♗',
+    role: 'Magician',
+    howItMoves: 'Slides diagonally in an "X" shape across as many open squares as it wants.',
+    howItCaptures: 'Slides diagonally into an enemy piece and takes its place.',
+    canGoBackwards: 'YES! Along any open diagonal in any direction.',
+    canJump: 'NO! It cannot jump over any pieces.',
+    mythBuster: '❌ Myth: "Can a Bishop switch square colors?" NEVER! A light-square Bishop stays on light squares for the entire game. A dark-square Bishop stays on dark squares forever.'
+  },
+  R: {
+    name: 'Rook',
+    nickname: 'The Castle Rocket',
+    points: 5,
+    symbol: '♖',
+    role: 'Tower',
+    howItMoves: 'Drives straight like a rocket along rows (ranks) and columns (files) as far as the path is clear.',
+    howItCaptures: 'Drives straight into an enemy piece and replaces it.',
+    canGoBackwards: 'YES! Forward, backward, left, or right.',
+    canJump: 'NO! It cannot jump over other pieces.',
+    mythBuster: '⭐ Superpower: The Rook teams up with the King for the special "Castling" move to tuck the King into safety!'
+  },
+  Q: {
+    name: 'Queen',
+    nickname: 'The Superhero',
+    points: 9,
+    symbol: '♕',
+    role: 'Superhero',
+    howItMoves: 'The most powerful piece! Combines Rook + Bishop: moves straight AND diagonal as far as she wants.',
+    howItCaptures: 'Moves along any straight or diagonal line to take the enemy square.',
+    canGoBackwards: 'YES! In all 8 directions.',
+    canJump: 'NO! She cannot jump over other pieces.',
+    mythBuster: '⚠️ Warning: While the Queen is your strongest attacker, keeping Grandpa King safe is what wins the game!'
+  },
+  K: {
+    name: 'King',
+    nickname: 'Grandpa King',
+    points: 1000,
+    symbol: '♔',
+    role: 'King',
+    howItMoves: 'Moves exactly 1 baby step in any direction (straight or diagonal).',
+    howItCaptures: 'Steps 1 square into an unprotected enemy piece.',
+    canGoBackwards: 'YES! 1 step in any direction.',
+    canJump: 'NO! Except during the special 2-square Castling maneuver with a Rook.',
+    mythBuster: '👑 Golden Rule: The King can NEVER move into check (danger). Two Kings can NEVER touch or stand next to each other!'
+  }
 };
 
 // Clean, high-contrast SVG pieces

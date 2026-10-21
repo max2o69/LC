@@ -186,9 +186,9 @@ const LEVELS = [
     piece: 'P',
     badge: '♙ Pawn',
     parMoves: 2,
-    story: 'Meet <b>Peter the Pawn</b>! Pawns are the brave little foot-soldiers. They walk 1 step forward. But on their VERY FIRST move from home, they have enough energy for a giant 2-step leap!',
-    goal: 'Jump 2 steps forward to grab the first star, then take 1 more step to grab the second star!',
-    hint: 'Pawns only march straight ahead. First move: take the 2-step leap to e4!',
+    story: 'Pawns have 2 special movement rules:<br><b>1. Always Forward:</b> Pawns only march straight forward. They can NEVER walk backwards!<br><b>2. Starting Leap Option:</b> ONLY on its very first move from home (Row 2), a pawn has the option to leap <b>2 squares forward</b> (or 1 step). After that, it can only walk 1 step at a time!',
+    goal: 'Use your starting 2-step leap to grab star 1 on e4, then take 1 normal step to grab star 2 on e5!',
+    hint: 'First move: take the 2-step leap from e2 to e4! Second move: take 1 step to e5!',
     board: [
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
@@ -203,19 +203,19 @@ const LEVELS = [
   {
     id: 10,
     chapterId: 1,
-    title: 'Pawn Attack: Diagonal High-Five!',
+    title: 'Pawn Attack: Diagonal Strike!',
     piece: 'P',
-    badge: '♙ Pawn',
+    badge: '♙ Pawn Attack',
     parMoves: 2,
-    story: 'Pawns are tricky! They <b>walk straight forward</b>, but they <b>CAPTURE diagonally</b> like giving a sideways high-five! They cannot capture straight ahead.',
-    goal: 'Capture the black pieces by striking diagonally!',
-    hint: 'Pawns capture 1 square diagonally forward. Tap the diagonal targets!',
+    story: 'Here is the most important pawn rule that confuses beginners:<br><b>Can a pawn capture straight ahead? NO, NEVER!</b> If an enemy is directly in front of your pawn, you are blocked like a brick wall.<br><b>How do pawns capture? DIAGONALLY FORWARD!</b> Pawns only attack 1 square diagonally (up-left or up-right) like thrusting a spear!',
+    goal: 'Capture the black pawns by striking diagonally forward!',
+    hint: 'Pawns capture 1 square diagonally forward. Tap the diagonal enemy pawn at e5, then at f6!',
     board: [
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, 'p',  null, null],
-      [null, null, null, null, 'p',  null, null, null],
-      [null, null, null, 'P',  null, null, null, null],
+      [null, null, null, null, null, 'p',  null, null], // f6 (row 2, col 5)
+      [null, null, null, null, 'p',  null, null, null], // e5 (row 3, col 4)
+      [null, null, null, 'P',  null, null, null, null], // d4 (row 4, col 3)
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null]
