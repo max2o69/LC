@@ -4,7 +4,7 @@
   "description": "A beginner-friendly browser chess teaching game designed for absolute beginners.",
   "scripts": {
     "start": "node server.js",
-    "test": "node test_curriculum.js"
+    "test": "node test_curriculum.js && node test_dojo.js"
   },
   "keywords": ["chess", "educational", "teaching", "beginner", "game"],
   "author": "",

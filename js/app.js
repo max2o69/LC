@@ -71,13 +71,41 @@ class ChessGameApp {
 
     // Reset current level
     document.getElementById('btn-restart').addEventListener('click', () => {
-      this.startLevel(this.currentLevelIndex);
+      if (this.gameMode === 'dojo') {
+        const p = window.TacticsDojo && window.TacticsDojo.currentPuzzle;
+        if (p) {
+          this.boardUI.setBoard(p.board);
+          this.boardUI.interactive = true;
+          document.getElementById('turn-indicator').textContent = '🌟 White to Move!';
+          this.hintBox.classList.add('hidden');
+        }
+      } else if (this.gameMode === 'freeplay') {
+        this.startFreePlay();
+      } else {
+        this.startLevel(this.currentLevelIndex);
+      }
     });
 
     // Hint button
     document.getElementById('btn-hint').addEventListener('click', () => {
       this.showHint();
     });
+
+    // Tactics Dojo toggle
+    const dojoBtn = document.getElementById('btn-dojo');
+    if (dojoBtn) {
+      dojoBtn.addEventListener('click', () => {
+        this.startDojo();
+      });
+    }
+
+    // Next puzzle button
+    const nextPuzzleBtn = document.getElementById('btn-next-puzzle');
+    if (nextPuzzleBtn) {
+      nextPuzzleBtn.addEventListener('click', () => {
+        this.startDojo();
+      });
+    }
 
     // Level select drawer toggle
     document.getElementById('btn-levels').addEventListener('click', () => {
@@ -131,6 +159,10 @@ class ChessGameApp {
     this.hintBox.classList.add('hidden');
     this.boardUI.interactive = true;
     document.getElementById('turn-indicator').textContent = '🌟 Your Turn!';
+    const nextBtn = document.getElementById('btn-next-puzzle');
+    if (nextBtn) nextBtn.classList.add('hidden');
+
+    this.updateDojoStatsUI();
 
     const level = LEVELS[index];
     this.levelTitleEl.textContent = `Level ${level.id}: ${level.title}`;
@@ -149,6 +181,11 @@ class ChessGameApp {
   handlePlayerMove(from, to, moveData) {
     this.moveCount++;
     this.moveCountEl.textContent = this.moveCount;
+
+    if (this.gameMode === 'dojo') {
+      this.handleDojoMove(from, to, moveData);
+      return;
+    }
 
     if (this.gameMode === 'freeplay') {
       this.handleFreePlayTurn();
@@ -263,7 +300,93 @@ class ChessGameApp {
     }, 400);
   }
 
+  handleDojoMove(from, to, moveData) {
+    if (!window.TacticsDojo) return;
+    const isCorrect = window.TacticsDojo.checkMove(from, to);
+    if (isCorrect) {
+      const res = window.TacticsDojo.handleSuccess();
+      try { sounds.playWin(); } catch (e) {}
+      this.triggerConfetti();
+      this.boardUI.interactive = false;
+      document.getElementById('turn-indicator').textContent = '🌟 SOLVED! +15 Rating';
+      this.updateDojoStatsUI();
+      this.hintText.innerHTML = `🎉 <b>Brilliant Move!</b> ${res.explanation}`;
+      this.hintBox.classList.remove('hidden');
+      const nextBtn = document.getElementById('btn-next-puzzle');
+      if (nextBtn) nextBtn.classList.remove('hidden');
+    } else {
+      const res = window.TacticsDojo.handleFailure();
+      try { sounds.playError(); } catch (e) {}
+      this.updateDojoStatsUI();
+      document.getElementById('turn-indicator').textContent = '❌ Try again!';
+      this.hintText.innerHTML = `🤔 <b>Not quite!</b> ${res.hint}`;
+      this.hintBox.classList.remove('hidden');
+      setTimeout(() => {
+        const p = window.TacticsDojo.currentPuzzle;
+        if (p) this.boardUI.setBoard(p.board);
+        this.boardUI.interactive = true;
+        document.getElementById('turn-indicator').textContent = '🌟 White to Move!';
+      }, 950);
+    }
+  }
+
+  startDojo(puzzleId = null) {
+    if (!window.TacticsDojo) return;
+    this.gameMode = 'dojo';
+    this.moveCount = 0;
+    this.closeLevelDrawer();
+    this.hintBox.classList.add('hidden');
+    this.boardUI.interactive = true;
+    document.getElementById('turn-indicator').textContent = '🌟 White to Move!';
+
+    const p = puzzleId !== null ? window.TacticsDojo.getPuzzleById(puzzleId) : window.TacticsDojo.getRandomPuzzle();
+
+    this.levelTitleEl.textContent = `Puzzle #${p.id}: ${p.title}`;
+    this.levelBadgeEl.textContent = p.categoryLabel;
+    this.levelStoryEl.innerHTML = `<b>🥋 Tactics Dojo:</b> Train on 100+ real tactical combinations. Spot the winning checkmate, fork, pin, skewer, or free snack!<br><br><b>Category:</b> ${p.categoryLabel}`;
+    this.levelGoalEl.innerHTML = `🎯 <b>Goal:</b> ${p.prompt}`;
+
+    const nextBtn = document.getElementById('btn-next-puzzle');
+    if (nextBtn) nextBtn.classList.add('hidden');
+
+    this.updateDojoStatsUI();
+    this.boardUI.setBoard(p.board);
+  }
+
+  updateDojoStatsUI() {
+    if (!window.TacticsDojo) return;
+    const stats = window.TacticsDojo.stats;
+    const ratingEl = document.getElementById('dojo-rating');
+    const streakEl = document.getElementById('dojo-streak');
+    const ratingPill = document.getElementById('dojo-rating-pill');
+    const streakPill = document.getElementById('dojo-streak-pill');
+    const starsPill = document.getElementById('total-stars');
+    const movesPill = document.getElementById('move-count-pill');
+
+    if (this.gameMode === 'dojo') {
+      if (starsPill) starsPill.classList.add('hidden');
+      if (movesPill) movesPill.classList.add('hidden');
+      if (ratingPill) ratingPill.classList.remove('hidden');
+      if (streakPill) streakPill.classList.remove('hidden');
+      if (ratingEl) ratingEl.textContent = stats.rating;
+      if (streakEl) streakEl.textContent = stats.streak;
+    } else {
+      if (starsPill) starsPill.classList.remove('hidden');
+      if (movesPill) movesPill.classList.remove('hidden');
+      if (ratingPill) ratingPill.classList.add('hidden');
+      if (streakPill) streakPill.classList.add('hidden');
+    }
+  }
+
   showHint() {
+    if (this.gameMode === 'dojo') {
+      const p = window.TacticsDojo && window.TacticsDojo.currentPuzzle;
+      if (p) {
+        this.hintText.innerHTML = `💡 <b>Coach Tip:</b> ${p.hint}`;
+        this.hintBox.classList.remove('hidden');
+      }
+      return;
+    }
     const level = LEVELS[this.currentLevelIndex];
     if (this.gameMode === 'freeplay') {
       const bot = window.CoachBot || CoachBot;
@@ -285,7 +408,10 @@ class ChessGameApp {
     this.levelStoryEl.innerHTML = 'Play a friendly training match! Take your time, make smart moves, and ask for hints anytime!';
     this.levelGoalEl.innerHTML = '🎯 <b>Goal:</b> Control the center, protect Grandpa King, and deliver checkmate!';
     this.hintBox.classList.add('hidden');
+    const nextBtn = document.getElementById('btn-next-puzzle');
+    if (nextBtn) nextBtn.classList.add('hidden');
     this.closeLevelDrawer();
+    this.updateDojoStatsUI();
 
     const standardBoard = [
       ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],

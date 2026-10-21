@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kingdom Chess: Learn Step-by-Step</title>
-  <link rel="stylesheet" href="css/style.css?v=3.2">
+  <link rel="stylesheet" href="css/style.css?v=3.3">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏰</text></svg>">
 </head>
 <body>
@@ -18,14 +18,21 @@
 
     <div class="stats-bar">
       <div class="stat-pill stars" id="total-stars" title="Stars collected">⭐ 0</div>
-      <div class="stat-pill" title="Moves made this level">
+      <div class="stat-pill" id="move-count-pill" title="Moves made this level">
         <span>🔄</span> <span id="move-count">0</span> moves
+      </div>
+      <div class="stat-pill rating hidden" id="dojo-rating-pill" title="Tactics Dojo Rating">
+        <span>🥋 Rating:</span> <span id="dojo-rating">1000</span>
+      </div>
+      <div class="stat-pill streak hidden" id="dojo-streak-pill" title="Current Solve Streak">
+        <span>🔥 Streak:</span> <span id="dojo-streak">0</span>
       </div>
     </div>
 
     <div class="header-actions">
       <button class="btn btn-secondary btn-icon" id="btn-sound" title="Toggle Sound">🔊</button>
-      <button class="btn btn-secondary" id="btn-levels">🗺️ Levels</button>
+      <button class="btn btn-secondary" id="btn-levels">🗺️ Levels (52)</button>
+      <button class="btn btn-secondary btn-dojo" id="btn-dojo" title="Train on 100+ tactics puzzles">🥋 Dojo (100)</button>
       <button class="btn btn-secondary" id="btn-guide">📖 Heroes</button>
       <button class="btn btn-accent" id="btn-freeplay">🎮 Free Play</button>
     </div>
@@ -58,6 +65,7 @@
         <div class="controls-grid">
           <button class="btn btn-secondary" id="btn-hint">💡 Need a Hint?</button>
           <button class="btn btn-secondary" id="btn-restart">🔄 Restart</button>
+          <button class="btn btn-accent hidden" id="btn-next-puzzle">Next Puzzle ➡️</button>
         </div>
       </div>
     </aside>
@@ -114,11 +122,12 @@
   <canvas id="confetti-canvas"></canvas>
 
   <!-- Game Scripts (cache-busted for instant updates) -->
-  <script src="js/sound.js?v=3.2"></script>
-  <script src="js/pieces.js?v=3.2"></script>
-  <script src="js/levels.js?v=3.2"></script>
-  <script src="js/bot.js?v=3.2"></script>
-  <script src="js/board.js?v=3.2"></script>
-  <script src="js/app.js?v=3.2"></script>
+  <script src="js/sound.js?v=3.3"></script>
+  <script src="js/pieces.js?v=3.3"></script>
+  <script src="js/levels.js?v=3.3"></script>
+  <script src="js/dojo.js?v=3.3"></script>
+  <script src="js/bot.js?v=3.3"></script>
+  <script src="js/board.js?v=3.3"></script>
+  <script src="js/app.js?v=3.3"></script>
 </body>
 </html>

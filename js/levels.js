@@ -8,7 +8,10 @@ const CHAPTERS = [
   { id: 4, title: 'Chapter 4: Secret Superpowers', icon: '✨', desc: 'Castling, Pawn Promotion, and the sneaky En Passant!' },
   { id: 5, title: 'Chapter 5: Mini-Games & Practice', icon: '🏆', desc: 'Fun mini-battles and playing against Coach Bot!' },
   { id: 6, title: 'Chapter 6: Tactical Superpowers', icon: '⚡', desc: 'The Fork, The Pin, The Skewer, Discovered Attack & Back-Rank Mate!' },
-  { id: 7, title: 'Chapter 7: Master the Opening & Endgames', icon: '🎓', desc: 'Center Control, Development, Busting Scholar’s Mate, and Lawnmower Mate!' }
+  { id: 7, title: 'Chapter 7: Master the Opening & Endgames', icon: '🎓', desc: 'Center Control, Development, Busting Scholar’s Mate, and Lawnmower Mate!' },
+  { id: 8, title: 'Chapter 8: Deadly Combinations', icon: '💥', desc: 'Double Check, Smothered Mate, Deflection & The Greek Gift!' },
+  { id: 9, title: 'Chapter 9: Opening Repertoire', icon: '🏛️', desc: 'Italian Game, Queen’s Gambit, Sicilian & London System!' },
+  { id: 10, title: 'Chapter 10: Endgame Masterclass', icon: '👑', desc: 'King + Rook Mate, The Opposition, Pawn Escort & Kiss of Death!' }
 ];
 
 const LEVELS = [
@@ -823,6 +826,498 @@ const LEVELS = [
       const isCheck = ChessRules.isCheck(board, 'b');
       const moves = ChessRules.getLegalMoves(board, 0, 4);
       return to.r === 0 && to.c === 0 && isCheck && moves.length === 0;
+    }
+  },
+
+  // ================= CHAPTER 8: DEADLY COMBINATIONS =================
+  {
+    id: 34,
+    chapterId: 8,
+    title: 'Double Check: The Unstoppable Shock!',
+    piece: 'N',
+    badge: '💥 Double Check',
+    parMoves: 1,
+    story: '<b>Double Check</b> is the most lethal attack in all of chess! ⚡<br><br>' +
+           'When TWO pieces check the King at the same time, it is impossible to block both, and impossible to capture both. The enemy King has only one choice: <b>RUN!</b><br><br>' +
+           'Your White Rook sits on e1, and your White Knight is on e4. Jump your Knight to <b>d6</b>: the Knight checks the King on e8 AND opens the e-file for the Rook to check as well!',
+    goal: 'Jump your Knight from e4 to d6 to deliver an unstoppable Double Check!',
+    hint: 'Move your Knight from e4 to d6! Both the Knight and the Rook will check the King!',
+    board: [
+      [null, null, null, null, 'k',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, 'N',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, 'R',  null, 'K',  null]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 2 && to.c === 3 && ChessRules.isCheck(board, 'b');
+    }
+  },
+  {
+    id: 35,
+    chapterId: 8,
+    title: 'The Smothered Mate: Trapped by Friends!',
+    piece: 'N',
+    badge: '🐴 Smothered',
+    parMoves: 1,
+    story: 'The <b>Smothered Mate</b> is a legendary checkmate! The enemy King is completely boxed in and suffocated by its own army.<br><br>' +
+           'The Black King on h8 is trapped by its own Rook on g8 and pawns on g7 and h7. It has zero escape squares!<br><br>' +
+           'Jump your White Knight from <b>e5 to f7</b> to leap over the walls and deliver the famous Smothered Checkmate!',
+    goal: 'Jump your Knight from e5 to f7 to deliver the Smothered Checkmate!',
+    hint: 'Click your Knight on e5 and jump to f7 right into the corner nest!',
+    board: [
+      [null, null, null, null, null, null, 'r',  'k' ],
+      [null, null, null, null, null, null, 'p',  'p' ],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, 'N',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ['K',  null, null, null, null, null, null, null]
+    ],
+    validateMove: (from, to, board) => {
+      const isCheck = ChessRules.isCheck(board, 'b');
+      const moves = ChessRules.getLegalMoves(board, 0, 7);
+      return to.r === 1 && to.c === 5 && isCheck && moves.length === 0;
+    }
+  },
+  {
+    id: 36,
+    chapterId: 8,
+    title: 'Deflection: Removing the Guard!',
+    piece: 'Q',
+    badge: '🎯 Deflection',
+    parMoves: 1,
+    story: '<b>Deflection</b> is distracting a guard so you can sneak inside! 🥷<br><br>' +
+           'The Black Rook on f8 is guarding the back rank. If the Rook leaves, White can deliver instant checkmate with the d1 Rook!<br><br>' +
+           'Offer your White Queen on <b>c8</b> (`c4-c8`)! Black must take your Queen, pulling the defender off the back rank!',
+    goal: 'Slide your Queen to c8 to deflect the Black Rook!',
+    hint: 'Move your Queen from c4 to c8 on the back rank!',
+    board: [
+      [null, null, null, null, null, 'r',  null, 'k' ],
+      [null, null, null, null, null, null, 'p',  'p' ],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, 'Q',  null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, 'R',  null, null, 'K',  null]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 0 && to.c === 2;
+    }
+  },
+  {
+    id: 37,
+    chapterId: 8,
+    title: 'The Overworked Piece: Too Many Chores!',
+    piece: 'N',
+    badge: '🧹 Overworked',
+    parMoves: 1,
+    story: 'An <b>Overworked Piece</b> has two jobs at once! When you attack one job, it has to abandon the other.<br><br>' +
+           'The Black Queen on d7 must guard against back-rank mate at d8 AND protect the Bishop on b5. Capture the undefended Bishop with your Knight on <b>b5</b> (`c3-b5`)!',
+    goal: 'Capture Black’s Bishop on b5 with your Knight!',
+    hint: 'Jump your Knight from c3 to b5 to capture the Bishop!',
+    board: [
+      [null, null, null, null, null, null, 'k',  null],
+      [null, null, null, 'q',  null, 'p',  'p',  'p' ],
+      [null, null, null, null, null, null, null, null],
+      [null, 'b',  null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, 'N',  null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, 'R',  null, null, 'K',  null]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 3 && to.c === 1;
+    }
+  },
+  {
+    id: 38,
+    chapterId: 8,
+    title: 'Trap the Greedy Queen!',
+    piece: 'B',
+    badge: '🕸️ Trap',
+    parMoves: 1,
+    story: 'Beginners often bring their Queen out early hoping for quick snacks. A smart player punishes this by trapping her!<br><br>' +
+           'The Black Queen has wandered to <b>a5</b>. Step your Bishop to <b>d2</b> (`c1-d2`) to attack her while keeping all her escape squares cut off!',
+    goal: 'Step your Bishop from c1 to d2 to trap the Black Queen!',
+    hint: 'Move your Bishop from c1 to d2 to attack the Queen!',
+    board: [
+      ['r',  'n',  'b',  null, 'k',  'b',  'n',  'r' ],
+      ['p',  'p',  'p',  'p',  'p',  'p',  'p',  'p' ],
+      [null, null, null, null, null, null, null, null],
+      ['q',  null, null, null, null, null, null, null],
+      [null, null, null, 'P',  'P',  null, null, null],
+      [null, null, 'P',  null, null, null, null, null],
+      ['P',  'P',  null, null, null, 'P',  'P',  'P' ],
+      ['R',  'N',  'B',  'Q',  'K',  null, 'N',  'R' ]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 6 && to.c === 3;
+    }
+  },
+  {
+    id: 39,
+    chapterId: 8,
+    title: 'The Greek Gift: Royal Sacrifice!',
+    piece: 'B',
+    badge: '🎁 Greek Gift',
+    parMoves: 1,
+    story: 'The <b>Greek Gift Sacrifice</b> is the most famous attacking sacrifice in chess history! 🎁<br><br>' +
+           'Sacrifice your Bishop by capturing the pawn on <b>h7</b> with check (`d3-h7+`). This blows open Black’s castle doors and drags the King into the line of fire!',
+    goal: 'Capture the pawn on h7 with your Bishop to deliver check!',
+    hint: 'Click your Bishop on d3 and capture the pawn on h7!',
+    board: [
+      [null, null, null, null, null, null, 'k',  null],
+      [null, null, null, null, null, 'p',  'p',  'p' ],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, 'B',  null, 'N',  null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, 'K',  null]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 1 && to.c === 7 && ChessRules.isCheck(board, 'b');
+    }
+  },
+
+  // ================= CHAPTER 9: OPENING REPERTOIRE =================
+  {
+    id: 40,
+    chapterId: 9,
+    title: 'The Italian Game: Giuoco Piano',
+    piece: 'B',
+    badge: '🏛️ Italian Game',
+    parMoves: 1,
+    story: 'The <b>Italian Game</b> has been played for over 500 years and is the cleanest opening for beginners!<br><br>' +
+           'After 1. e4 e5 and 2. Nf3 Nc6, develop your light-squared Bishop to <b>c4</b> (`f1-c4`). From c4, your Bishop controls the center and lasers in on Black’s weakest square: f7!',
+    goal: 'Develop your Bishop from f1 to c4 to complete the Italian Game setup!',
+    hint: 'Move your Bishop from f1 diagonally to c4!',
+    board: [
+      ['r',  null, 'b',  'q',  'k',  'b',  'n',  'r' ],
+      ['p',  'p',  'p',  'p',  null, 'p',  'p',  'p' ],
+      [null, null, 'n',  null, null, null, null, null],
+      [null, null, null, null, 'p',  null, null, null],
+      [null, null, null, null, 'P',  null, null, null],
+      [null, null, null, null, null, 'N',  null, null],
+      ['P',  'P',  'P',  'P',  null, 'P',  'P',  'P' ],
+      ['R',  'N',  'B',  'Q',  'K',  'B',  null, 'R' ]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 4 && to.c === 2;
+    }
+  },
+  {
+    id: 41,
+    chapterId: 9,
+    title: 'The Fried Liver Attack: Double Strike!',
+    piece: 'N',
+    badge: '🍗 Fried Liver',
+    parMoves: 1,
+    story: 'The <b>Fried Liver Attack</b> is every beginner’s favorite weapon! 🍗<br><br>' +
+           'In the Italian Game, your Bishop already attacks f7 from c4. Jump your Knight to <b>g5</b> (`f3-g5`) so both pieces double-team the f7 square with unstoppable firepower!',
+    goal: 'Jump your Knight from f3 to g5 to double-attack f7!',
+    hint: 'Click the Knight on f3 and leap to g5!',
+    board: [
+      ['r',  null, 'b',  'q',  'k',  'b',  null, 'r' ],
+      ['p',  'p',  'p',  'p',  null, 'p',  'p',  'p' ],
+      [null, null, 'n',  null, null, 'n',  null, null],
+      [null, null, null, null, 'p',  null, null, null],
+      [null, null, 'B',  null, 'P',  null, null, null],
+      [null, null, null, null, null, 'N',  null, null],
+      ['P',  'P',  'P',  'P',  null, 'P',  'P',  'P' ],
+      ['R',  'N',  'B',  'Q',  'K',  null, null, 'R' ]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 3 && to.c === 6;
+    }
+  },
+  {
+    id: 42,
+    chapterId: 9,
+    title: 'The Queen’s Gambit: The Center Offer',
+    piece: 'P',
+    badge: '👑 Queen’s Gambit',
+    parMoves: 1,
+    story: 'The <b>Queen’s Gambit</b> is the most popular opening at the World Championship level!<br><br>' +
+           'After 1. d4 d5, offer your c-pawn by playing <b>c4</b> (`c2-c4`). If Black accepts, you dominate the center with e4!',
+    goal: 'Push your c2 pawn two squares to c4 to launch the Queen’s Gambit!',
+    hint: 'Click your pawn on c2 and march to c4!',
+    board: [
+      ['r',  'n',  'b',  'q',  'k',  'b',  'n',  'r' ],
+      ['p',  'p',  'p',  null, 'p',  'p',  'p',  'p' ],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, 'p',  null, null, null, null],
+      [null, null, null, 'P',  null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ['P',  'P',  'P',  null, 'P',  'P',  'P',  'P' ],
+      ['R',  'N',  'B',  'Q',  'K',  'B',  'N',  'R' ]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 4 && to.c === 2;
+    }
+  },
+  {
+    id: 43,
+    chapterId: 9,
+    title: 'Facing the Sicilian Defense!',
+    piece: 'N',
+    badge: '🛡️ Sicilian',
+    parMoves: 1,
+    story: 'When you play 1. e4, Black often responds with the sharp <b>Sicilian Defense</b> (1... c5)!<br><br>' +
+           'Develop your Knight to <b>f3</b> (`g1-f3`) to prepare your central breakthrough with d4!',
+    goal: 'Develop your Knight to f3 against the Sicilian Defense!',
+    hint: 'Move your Knight from g1 to f3!',
+    board: [
+      ['r',  'n',  'b',  'q',  'k',  'b',  'n',  'r' ],
+      ['p',  'p',  null, 'p',  'p',  'p',  'p',  'p' ],
+      [null, null, null, null, null, null, null, null],
+      [null, null, 'p',  null, null, null, null, null],
+      [null, null, null, null, 'P',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ['P',  'P',  'P',  'P',  null, 'P',  'P',  'P' ],
+      ['R',  'N',  'B',  'Q',  'K',  'B',  'N',  'R' ]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 5 && to.c === 5;
+    }
+  },
+  {
+    id: 44,
+    chapterId: 9,
+    title: 'The London System: The Unbreakable Wall',
+    piece: 'B',
+    badge: '🏰 London System',
+    parMoves: 1,
+    story: 'The <b>London System</b> is famous for being rock-solid and super easy to learn!<br><br>' +
+           'After 1. d4 d5, bring your dark-squared Bishop outside the pawn wall to <b>f4</b> (`c1-f4`) BEFORE you push e3!',
+    goal: 'Develop your Bishop from c1 to f4 in the London System!',
+    hint: 'Slide your Bishop diagonally from c1 to f4!',
+    board: [
+      ['r',  'n',  'b',  'q',  'k',  'b',  'n',  'r' ],
+      ['p',  'p',  'p',  null, 'p',  'p',  'p',  'p' ],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, 'p',  null, null, null, null],
+      [null, null, null, 'P',  null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ['P',  'P',  'P',  null, 'P',  'P',  'P',  'P' ],
+      ['R',  'N',  'B',  'Q',  'K',  'B',  'N',  'R' ]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 4 && to.c === 5;
+    }
+  },
+  {
+    id: 45,
+    chapterId: 9,
+    title: 'Never Play f6! Punish the Weakness',
+    piece: 'Q',
+    badge: '⚠️ f6 Trap',
+    parMoves: 1,
+    story: 'Grandmasters have a famous saying: <i>"Never play f6!"</i> Pushing the f-pawn opens the fatal diagonal to the King.<br><br>' +
+           'Black carelessly played 1... f6. Punish them immediately: fly your Queen out to <b>h5</b> (`d1-h5`) with CHECK!',
+    goal: 'Fly your Queen from d1 to h5 to punish the weakened diagonal!',
+    hint: 'Zoom your Queen diagonally to h5 to say check!',
+    board: [
+      ['r',  'n',  'b',  'q',  'k',  'b',  'n',  'r' ],
+      ['p',  'p',  'p',  'p',  'p',  null, 'p',  'p' ],
+      [null, null, null, null, null, 'p',  null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, 'P',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ['P',  'P',  'P',  'P',  null, 'P',  'P',  'P' ],
+      ['R',  'N',  'B',  'Q',  'K',  'B',  'N',  'R' ]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 3 && to.c === 7 && ChessRules.isCheck(board, 'b');
+    }
+  },
+
+  // ================= CHAPTER 10: ENDGAME MASTERCLASS =================
+  {
+    id: 46,
+    chapterId: 10,
+    title: 'King & Rook Checkmate: The Box Method',
+    piece: 'R',
+    badge: '📦 The Box',
+    parMoves: 1,
+    story: 'A Rook cannot checkmate a lone King by itself—it needs Grandpa King’s help!<br><br>' +
+           'White’s King stands opposite on e6, blocking all three escape squares (d7, e7, f7). Drop your Rook to <b>a8</b> (`a7-a8`) for CHECKMATE!',
+    goal: 'Drop your Rook from a7 to a8 to deliver the King & Rook checkmate!',
+    hint: 'Zoom your Rook to a8 to deliver the final blow!',
+    board: [
+      [null, null, null, null, 'k',  null, null, null],
+      ['R',  null, null, null, null, null, null, null],
+      [null, null, null, null, 'K',  null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null]
+    ],
+    validateMove: (from, to, board) => {
+      const isCheck = ChessRules.isCheck(board, 'b');
+      const moves = ChessRules.getLegalMoves(board, 0, 4);
+      return to.r === 0 && to.c === 0 && isCheck && moves.length === 0;
+    }
+  },
+  {
+    id: 47,
+    chapterId: 10,
+    title: 'The Magic of Opposition: Taking the Lead!',
+    piece: 'K',
+    badge: '👑 Opposition',
+    parMoves: 1,
+    story: 'In King and pawn endgames, <b>Opposition</b> means putting your King directly opposite the enemy King with one square in between.<br><br>' +
+           'Black’s King stands on d7. Step your King forward from <b>d4 to d5</b> (`d4-d5`) to seize the vertical Opposition! Now Black must step aside!',
+    goal: 'Step your King to d5 to seize the Opposition against Black’s King!',
+    hint: 'Move your King from d4 straight up to d5!',
+    board: [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, 'k',  null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, 'K',  null, null, null, null],
+      [null, null, null, 'P',  null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 3 && to.c === 3;
+    }
+  },
+  {
+    id: 48,
+    chapterId: 10,
+    title: 'The Square of the Pawn: The Mental Box',
+    piece: 'P',
+    badge: '📐 Rule of Square',
+    parMoves: 1,
+    story: 'Can the enemy King catch your runaway pawn? Count the squares to the back rank to create a mental square box! If the enemy King cannot step inside the box, the pawn CANNOT be caught!<br><br>' +
+           'Sprint your pawn from <b>a5 to a6</b> (`a5-a6`). The Black King is outside the box and can never catch you!',
+    goal: 'Sprint your passed pawn from a5 to a6!',
+    hint: 'Step your pawn forward to a6!',
+    board: [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, 'k',  null, null],
+      [null, null, null, null, null, null, null, null],
+      ['P',  null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, 'K' ]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 2 && to.c === 0;
+    }
+  },
+  {
+    id: 49,
+    chapterId: 10,
+    title: 'Promoting with King Escort!',
+    piece: 'P',
+    badge: '🛡️ Escort',
+    parMoves: 1,
+    story: 'A King must escort its pawn to the promotion square! Your King stands proudly on c7, shielding the runway.<br><br>' +
+           'Push your pawn forward to <b>d7</b> (`d6-d7`): on your next turn, you will crown a new Queen!',
+    goal: 'Push your pawn from d6 to d7 under the King’s protection!',
+    hint: 'March your pawn to d7 right beside the King!',
+    board: [
+      [null, null, null, null, null, 'k',  null, null],
+      [null, null, 'K',  null, null, null, null, null],
+      [null, null, null, 'P',  null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 1 && to.c === 3;
+    }
+  },
+  {
+    id: 50,
+    chapterId: 10,
+    title: 'The Kiss of Death Checkmate!',
+    piece: 'Q',
+    badge: '💋 Kiss of Death',
+    parMoves: 1,
+    story: 'The most famous Queen checkmate is called <b>The Kiss of Death</b>! 💋<br><br>' +
+           'The Queen steps directly in front of the enemy King with King protection. Fly your Queen to <b>g7</b> (`b2-g7`) right into the King’s face for CHECKMATE!',
+    goal: 'Fly your Queen from b2 to g7 to deliver the Kiss of Death checkmate!',
+    hint: 'Zoom your Queen to g7! The King cannot take her because your King on g6 protects her!',
+    board: [
+      [null, null, null, null, null, null, null, 'k' ],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, 'K',  null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, 'Q',  null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null]
+    ],
+    validateMove: (from, to, board) => {
+      const isCheck = ChessRules.isCheck(board, 'b');
+      const moves = ChessRules.getLegalMoves(board, 0, 7);
+      return to.r === 1 && to.c === 6 && isCheck && moves.length === 0;
+    }
+  },
+  {
+    id: 51,
+    chapterId: 10,
+    title: 'The Desperado Stalemate Trick!',
+    piece: 'Q',
+    badge: '🎭 Desperado',
+    parMoves: 1,
+    story: 'Down on material? Don’t resign—aim for a <b>Stalemate</b>! If your King has no legal moves and isn’t in check, you save a draw!<br><br>' +
+           'White’s King on a1 is completely trapped. Throw your Queen to <b>g3</b> with check (`g1-g3+`). When Black takes your Queen, it’s instant STALEMATE!',
+    goal: 'Sacrifice your Queen to g3 to save a draw by stalemate!',
+    hint: 'Move your Queen to g3 with check! Black is forced to capture, triggering stalemate!',
+    board: [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, 'q',  'k',  null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ['K',  null, null, null, null, null, 'Q',  null]
+    ],
+    validateMove: (from, to, board) => {
+      return to.r === 5 && to.c === 6 && ChessRules.isCheck(board, 'b');
+    }
+  },
+  {
+    id: 52,
+    chapterId: 10,
+    title: 'The Master Graduation: Final Checkmate!',
+    piece: 'Q',
+    badge: '🎓 Master Final',
+    parMoves: 1,
+    story: '<b>Your Final Exam:</b> You have learned every piece, rule, opening, tactic, and endgame in the royal game!<br><br>' +
+           'Bring home the championship: your Bishop on c4 is aiming at f7. Strike with your Queen from <b>f6 to f7</b> (`f6-f7`) for the Grandmaster CHECKMATE!',
+    goal: 'Deliver the championship checkmate with your Queen on f7!',
+    hint: 'Fly your Queen to f7! The Bishop on c4 backs her up for checkmate!',
+    board: [
+      [null, null, null, null, null, 'k',  null, 'r' ],
+      [null, null, null, 'p',  null, null, 'p',  'p' ],
+      [null, null, null, null, null, 'Q',  null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, 'B',  null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, 'K',  null, null, null]
+    ],
+    validateMove: (from, to, board) => {
+      const isCheck = ChessRules.isCheck(board, 'b');
+      const moves = ChessRules.getLegalMoves(board, 0, 5);
+      return to.r === 1 && to.c === 5 && isCheck && moves.length === 0;
     }
   }
 ];
