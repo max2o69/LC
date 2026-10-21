@@ -273,15 +273,15 @@ const LEVELS = [
     badge: '💰 Point Values',
     parMoves: 1,
     story: 'In chess, every piece has point values!<br><b>Pawn = 1 point</b> ♙<br><b>Knight/Bishop = 3 points</b> ♘♗<br><b>Rook = 5 points</b> ♖<br><b>Queen = 9 points</b> ♕<br>Don\'t capture a 1-point pawn if you can get a 5-point Rook!',
-    goal: 'Your Bishop can capture the 1-point pawn OR the 5-point Rook. Capture the high-value Rook!',
-    hint: 'The black Rook is worth 5 points! Slide your Bishop up-right to take it!',
+    goal: 'Your Bishop can capture the 1-point pawn on c5 OR the 5-point Rook on g7. Capture the high-value Rook on g7!',
+    hint: 'The black Rook is worth 5 points! Slide your Bishop up-right to g7 to take it!',
     board: [
       [null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, 'r',  null],
+      [null, null, null, null, null, null, 'r',  null], // g7 (row 1, col 6 - Rook: 5 pts)
       [null, null, null, null, null, null, null, null],
-      [null, 'p',  null, null, null, null, null, null],
+      [null, null, 'p',  null, null, null, null, null], // c5 (row 3, col 2 - Pawn: 1 pt)
+      [null, null, null, 'B',  null, null, null, null], // d4 (row 4, col 3 - Bishop)
       [null, null, null, null, null, null, null, null],
-      [null, null, null, 'B',  null, null, null, null],
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null]
     ],
@@ -442,14 +442,14 @@ const LEVELS = [
     badge: '⚠️ Stalemate Warning',
     parMoves: 1,
     story: 'Watch out! If the enemy King is <b>NOT in check</b>, but has <b>ZERO legal moves</b>, that is a <b>Stalemate</b> (a tie game)! To win, you MUST attack the King on the final move. Don\'t trap him without check!',
-    goal: 'Deliver true CHECKMATE on c8! (If you went to c7 instead, that would be stalemate!)',
-    hint: 'Move your Queen to c8 to check the King on a8!',
+    goal: 'Deliver true CHECKMATE by zooming your Queen straight up to e8! (Notice: if you trapped him without checking him, that would be a Stalemate tie!)',
+    hint: 'Drive your Queen straight up the e-file to e8 to check the King on a8!',
     board: [
-      ['k',  null, null, null, null, null, null, null],
+      ['k',  null, null, null, null, null, null, null], // a8 (row 0, col 0)
       [null, null, null, null, null, null, null, null],
-      [null, null, 'K',  null, null, null, null, null],
+      [null, 'K',  null, null, null, null, null, null], // b6 (row 2, col 1 - guards a7 & b7)
       [null, null, null, null, null, null, null, null],
-      [null, null, 'Q',  null, null, null, null, null],
+      [null, null, null, null, 'Q',  null, null, null], // e4 (row 4, col 4)
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null]

@@ -221,6 +221,29 @@ class ChessBoardUI {
       } else if (moveData.castling === 'Q') {
         this.boardState[7][3] = 'R';
         this.boardState[7][0] = null;
+      } else if (moveData.castling === 'k') {
+        this.boardState[0][5] = 'r';
+        this.boardState[0][7] = null;
+      } else if (moveData.castling === 'q') {
+        this.boardState[0][3] = 'r';
+        this.boardState[0][0] = null;
+      }
+    }
+
+    // Update castling rights if King or Rook moved
+    if (this.options && this.options.castling) {
+      if (piece === 'K') {
+        this.options.castling.K = false;
+        this.options.castling.Q = false;
+      } else if (piece === 'k') {
+        this.options.castling.k = false;
+        this.options.castling.q = false;
+      } else if (piece === 'R') {
+        if (from.r === 7 && from.c === 7) this.options.castling.K = false;
+        if (from.r === 7 && from.c === 0) this.options.castling.Q = false;
+      } else if (piece === 'r') {
+        if (from.r === 0 && from.c === 7) this.options.castling.k = false;
+        if (from.r === 0 && from.c === 0) this.options.castling.q = false;
       }
     }
 
@@ -229,6 +252,15 @@ class ChessBoardUI {
       const epR = ChessRules.getColor(piece) === 'w' ? to.r + 1 : to.r - 1;
       this.boardState[epR][to.c] = null;
       sounds.playCapture();
+    }
+
+    // Update or clear en passant target for next turn
+    if (piece === 'P' && from.r === 6 && to.r === 4) {
+      this.options.enPassant = { r: 5, c: from.c };
+    } else if (piece === 'p' && from.r === 1 && to.r === 3) {
+      this.options.enPassant = { r: 2, c: from.c };
+    } else {
+      this.options.enPassant = null;
     }
 
     // Handle Pawn Promotion (Pawn reaches 8th rank)

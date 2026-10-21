@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "A beginner-friendly browser chess teaching game designed for absolute beginners.",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node test_curriculum.js"
   },
   "keywords": ["chess", "educational", "teaching", "beginner", "game"],
   "author": "",
