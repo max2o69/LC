@@ -62,16 +62,16 @@ const LEVELS = [
     parMoves: 2,
     story: 'Meet <b>Barnaby the Bishop</b>! He is a magician who slides diagonally like an "X". Notice how he starts on a light square—he can NEVER step on a dark square!',
     goal: 'Slide diagonally to collect both stars!',
-    hint: 'Bishops slide along diagonals. Follow the light-colored path!',
+    hint: 'Slide up-left to c4 to grab star 1, then slide up-right to f7 to grab star 2!',
     board: [
       [null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, '*',  null],
-      [null, null, null, null, null, null, null, null],
-      [null, null, null, null, '*',  null, null, null],
+      [null, null, null, null, null, '*',  null, null], // f7 (row 1, col 5)
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
+      [null, null, '*',  null, null, null, null, null], // c4 (row 4, col 2)
       [null, null, null, null, null, null, null, null],
-      [null, 'B',  null, null, null, null, null, null]
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, 'B',  null, null]  // f1 (row 7, col 5)
     ]
   },
   {
@@ -83,16 +83,16 @@ const LEVELS = [
     parMoves: 2,
     story: 'Every kingdom has TWO Bishops! One stays on light squares forever, and this one stays on dark squares forever!',
     goal: 'Zig-zag along the dark diagonal tiles to collect both stars!',
-    hint: 'Slide up-left to the first star, then up-right to the second star!',
+    hint: 'Slide up-right to f4, then up-left to c7!',
     board: [
-      [null, null, null, null, null, '*',  null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, '*',  null, null, null, null, null], // c7 (row 1, col 2)
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
-      [null, null, '*',  null, null, null, null, null],
+      [null, null, null, null, null, '*',  null, null], // f4 (row 4, col 5)
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, 'B',  null, null]
+      [null, null, 'B',  null, null, null, null, null]  // c1 (row 7, col 2)
     ]
   },
   {
@@ -104,16 +104,16 @@ const LEVELS = [
     parMoves: 3,
     story: 'Meet <b>Queen Quick</b>! She has the powers of BOTH the Rook and the Bishop combined. She can zoom straight OR diagonally as far as she wants!',
     goal: 'Use your superhero moves to collect all 3 stars in 3 moves!',
-    hint: 'You can go straight, then diagonal, or any direction you want!',
+    hint: 'Zoom straight up to d7, drive straight right to g7, then slide diagonally down to b2!',
     board: [
       [null, null, null, null, null, null, null, null],
-      [null, '*',  null, null, null, null, '*',  null],
+      [null, null, null, '*',  null, null, '*',  null], // d7 (row 1, col 3) & g7 (row 1, col 6)
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
-      [null, null, null, 'Q',  null, null, null, null],
+      [null, null, null, 'Q',  null, null, null, null], // d4 (row 4, col 3)
       [null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, '*',  null]
+      [null, '*',  null, null, null, null, null, null], // b2 (row 6, col 1)
+      [null, null, null, null, null, null, null, null]
     ]
   },
   {
@@ -146,16 +146,16 @@ const LEVELS = [
     parMoves: 2,
     story: 'Meet <b>Knight Gallop</b>! The horse has a funny dance move: 2 squares forward, then 1 square turn to make an "L" shape! <i>Neighhh!</i>',
     goal: 'Gallop in an L-shape to collect the carrots/stars!',
-    hint: 'Count: 1 step, 2 steps, then turn left or right!',
+    hint: 'Hop to c3 first (2 up, 1 right), then hop to e4 (1 up, 2 right)!',
     board: [
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, '*',  null],
-      [null, null, null, null, null, null, null, null],
-      [null, null, null, null, '*',  null, null, null],
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
-      [null, null, 'N',  null, null, null, null, null]
+      [null, null, null, null, '*',  null, null, null], // e4 (row 4, col 4)
+      [null, null, '*',  null, null, null, null, null], // c3 (row 5, col 2)
+      [null, null, null, null, null, null, null, null],
+      [null, 'N',  null, null, null, null, null, null]  // b1 (row 7, col 1)
     ]
   },
   {
@@ -187,16 +187,16 @@ const LEVELS = [
     badge: '♙ Pawn',
     parMoves: 2,
     story: 'Meet <b>Peter the Pawn</b>! Pawns are the brave little foot-soldiers. They walk 1 step forward. But on their VERY FIRST move from home, they have enough energy for a giant 2-step leap!',
-    goal: 'Use your 2-step starting leap, then take 1 more step forward to reach the star!',
-    hint: 'Pawns only march straight ahead. First move: jump 2 squares forward!',
+    goal: 'Jump 2 steps forward to grab the first star, then take 1 more step to grab the second star!',
+    hint: 'Pawns only march straight ahead. First move: take the 2-step leap to e4!',
     board: [
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
-      [null, null, null, null, '*',  null, null, null],
+      [null, null, null, null, '*',  null, null, null], // e5 (row 3, col 4)
+      [null, null, null, null, '*',  null, null, null], // e4 (row 4, col 4)
       [null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null],
-      [null, null, null, null, 'P',  null, null, null],
+      [null, null, null, null, 'P',  null, null, null], // e2 (row 6, col 4)
       [null, null, null, null, null, null, null, null]
     ]
   },
@@ -295,8 +295,8 @@ const LEVELS = [
     badge: '🛡️ Defending',
     parMoves: 1,
     story: 'A good kingdom protects its friends! Look at your Knight on c3—the black Rook on c8 is staring at him with laser eyes! Bring your Bishop to defend the Knight so Black won\'t dare capture it!',
-    goal: 'Move your Bishop to b2 or d2 to protect your Knight friend!',
-    hint: 'Move your Bishop to d2 or b2 so it aims directly at the Knight to protect it!',
+    goal: 'Move your Bishop to b2 to protect your Knight friend, or jump your Knight away to safety!',
+    hint: 'Move your Bishop from a1 to b2 so it aims diagonally at the Knight to guard him!',
     board: [
       [null, null, 'r',  null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
@@ -305,9 +305,9 @@ const LEVELS = [
       [null, null, null, null, null, null, null, null],
       [null, null, 'N',  null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
-      [null, 'B',  null, null, null, null, null, null]
+      ['B',  null, null, null, null, null, null, null]
     ],
-    validateMove: (from, to) => (to.r === 6 && (to.c === 1 || to.c === 3)) || (to.r === 7 && to.c === 3)
+    validateMove: (from, to) => (from.r === 7 && from.c === 0 && to.r === 6 && to.c === 1) || (from.r === 5 && from.c === 2 && to.c !== 2)
   },
 
   // ================= CHAPTER 3: KING IN DANGER =================
