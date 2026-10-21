@@ -197,7 +197,7 @@ class ChessBoardUI {
     }
   }
 
-  executeMove(from, to, moveData) {
+  executeMove(from, to, moveData, isBotMove = false) {
     const piece = this.boardState[from.r][from.c];
     const target = this.boardState[to.r][to.c];
 
@@ -278,7 +278,7 @@ class ChessBoardUI {
     this.validMoves = [];
     this.render();
 
-    if (this.onMoveCallback) {
+    if (this.onMoveCallback && !isBotMove) {
       this.onMoveCallback(from, to, moveData);
     }
   }

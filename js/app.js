@@ -163,10 +163,13 @@ class ChessGameApp {
     // Check Mini-Game end condition
     if (level.isMiniGame && level.validateGameEnd) {
       const outcome = level.validateGameEnd(this.boardUI.boardState);
-      if (outcome === 'win') won = true;
-      else if (outcome === 'loss') {
+      if (outcome === 'win') {
+        this.handleVictory();
+        return;
+      } else if (outcome === 'loss') {
         sounds.playError();
-        this.showHint("The black pawn promoted first! Tap restart to try again!");
+        this.showHint("The black pawn promoted first! Tap 🔄 Restart to try again!");
+        this.boardUI.interactive = false;
         return;
       } else {
         // Let bot respond in mini-game
@@ -201,17 +204,18 @@ class ChessGameApp {
       const level = LEVELS[this.currentLevelIndex];
       const botMove = CoachBot.chooseMove(this.boardUI.boardState, level ? level.options : {});
       if (botMove) {
-        this.boardUI.executeMove(botMove.from, botMove.to, botMove);
+        this.boardUI.executeMove(botMove.from, botMove.to, botMove, true);
       }
       this.boardUI.interactive = true;
       document.getElementById('turn-indicator').textContent = '🌟 Your Turn!';
 
       // Check if bot win triggered
-      if (level.isMiniGame && level.validateGameEnd) {
+      if (level && level.isMiniGame && level.validateGameEnd) {
         const outcome = level.validateGameEnd(this.boardUI.boardState);
         if (outcome === 'loss') {
           sounds.playError();
-          this.showHint("Black promoted first! Try again!");
+          this.showHint("The black pawn promoted first! Tap 🔄 Restart to try again!");
+          this.boardUI.interactive = false;
         }
       }
     }, 500);
@@ -305,7 +309,7 @@ class ChessGameApp {
     setTimeout(() => {
       const move = CoachBot.chooseMove(this.boardUI.boardState);
       if (move) {
-        this.boardUI.executeMove(move.from, move.to, move);
+        this.boardUI.executeMove(move.from, move.to, move, true);
       }
 
       // Check if bot checkmated white
