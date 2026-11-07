@@ -4,20 +4,30 @@ const path = require('path');
 const { exec } = require('child_process');
 
 const PORT = 8000;
-const BASE_DIR = __dirname;
+const BASE_DIR = path.resolve(__dirname);
 
 const MIME_TYPES = {
-  '.html': 'text/html',
-  '.css': 'text/css',
-  '.js': 'application/javascript',
-  '.json': 'application/json',
+  '.html': 'text/html; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.js': 'application/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
   '.jpg': 'image/jpeg'
 };
 
 const server = http.createServer((req, res) => {
-  let filePath = path.join(BASE_DIR, req.url === '/' ? 'index.html' : req.url.split('?')[0]);
+  const rawPath = decodeURIComponent((req.url || '/').split('?')[0]);
+  const relPath = rawPath === '/' ? 'index.html' : rawPath.replace(/^\/+/, '');
+  const filePath = path.resolve(BASE_DIR, relPath);
+
+  // Prevent directory traversal outside workspace root
+  if (!filePath.startsWith(BASE_DIR + path.sep) && filePath !== path.join(BASE_DIR, 'index.html')) {
+    res.writeHead(403, { 'Content-Type': 'text/plain' });
+    res.end('403 Forbidden');
+    return;
+  }
+
   const ext = path.extname(filePath).toLowerCase();
   const contentType = MIME_TYPES[ext] || 'application/octet-stream';
 
@@ -41,7 +51,5 @@ server.listen(PORT, () => {
   const url = `http://localhost:${PORT}`;
   console.log(`🏰 Kingdom Chess is running at ${url}`);
   console.log('Press Ctrl+C to stop.');
-
-  // Open default browser on Windows
   exec(`start ${url}`);
 });

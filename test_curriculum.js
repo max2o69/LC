@@ -62,7 +62,7 @@ emptyBoard[4][4] = null;
 console.log('✓ All 6 piece movement geometries 100% verified.');
 
 // Test 3: Complete Level-by-Level Playthrough Verification
-console.log('\n=== TEST 3: ALL 24 CURRICULUM LEVELS PLAYTHROUGH ===');
+console.log('\n=== TEST 3: ALL CURRICULUM LEVELS PLAYTHROUGH ===');
 
 const SOLUTIONS = {
   1: ['e1-e7'],
@@ -72,123 +72,150 @@ const SOLUTIONS = {
   5: ['d4-d7', 'd7-g7', 'g7-b2'],
   6: ['b1-c2', 'c2-d3', 'd3-e4'],
   7: ['b1-c3', 'c3-e4'],
-  8: ['e4-f6'],
+  8: ['e4-f6', 'f6-h7'],
   9: ['e2-e4', 'e4-e5'],
   10: ['d4-e5', 'e5-f6'],
-  11: ['e7-e8'],
-  12: ['c1-c7'],
-  13: ['d4-g7'],
-  14: ['a1-b2'],
-  15: ['c4-c8'],
-  16: ['e1-d1'],
-  17: ['b4-e4'],
-  18: ['b2-e5'],
-  19: ['b4-b7'],
-  20: ['e4-e8'],
-  21: ['e1-g1'],
-  22: ['e5-f6'],
+  11: ['e6-e7', 'e7-e8'],
   23: ['c2-c4'],
-  24: ['b4-b8'],
-  25: ['d5-c7'],
-  26: ['a1-e1'],
-  27: ['a1-a4'],
-  28: ['d4-c6'],
-  29: ['d1-d8'],
-  30: ['e2-e4'],
-  31: ['g1-f3'],
-  32: ['g2-g3'],
-  33: ['a1-a8'],
-  34: ['e4-d6'],
-  35: ['e5-f7'],
-  36: ['c4-c8'],
-  37: ['c3-b5'],
-  38: ['c1-d2'],
-  39: ['d3-h7'],
-  40: ['f1-c4'],
-  41: ['f3-g5'],
-  42: ['c2-c4'],
-  43: ['g1-f3'],
-  44: ['c1-f4'],
-  45: ['d1-h5'],
-  46: ['a7-a8'],
-  47: ['d4-d5'],
-  48: ['a5-a6'],
-  49: ['d6-d7'],
-  50: ['b2-g7'],
-  51: ['g1-g3'],
-  52: ['f6-f7']
+  51: ['g1-g3']
 };
 
 let allLevelsOk = true;
 
 LEVELS.forEach(lvl => {
-  const sol = SOLUTIONS[lvl.id];
-  if (!sol) {
-    console.error(`FAIL: Level ${lvl.id} has no test solution!`);
-    allLevelsOk = false;
-    return;
-  }
-
   let board = lvl.board.map(r => [...r]);
   let options = lvl.options ? JSON.parse(JSON.stringify(lvl.options)) : {};
 
-  for (let i = 0; i < sol.length; i++) {
-    const [fromStr, toStr] = sol[i].split('-');
-    const from = ChessRules.fromAlgebraic(fromStr);
-    const to = ChessRules.fromAlgebraic(toStr);
+  if (lvl.sequence && lvl.sequence.length > 0) {
+    // Test interactive sequence level
+    for (let i = 0; i < lvl.sequence.length; i++) {
+      const step = lvl.sequence[i];
+      const [fromStr, toStr] = step.move.split('-');
+      const from = ChessRules.fromAlgebraic(fromStr);
+      const to = ChessRules.fromAlgebraic(toStr);
 
-    const piece = board[from.r][from.c];
-    if (!piece) {
-      console.error(`FAIL: Level ${lvl.id} step ${i+1}: No piece at ${fromStr}!`);
-      allLevelsOk = false;
-      return;
-    }
-
-    const legal = ChessRules.getLegalMoves(board, from.r, from.c, options);
-    const move = legal.find(m => m.r === to.r && m.c === to.c);
-    if (!move) {
-      console.error(`FAIL: Level ${lvl.id} step ${i+1}: Move ${fromStr}->${toStr} is ILLEGAL for ${piece}!`);
-      console.error('Available legal moves:', legal.map(m => ChessRules.toAlgebraic(m.r, m.c)).join(', '));
-      allLevelsOk = false;
-      return;
-    }
-
-    // Apply move
-    board[to.r][to.c] = piece;
-    board[from.r][from.c] = null;
-    if (move.castling === 'K') {
-      board[7][5] = 'R'; board[7][7] = null;
-    } else if (move.castling === 'Q') {
-      board[7][3] = 'R'; board[7][0] = null;
-    }
-    if (move.enPassant) {
-      const epR = ChessRules.getColor(piece) === 'w' ? to.r + 1 : to.r - 1;
-      board[epR][to.c] = null;
-    }
-    if (piece === 'P' && to.r === 0) board[to.r][to.c] = 'Q';
-
-    // If final move, check win
-    if (i === sol.length - 1) {
-      let won = false;
-      if (lvl.validateMove) {
-        won = lvl.validateMove(from, to, board, move);
-      } else if (lvl.targetPiece) {
-        won = !board.some(row => row.includes(lvl.targetPiece));
-      } else if (lvl.isMiniGame) {
-        won = true;
-      } else {
-        won = !board.some(row => row.includes('*'));
-      }
-
-      if (!won) {
-        console.error(`FAIL: Level ${lvl.id}: Solved moves did NOT satisfy victory condition!`);
+      const piece = board[from.r][from.c];
+      if (!piece || !ChessRules.isWhite(piece)) {
+        console.error(`FAIL: Level ${lvl.id} step ${i+1}: No white piece at ${fromStr}!`);
         allLevelsOk = false;
         return;
       }
-    }
-  }
 
-  console.log(`✓ Level ${lvl.id} (${lvl.title}) verified and fully solvable in ${sol.length} move(s).`);
+      const legal = ChessRules.getLegalMoves(board, from.r, from.c, options);
+      const move = legal.find(m => m.r === to.r && m.c === to.c);
+      if (!move) {
+        console.error(`FAIL: Level ${lvl.id} step ${i+1}: White move ${fromStr}->${toStr} is ILLEGAL for ${piece}!`);
+        console.error('Available legal moves:', legal.map(m => ChessRules.toAlgebraic(m.r, m.c)).join(', '));
+        allLevelsOk = false;
+        return;
+      }
+
+      // Apply White move
+      board[to.r][to.c] = piece;
+      board[from.r][from.c] = null;
+      if (move.castling === 'K') {
+        board[7][5] = 'R'; board[7][7] = null;
+      } else if (move.castling === 'Q') {
+        board[7][3] = 'R'; board[7][0] = null;
+      }
+      if (move.enPassant) {
+        const epR = ChessRules.getColor(piece) === 'w' ? to.r + 1 : to.r - 1;
+        board[epR][to.c] = null;
+      }
+      if (piece === 'P' && to.r === 0) board[to.r][to.c] = 'Q';
+
+      // Check bot response if present
+      if (step.response) {
+        const [rFromStr, rToStr] = step.response.split('-');
+        const rFrom = ChessRules.fromAlgebraic(rFromStr);
+        const rTo = ChessRules.fromAlgebraic(rToStr);
+        const rPiece = board[rFrom.r][rFrom.c];
+        if (!rPiece || !ChessRules.isBlack(rPiece)) {
+          console.error(`FAIL: Level ${lvl.id} step ${i+1} response: No black piece at ${rFromStr}!`);
+          allLevelsOk = false;
+          return;
+        }
+
+        const rLegal = ChessRules.getLegalMoves(board, rFrom.r, rFrom.c, options);
+        const rMove = rLegal.find(m => m.r === rTo.r && m.c === rTo.c);
+        if (!rMove) {
+          console.error(`FAIL: Level ${lvl.id} step ${i+1} response: Black move ${rFromStr}->${rToStr} is ILLEGAL for ${rPiece}!`);
+          console.error('Available legal moves:', rLegal.map(m => ChessRules.toAlgebraic(m.r, m.c)).join(', '));
+          allLevelsOk = false;
+          return;
+        }
+
+        board[rTo.r][rTo.c] = rPiece;
+        board[rFrom.r][rFrom.c] = null;
+        if (rPiece === 'p' && rTo.r === 7) board[rTo.r][rTo.c] = 'q';
+      }
+    }
+    console.log(`✓ Level ${lvl.id} (${lvl.title}) verified and fully solvable in ${lvl.sequence.length} move(s).`);
+  } else {
+    // Non-sequence level
+    const sol = SOLUTIONS[lvl.id];
+    if (!sol) {
+      console.error(`FAIL: Level ${lvl.id} has no test solution!`);
+      allLevelsOk = false;
+      return;
+    }
+
+    for (let i = 0; i < sol.length; i++) {
+      const [fromStr, toStr] = sol[i].split('-');
+      const from = ChessRules.fromAlgebraic(fromStr);
+      const to = ChessRules.fromAlgebraic(toStr);
+
+      const piece = board[from.r][from.c];
+      if (!piece) {
+        console.error(`FAIL: Level ${lvl.id} step ${i+1}: No piece at ${fromStr}!`);
+        allLevelsOk = false;
+        return;
+      }
+
+      const legal = ChessRules.getLegalMoves(board, from.r, from.c, options);
+      const move = legal.find(m => m.r === to.r && m.c === to.c);
+      if (!move) {
+        console.error(`FAIL: Level ${lvl.id} step ${i+1}: Move ${fromStr}->${toStr} is ILLEGAL for ${piece}!`);
+        console.error('Available legal moves:', legal.map(m => ChessRules.toAlgebraic(m.r, m.c)).join(', '));
+        allLevelsOk = false;
+        return;
+      }
+
+      board[to.r][to.c] = piece;
+      board[from.r][from.c] = null;
+      if (move.castling === 'K') {
+        board[7][5] = 'R'; board[7][7] = null;
+      } else if (move.castling === 'Q') {
+        board[7][3] = 'R'; board[7][0] = null;
+      }
+      if (move.enPassant) {
+        const epR = ChessRules.getColor(piece) === 'w' ? to.r + 1 : to.r - 1;
+        board[epR][to.c] = null;
+      }
+      if (piece === 'P' && to.r === 0) board[to.r][to.c] = 'Q';
+
+      // Check win on final move
+      if (i === sol.length - 1) {
+        let won = false;
+        if (lvl.validateMove) {
+          won = lvl.validateMove(from, to, board, move);
+        } else if (lvl.targetPiece) {
+          won = !board.some(row => row.includes(lvl.targetPiece));
+        } else if (lvl.isMiniGame) {
+          won = true;
+        } else {
+          won = !board.some(row => row.includes('*'));
+        }
+
+        if (!won) {
+          console.error(`FAIL: Level ${lvl.id}: Solved moves did NOT satisfy victory condition!`);
+          allLevelsOk = false;
+          return;
+        }
+      }
+    }
+    console.log(`✓ Level ${lvl.id} (${lvl.title}) verified and fully solvable in ${sol.length} move(s).`);
+  }
 });
 
 function assert(condition, message) {

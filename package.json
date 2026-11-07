@@ -1,12 +1,12 @@
 {
   "name": "kingdom-chess-teaching-game",
-  "version": "1.0.0",
-  "description": "A beginner-friendly browser chess teaching game designed for absolute beginners.",
+  "version": "2.0.0",
+  "description": "An interactive self-teaching chess platform with 52 lessons, 115+ rated Dojo puzzles & multi-move combos, multi-difficulty Alpha-Beta AI, and a live White/Black Coach.",
   "scripts": {
     "start": "node server.js",
-    "test": "node test_curriculum.js && node test_dojo.js"
+    "test": "node test_curriculum.js && node test_dojo.js && node test_bot.js && node test_guide.js"
   },
-  "keywords": ["chess", "educational", "teaching", "beginner", "game"],
+  "keywords": ["chess", "educational", "teaching", "tactics", "engine", "coach"],
   "author": "",
   "license": "MIT"
 }

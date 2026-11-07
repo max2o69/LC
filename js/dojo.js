@@ -9301,6 +9301,522 @@ const DOJO_PUZZLES = [
         null
       ]
     ]
+  },
+  // ================= MASTER MULTI-MOVE COMBINATIONS (#101 - #120) =================
+  {
+    "id": 101,
+    "cat": "combo",
+    "rating": 1350,
+    "categoryLabel": "🔥 Master Combo (2 Moves)",
+    "title": "Queen Sacrifice Back-Rank Mate",
+    "prompt": "Sacrifice your Queen to deflect the Rook and deliver back-rank checkmate!",
+    "hint": "Step 1: Sacrifice Queen on e8 with check! Step 2: Finish with Rook to e8#!",
+    "explanation": "1. Qxe8+! Rxe8 2. Rxe8# — classic deflection checkmate!",
+    "from": "b5",
+    "to": "e8",
+    "sequence": [
+      { "move": "b5-e8", "response": "a8-e8", "hint": "Sacrifice Queen from b5 to e8 with check!" },
+      { "move": "e1-e8", "hint": "Recapture with Rook on e8 for checkmate!" }
+    ],
+    "board": [
+      ["r", null, null, null, null, null, "k", null],
+      ["p", "p", null, null, null, "p", "p", "p"],
+      [null, null, null, null, null, null, null, null],
+      [null, "Q", null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ["P", "P", null, null, null, "P", "P", "P"],
+      [null, null, null, null, "R", null, "K", null]
+    ]
+  },
+  {
+    "id": 102,
+    "cat": "combo",
+    "rating": 1450,
+    "categoryLabel": "🔥 Master Combo (2 Moves)",
+    "title": "Philidor’s Smothered Mate",
+    "prompt": "Force Black’s Rook to smother its own King, then deliver Knight mate!",
+    "hint": "Sacrifice your Queen on g8 with check! Black Rook must take, trapping the King!",
+    "explanation": "1. Qg8+! Rxg8 2. Nf7# — the immortal Smothered Mate!",
+    "from": "c4",
+    "to": "g8",
+    "sequence": [
+      { "move": "c4-g8", "response": "f8-g8", "hint": "Sacrifice Queen on g8+ (protected by Knight on h6)!" },
+      { "move": "h6-f7", "hint": "Leap Knight from h6 to f7 for Smothered Checkmate!" }
+    ],
+    "board": [
+      [null, null, null, null, null, "r", null, "k"],
+      [null, null, null, null, null, null, "p", "p"],
+      [null, null, null, null, null, null, null, "N"],
+      [null, null, null, null, null, null, null, null],
+      [null, null, "Q", null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, "P", "P"],
+      [null, null, null, null, null, null, "K", null]
+    ]
+  },
+  {
+    "id": 103,
+    "cat": "combo",
+    "rating": 1400,
+    "categoryLabel": "🔥 Master Combo (2 Moves)",
+    "title": "Anastasia’s Mate Sacrifice",
+    "prompt": "Open the h-file with a Queen sacrifice to unleash Rook mate!",
+    "hint": "Sacrifice Qxh7+! After Kxh7, slide Rook to h3#!",
+    "explanation": "1. Qxh7+! Kxh7 2. Rh3# — Knight on e7 seals g8 and g6!",
+    "from": "h5",
+    "to": "h7",
+    "sequence": [
+      { "move": "h5-h7", "response": "g8-h7", "hint": "Capture on h7 with your Queen (check)!" },
+      { "move": "e3-h3", "hint": "Slide Rook from e3 to h3 for checkmate!" }
+    ],
+    "board": [
+      [null, null, null, null, null, "r", "k", null],
+      ["p", "p", null, null, "N", "p", "p", "p"],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, "Q"],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, "R", null, null, null],
+      ["P", "P", null, null, null, "P", "P", "P"],
+      [null, null, null, null, null, null, "K", null]
+    ]
+  },
+  {
+    "id": 104,
+    "cat": "combo",
+    "rating": 1420,
+    "categoryLabel": "🔥 Master Combo (2 Moves)",
+    "title": "Arabian Mate Sacrifice",
+    "prompt": "Sacrifice your Queen on h7 to set up the classic Rook + Knight Arabian Mate!",
+    "hint": "Step 1: Sacrifice Qxh7+! Step 2: Zoom Rook from g1 to g8# (guarded by Nf6)!",
+    "explanation": "1. Qxh7+! Rxh7 2. Rg8# — the timeless Arabian Mate!",
+    "from": "d3",
+    "to": "h7",
+    "sequence": [
+      { "move": "d3-h7", "response": "c7-h7", "hint": "Sacrifice your Queen on h7 with check!" },
+      { "move": "g1-g8", "hint": "Slide Rook from g1 to g8# (protected by your f6 Knight)!" }
+    ],
+    "board": [
+      [null, null, null, null, null, null, null, "k"],
+      ["p", "p", "r", null, null, null, null, "p"],
+      [null, null, null, null, null, "N", null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, "Q", null, null, null, null],
+      ["P", "P", "P", null, null, "P", null, "P"],
+      [null, null, null, null, null, null, "R", "K"]
+    ]
+  },
+  {
+    "id": 105,
+    "cat": "combo",
+    "rating": 1480,
+    "categoryLabel": "🔥 Master Combo (2 Moves)",
+    "title": "Decoy into Royal Fork",
+    "prompt": "Sacrifice your Rook to lure Black’s King onto a deadly Knight fork!",
+    "hint": "Sacrifice Rook on e7+! Once Kxe7, jump Knight to d5+ forking King and Queen!",
+    "explanation": "1. Rxe7+! Kxe7 2. Nd5+! wins Black’s Queen cleanly!",
+    "from": "e1",
+    "to": "e7",
+    "sequence": [
+      { "move": "e1-e7", "response": "e8-e7", "hint": "Sacrifice Rook on e7 with check!" },
+      { "move": "c3-d5", "hint": "Jump Knight from c3 to d5 forking King and Queen!" }
+    ],
+    "board": [
+      [null, null, null, null, "k", null, null, null],
+      [null, null, "q", null, "b", "p", "p", "p"],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, "N", null, null, null, null, null],
+      ["P", "P", "P", null, null, "P", "P", "P"],
+      [null, null, null, null, "R", null, "K", null]
+    ]
+  },
+  {
+    "id": 106,
+    "cat": "combo",
+    "rating": 1520,
+    "categoryLabel": "🔥 Master Combo (2 Moves)",
+    "title": "Opera Game Finale",
+    "prompt": "Channel Paul Morphy! Sacrifice your Queen to finish with Rook checkmate!",
+    "hint": "Play Qb8+! Black Knight must capture Qxb8, then Rd8# is mate!",
+    "explanation": "1. Qb8+! Nxb8 2. Rd8# — Paul Morphy’s famous 1858 Opera House mate!",
+    "from": "b3",
+    "to": "b8",
+    "sequence": [
+      { "move": "b3-b8", "response": "d7-b8", "hint": "Sacrifice Queen on b8 with check!" },
+      { "move": "d1-d8", "hint": "Zoom Rook to d8 protected by your g5 Bishop!" }
+    ],
+    "board": [
+      [null, null, null, null, "k", null, null, "r"],
+      ["p", null, "p", "n", null, "p", "p", "p"],
+      [null, null, null, null, "p", null, null, null],
+      [null, null, null, null, null, null, "B", null],
+      [null, null, null, null, null, null, null, null],
+      [null, "Q", null, null, null, null, null, null],
+      ["P", "P", "P", null, null, "P", "P", "P"],
+      [null, null, "K", "R", null, null, null, null]
+    ]
+  },
+  {
+    "id": 107,
+    "cat": "combo",
+    "rating": 1500,
+    "categoryLabel": "🔥 Master Combo (2 Moves)",
+    "title": "Boden’s Criss-Cross Mate",
+    "prompt": "Sacrifice your Queen on c6 to crisscross Black’s King with two Bishops!",
+    "hint": "Sacrifice Qxc6+! After bxc6, play Ba6#!",
+    "explanation": "1. Qxc6+! bxc6 2. Ba6# — Boden’s Mate with crisscrossing Bishops!",
+    "from": "f3",
+    "to": "c6",
+    "sequence": [
+      { "move": "f3-c6", "response": "b7-c6", "hint": "Sacrifice Queen on c6 with check!" },
+      { "move": "f1-a6", "hint": "Slide light-squared Bishop to a6 for checkmate!" }
+    ],
+    "board": [
+      [null, "r", "k", "r", null, null, null, null],
+      ["p", "p", "p", null, "n", "p", "p", "p"],
+      [null, null, "n", null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, "Q", null, null],
+      ["P", "P", "P", null, null, "P", "P", "P"],
+      [null, "K", null, "R", null, "B", null, null]
+    ]
+  },
+  {
+    "id": 108,
+    "cat": "combo",
+    "rating": 1550,
+    "categoryLabel": "🔥 Master Combo (2 Moves)",
+    "title": "Deflect the Queen Guard",
+    "prompt": "Black’s King guards the Queen on d7—drive the King away with a Rook check!",
+    "hint": "Play Rh8+! Black King must capture Kxh8, leaving the d7 Queen undefended!",
+    "explanation": "1. Rh8+! Kxh8 2. Qxd7 wins Black’s Queen cleanly!",
+    "from": "h1",
+    "to": "h8",
+    "sequence": [
+      { "move": "h1-h8", "response": "g8-h8", "hint": "Sacrifice Rook on h8 with check!" },
+      { "move": "d2-d7", "hint": "Capture Black’s undefended Queen on d7!" }
+    ],
+    "board": [
+      [null, null, null, null, null, null, "k", null],
+      ["p", "p", null, "q", null, "p", "p", null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ["P", "P", null, "Q", null, "P", "P", null],
+      [null, "K", null, null, null, null, null, "R"]
+    ]
+  },
+  {
+    "id": 109,
+    "cat": "combo",
+    "rating": 1580,
+    "categoryLabel": "🔥 Master Combo (2 Moves)",
+    "title": "Pin & Pile On",
+    "prompt": "Exploit the absolute pin on Black’s d7 Rook to win decisive material!",
+    "hint": "Capture on d7 with your Rook (Rxd7)! Wait—first sacrifice Ne5 or Rxd7!",
+    "explanation": "1. Rxd7! Qxd7 2. Bxd7+ wins a full Rook thanks to the pin!",
+    "from": "d1",
+    "to": "d7",
+    "sequence": [
+      { "move": "d1-d7", "response": "c6-d7", "hint": "Capture the pinned piece on d7 with your Rook!" },
+      { "move": "b5-d7", "hint": "Recapture on d7 with your Bishop (with check)!" }
+    ],
+    "board": [
+      [null, null, null, null, "k", null, null, null],
+      ["p", "p", null, "r", null, "p", "p", "p"],
+      [null, null, "q", null, null, null, null, null],
+      [null, "B", null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ["P", "P", "P", null, null, "P", "P", "P"],
+      [null, null, "K", "R", null, null, null, null]
+    ]
+  },
+  {
+    "id": 110,
+    "cat": "combo",
+    "rating": 1620,
+    "categoryLabel": "🔥 Master Combo (2 Moves)",
+    "title": "Corner Queen Sacrifice",
+    "prompt": "Sacrifice your Queen in the h8 corner so your Rook delivers back-rank mate!",
+    "hint": "Play Qh8+! Black King must capture Kxh8, then Rxf8# is checkmate!",
+    "explanation": "1. Qh8+! Kxh8 2. Rxf8# — deflection into back-rank checkmate!",
+    "from": "d4",
+    "to": "h8",
+    "sequence": [
+      { "move": "d4-h8", "response": "g8-h8", "hint": "Zoom Queen along the long diagonal to h8 with check!" },
+      { "move": "f1-f8", "hint": "Capture on f8 with your Rook for back-rank checkmate!" }
+    ],
+    "board": [
+      [null, null, null, null, null, "r", "k", null],
+      ["p", "p", null, null, null, null, null, "p"],
+      [null, null, null, null, "p", null, "p", null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, "Q", null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ["P", "P", "P", null, null, null, "P", "P"],
+      [null, "K", null, null, null, "R", null, null]
+    ]
+  },
+  {
+    "id": 111,
+    "cat": "combo",
+    "rating": 1650,
+    "categoryLabel": "🔥 Master Combo (2 Moves)",
+    "title": "Skewer Through the King",
+    "prompt": "Sacrifice to draw the King onto the same file as Black’s Queen, then skewer!",
+    "hint": "Play Rxf7+! After Kxf7, play Rf1+ skewering King and Queen!",
+    "explanation": "1. Rxf7+! Kxf7 2. Rf1+ skewers the King and wins the Queen behind!",
+    "from": "f3",
+    "to": "f7",
+    "sequence": [
+      { "move": "f3-f7", "response": "g8-f7", "hint": "Capture on f7 with your f3 Rook (check)!" },
+      { "move": "a1-f1", "hint": "Slide your other Rook from a1 to f1+ skewering King and f8 Queen!" }
+    ],
+    "board": [
+      [null, null, null, null, null, "q", "k", null],
+      ["p", "p", null, null, null, "p", "p", "p"],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, "R", null, null],
+      ["P", "P", null, null, null, null, "P", "P"],
+      ["R", null, null, null, null, null, "K", null]
+    ]
+  },
+  {
+    "id": 112,
+    "cat": "combo",
+    "rating": 1680,
+    "categoryLabel": "🔥 Master Combo (2 Moves)",
+    "title": "Breakthrough Pawn Promotion",
+    "prompt": "Clear the blocker with a Rook sacrifice so your c7 pawn queens with mate!",
+    "hint": "Sacrifice Rd8+! After Rxd8, cxd8=Q# is checkmate!",
+    "explanation": "1. Rd8+! Rxd8 2. cxd8=Q# — pawn promotes with back-rank checkmate!",
+    "from": "d1",
+    "to": "d8",
+    "sequence": [
+      { "move": "d1-d8", "response": "a8-d8", "hint": "Slide Rook to d8 with check!" },
+      { "move": "c7-d8", "hint": "Capture on d8 with your c7 pawn to promote with checkmate!" }
+    ],
+    "board": [
+      ["r", null, null, null, null, null, "k", null],
+      [null, null, "P", null, null, "p", "p", "p"],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, "P", "P", "P"],
+      [null, null, null, "R", null, null, "K", null]
+    ]
+  },
+  {
+    "id": 113,
+    "cat": "combo",
+    "rating": 1760,
+    "categoryLabel": "🔥 Master Combo (3 Moves)",
+    "title": "Réti’s Immortal Double-Check",
+    "prompt": "Reproduce Richard Réti’s 1910 masterpiece! Queen sacrifice + Double Check + Mate!",
+    "hint": "1. Qd8+! Kxd8 2. Bg5+! (double check!) Ke8 3. Rd8#!",
+    "explanation": "1. Qd8+! Kxd8 2. Bg5++ Ke8 3. Rd8# — the most famous 3-move combination in chess history!",
+    "from": "d3",
+    "to": "d8",
+    "sequence": [
+      { "move": "d3-d8", "response": "e8-d8", "hint": "Sacrifice your Queen on d8 with check!" },
+      { "move": "d2-g5", "response": "d8-e8", "hint": "Move Bd2 to g5++ for a lethal DOUBLE CHECK!" },
+      { "move": "d1-d8", "hint": "Finish with Rd8# checkmate (guarded by Bg5)!" }
+    ],
+    "board": [
+      [null, null, "b", null, "k", "b", "n", "r"],
+      ["p", "p", null, null, null, "p", "p", "p"],
+      [null, "q", "p", null, null, null, null, null],
+      [null, null, null, null, "P", null, null, null],
+      [null, null, null, null, "n", null, null, null],
+      [null, null, "N", "Q", null, null, null, null],
+      ["P", "P", "P", "B", null, "P", "P", "P"],
+      [null, "K", null, "R", null, "B", "N", "R"]
+    ]
+  },
+  {
+    "id": 114,
+    "cat": "combo",
+    "rating": 1720,
+    "categoryLabel": "🔥 Master Combo (2 Moves)",
+    "title": "Legal’s Mate Trap",
+    "prompt": "Spring the famous Legal’s Trap! Sacrifice your Queen to checkmate with minors!",
+    "hint": "Strike f7 with your Bishop (Bxf7+)! After Ke7, jump Nd5#!",
+    "explanation": "1. Bxf7+! Ke7 2. Nd5# — classic minor-piece coordination checkmate!",
+    "from": "c4",
+    "to": "f7",
+    "sequence": [
+      { "move": "c4-f7", "response": "e8-e7", "hint": "Strike f7 with your Bishop (check)!" },
+      { "move": "c3-d5", "hint": "Leap Knight from c3 to d5 for checkmate!" }
+    ],
+    "board": [
+      ["r", null, null, "q", "k", "b", "n", "r"],
+      ["p", "p", "p", null, null, "p", "p", "p"],
+      [null, null, "n", "p", null, null, null, null],
+      [null, null, null, null, "N", null, null, null],
+      [null, null, "B", null, "P", null, null, null],
+      [null, null, "N", null, null, null, null, null],
+      ["P", "P", "P", "P", null, "P", "P", "P"],
+      ["R", null, "B", "b", "K", null, null, "R"]
+    ]
+  },
+  {
+    "id": 115,
+    "cat": "combo",
+    "rating": 1750,
+    "categoryLabel": "🔥 Master Combo (3 Moves)",
+    "title": "Blind Swine Double-Rook Mate",
+    "prompt": "Storm the 7th rank with both Rooks for the classic 3-move Blind Swine checkmate!",
+    "hint": "1. Rxg7+ Kh8 2. Rxh7+ Kg8 3. Rcg7#!",
+    "explanation": "1. Rxg7+! Kh8 2. Rxh7+! Kg8 3. Rg7# — Blind Swine checkmate with two Rooks on the 7th rank!",
+    "from": "g1",
+    "to": "g7",
+    "sequence": [
+      { "move": "g1-g7", "response": "g8-h8", "hint": "Capture on g7 with your g1 Rook (check)!" },
+      { "move": "g7-h7", "response": "h8-g8", "hint": "Capture on h7 with your g7 Rook (check)!" },
+      { "move": "c7-g7", "hint": "Slide your c7 Rook to g7 for Blind Swine checkmate!" }
+    ],
+    "board": [
+      [null, null, null, null, null, "r", "k", null],
+      ["p", "p", "R", null, null, null, "p", "p"],
+      [null, null, null, null, "p", null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ["P", "P", null, null, null, "P", null, "P"],
+      [null, null, null, null, null, null, "R", "K"]
+    ]
+  },
+  {
+    "id": 116,
+    "cat": "black_tactics",
+    "turn": "b",
+    "categoryLabel": "⬛ Black Counter-Tactics",
+    "rating": 1320,
+    "title": "Black Back-Rank Ambush",
+    "prompt": "Black to move! Punish White's unguarded back rank with checkmate in 1.",
+    "hint": "Drop your Black Queen straight down the open d-file to d1!",
+    "explanation": "Qd1#! White's pawns on f2, g2, and h2 trap their own King on the first rank.",
+    "from": "d8",
+    "to": "d1",
+    "board": [
+      [null, null, null, "q", null, null, "k", null],
+      ["p", "p", null, null, null, "p", "p", "p"],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ["Q", null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, "P", null, null, null, "P", "P", "P"],
+      [null, null, null, null, null, null, "K", null]
+    ]
+  },
+  {
+    "id": 117,
+    "cat": "black_tactics",
+    "turn": "b",
+    "categoryLabel": "⬛ Black Counter-Tactics",
+    "rating": 1360,
+    "title": "Black Royal Family Fork",
+    "prompt": "Black to move! Leap your Knight to fork White's King and Queen at once.",
+    "hint": "Jump your Knight from d4 to c2 for a royal check and Queen fork!",
+    "explanation": "Nc2+! White must move the King out of check while Black wins the Queen on a1.",
+    "from": "d4",
+    "to": "c2",
+    "board": [
+      [null, null, null, null, null, null, "k", null],
+      ["p", "p", null, null, null, "p", "p", "p"],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, "n", null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ["P", "P", null, null, null, "P", "P", "P"],
+      ["Q", null, null, null, "K", "R", null, null]
+    ]
+  },
+  {
+    "id": 118,
+    "cat": "black_tactics",
+    "turn": "b",
+    "categoryLabel": "⬛ Black Counter-Tactics",
+    "rating": 1410,
+    "title": "Long-Diagonal Battery Mate",
+    "prompt": "Black to move! Use your fianchettoed Bishop on b7 to deliver checkmate.",
+    "hint": "Your Bishop on b7 aims all the way down the long diagonal to g2!",
+    "explanation": "Qxg2#! Protected by the sniper Bishop on b7, the Black Queen delivers an unstoppable Kiss of Death.",
+    "from": "h3",
+    "to": "g2",
+    "board": [
+      [null, null, null, null, null, null, "k", null],
+      [null, "b", "p", null, null, "p", "p", "p"],
+      ["p", null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, "q"],
+      ["P", "P", null, null, null, "P", "P", "P"],
+      [null, null, null, null, null, "R", "K", null]
+    ]
+  },
+  {
+    "id": 119,
+    "cat": "black_tactics",
+    "turn": "b",
+    "categoryLabel": "⬛ Black Counter-Tactics",
+    "rating": 1520,
+    "title": "Black Queen Deflection Sacrifice (2-Move)",
+    "prompt": "Black to move! Sacrifice your Queen to deflect White's back-rank Rook and mate in 2.",
+    "hint": "1... Qe1+! forces 2. Rxe1, and your e8 Rook finishes the job!",
+    "explanation": "1... Qe1+! Rxe1 2... Rxe1#! Classic deflection sacrifice from the Black side.",
+    "from": "b4",
+    "to": "e1",
+    "sequence": [
+      { "move": "b4-e1", "response": "d1-e1", "hint": "Sacrifice your Queen on e1 with check!" },
+      { "move": "e8-e1", "hint": "Recapture on e1 with your Rook for back-rank checkmate!" }
+    ],
+    "board": [
+      [null, null, null, null, "r", null, "k", null],
+      ["p", "p", null, null, null, "p", "p", "p"],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, "q", null, null, null, null, null, null],
+      ["Q", null, null, null, null, null, null, null],
+      ["P", "P", null, null, null, "P", "P", "P"],
+      [null, null, null, "R", null, null, "K", null]
+    ]
+  },
+  {
+    "id": 120,
+    "cat": "black_tactics",
+    "turn": "b",
+    "categoryLabel": "⬛ Black Counter-Tactics",
+    "rating": 1580,
+    "title": "Black Corner Net Mate in 2",
+    "prompt": "Black to move! Combine your Queen and Knight on f3 to force checkmate in 2.",
+    "hint": "Check down the open h-file first with 1... Qh4+!",
+    "explanation": "1... Qh4+! Qh2 2... Qxh2#! The Knight on f3 guards both g1 and h2, sealing the corner net.",
+    "from": "d4",
+    "to": "h4",
+    "sequence": [
+      { "move": "d4-h4", "response": "d6-h2", "hint": "Swing your Queen to h4 for a deadly h-file check!" },
+      { "move": "h4-h2", "hint": "Capture the blocking Queen on h2—your f3 Knight protects you!" }
+    ],
+    "board": [
+      [null, null, null, null, null, null, null, "k"],
+      ["p", "p", null, null, null, "p", "p", "p"],
+      [null, null, null, "Q", null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, "q", null, null, null, null],
+      [null, null, null, null, null, "n", null, null],
+      ["P", null, null, null, null, "P", "P", null],
+      [null, null, null, null, null, null, "R", "K"]
+    ]
   }
 ];
 
@@ -9309,14 +9825,31 @@ class TacticsDojoManager {
     this.stats = this.loadStats();
     this.currentIndex = 0;
     this.currentPuzzle = null;
+    this.currentStepIndex = 0;
+    this.selectedCategory = 'all';
+    // Assign calibrated ratings to all puzzles if not explicitly tagged
+    DOJO_PUZZLES.forEach((p, idx) => {
+      if (!p.rating) {
+        if (p.cat === 'snack') p.rating = 880 + (idx % 20) * 12;
+        else if (p.cat === 'mate1') p.rating = 940 + (idx % 20) * 14;
+        else if (p.cat === 'fork') p.rating = 1050 + (idx % 20) * 15;
+        else if (p.cat === 'pin_skewer') p.rating = 1150 + (idx % 20) * 15;
+        else if (p.cat === 'discovered') p.rating = 1250 + (idx % 20) * 16;
+        else p.rating = 1400;
+      }
+    });
   }
 
   loadStats() {
     try {
       const data = localStorage.getItem('chess_dojo_stats');
-      return data ? JSON.parse(data) : { rating: 1000, streak: 0, bestStreak: 0, solvedCount: 0 };
+      const parsed = data ? JSON.parse(data) : null;
+      return Object.assign(
+        { rating: 1000, streak: 0, bestStreak: 0, solvedCount: 0, missedIds: [], recentIds: [] },
+        parsed || {}
+      );
     } catch (e) {
-      return { rating: 1000, streak: 0, bestStreak: 0, solvedCount: 0 };
+      return { rating: 1000, streak: 0, bestStreak: 0, solvedCount: 0, missedIds: [], recentIds: [] };
     }
   }
 
@@ -9328,50 +9861,105 @@ class TacticsDojoManager {
     }
   }
 
-  getRandomPuzzle() {
-    const idx = Math.floor(Math.random() * DOJO_PUZZLES.length);
-    this.currentIndex = idx;
-    this.currentPuzzle = DOJO_PUZZLES[idx];
-    return this.currentPuzzle;
+  setCategory(cat) {
+    this.selectedCategory = cat || 'all';
+  }
+
+  // Adaptive rating-matched + spaced-repetition puzzle selector
+  getRandomPuzzle(category = null) {
+    const cat = category || this.selectedCategory || 'all';
+    let pool = cat === 'all' ? DOJO_PUZZLES : DOJO_PUZZLES.filter(p => p.cat === cat);
+    if (pool.length === 0) pool = DOJO_PUZZLES;
+
+    const recent = this.stats.recentIds || [];
+    const nonRecent = pool.filter(p => !recent.includes(p.id));
+    if (nonRecent.length > 0) pool = nonRecent;
+
+    // 30% chance to revisit a previously missed puzzle (spaced repetition!)
+    const missedPool = pool.filter(p => (this.stats.missedIds || []).includes(p.id));
+    if (missedPool.length > 0 && Math.random() < 0.3) {
+      const p = missedPool[Math.floor(Math.random() * missedPool.length)];
+      return this.activatePuzzle(p);
+    }
+
+    // Weight puzzles near user's current rating (+50 slightly challenging target!)
+    const targetRating = (this.stats.rating || 1000) + 50;
+    const nearRating = pool.filter(p => Math.abs((p.rating || 1000) - targetRating) <= 240);
+    const pickFrom = nearRating.length >= 3 ? nearRating : pool;
+    const chosen = pickFrom[Math.floor(Math.random() * pickFrom.length)];
+    return this.activatePuzzle(chosen);
+  }
+
+  activatePuzzle(p) {
+    this.currentPuzzle = p;
+    this.currentStepIndex = 0;
+    this.currentIndex = DOJO_PUZZLES.indexOf(p);
+    if (!Array.isArray(this.stats.recentIds)) this.stats.recentIds = [];
+    this.stats.recentIds.push(p.id);
+    if (this.stats.recentIds.length > 20) this.stats.recentIds.shift();
+    return p;
   }
 
   getPuzzleById(id) {
     const p = DOJO_PUZZLES.find(x => x.id === id) || DOJO_PUZZLES[0];
-    this.currentPuzzle = p;
-    return p;
+    return this.activatePuzzle(p);
   }
 
   checkMove(from, to) {
     if (!this.currentPuzzle) return false;
+    if (this.currentPuzzle.sequence && this.currentPuzzle.sequence.length > 0) {
+      const step = this.currentPuzzle.sequence[this.currentStepIndex] || this.currentPuzzle.sequence[0];
+      const [fStr, tStr] = step.move.split('-');
+      const solFrom = ChessRules.fromAlgebraic(fStr);
+      const solTo = ChessRules.fromAlgebraic(tStr);
+      return from.r === solFrom.r && from.c === solFrom.c && to.r === solTo.r && to.c === solTo.c;
+    }
     const solFrom = ChessRules.fromAlgebraic(this.currentPuzzle.from);
     const solTo = ChessRules.fromAlgebraic(this.currentPuzzle.to);
     return from.r === solFrom.r && from.c === solFrom.c && to.r === solTo.r && to.c === solTo.c;
   }
 
   handleSuccess() {
-    this.stats.rating += 15;
+    const pRating = (this.currentPuzzle && this.currentPuzzle.rating) || 1000;
+    const isMulti = !!(this.currentPuzzle && this.currentPuzzle.sequence && this.currentPuzzle.sequence.length > 1);
+    const gain = isMulti ? 22 : (pRating > this.stats.rating + 150 ? 20 : 15);
+
+    this.stats.rating += gain;
     this.stats.streak += 1;
     this.stats.solvedCount += 1;
     if (this.stats.streak > this.stats.bestStreak) {
       this.stats.bestStreak = this.stats.streak;
     }
+    if (this.currentPuzzle && Array.isArray(this.stats.missedIds)) {
+      this.stats.missedIds = this.stats.missedIds.filter(id => id !== this.currentPuzzle.id);
+    }
     this.saveStats();
     return {
-      ratingGain: 15,
+      ratingGain: gain,
       streak: this.stats.streak,
       rating: this.stats.rating,
-      explanation: this.currentPuzzle.explanation
+      explanation: this.currentPuzzle ? this.currentPuzzle.explanation : ''
     };
   }
 
   handleFailure() {
     this.stats.streak = 0;
     this.stats.rating = Math.max(800, this.stats.rating - 5);
+    if (this.currentPuzzle) {
+      if (!Array.isArray(this.stats.missedIds)) this.stats.missedIds = [];
+      if (!this.stats.missedIds.includes(this.currentPuzzle.id)) {
+        this.stats.missedIds.push(this.currentPuzzle.id);
+      }
+    }
     this.saveStats();
+    let hint = this.currentPuzzle ? this.currentPuzzle.hint : '';
+    if (this.currentPuzzle && this.currentPuzzle.sequence && this.currentPuzzle.sequence[this.currentStepIndex]) {
+      hint = this.currentPuzzle.sequence[this.currentStepIndex].hint || hint;
+    }
     return {
       streak: 0,
       rating: this.stats.rating,
-      hint: this.currentPuzzle.hint
+      hint
     };
   }
 }

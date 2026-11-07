@@ -29,6 +29,7 @@ eval(fs.readFileSync('js/sound.js', 'utf8'));
 eval(fs.readFileSync('js/pieces.js', 'utf8'));
 eval(fs.readFileSync('js/levels.js', 'utf8'));
 eval(fs.readFileSync('js/bot.js', 'utf8'));
+eval(fs.readFileSync('js/guide.js', 'utf8'));
 eval(fs.readFileSync('js/board.js', 'utf8'));
 
 ChessBoardUI.prototype.initDOM = function() {

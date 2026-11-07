@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kingdom Chess: Learn Step-by-Step</title>
-  <link rel="stylesheet" href="css/style.css?v=3.3">
+  <link rel="stylesheet" href="css/style.css?v=4.0">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏰</text></svg>">
 </head>
 <body>
@@ -32,9 +32,9 @@
     <div class="header-actions">
       <button class="btn btn-secondary btn-icon" id="btn-sound" title="Toggle Sound">🔊</button>
       <button class="btn btn-secondary" id="btn-levels">🗺️ Levels (52)</button>
-      <button class="btn btn-secondary btn-dojo" id="btn-dojo" title="Train on 100+ tactics puzzles">🥋 Dojo (100)</button>
+      <button class="btn btn-secondary btn-dojo" id="btn-dojo" title="Train on 120 rated tactics & multi-move combos (White & Black!)">🥋 Dojo (120)</button>
       <button class="btn btn-secondary" id="btn-guide">📖 Heroes</button>
-      <button class="btn btn-accent" id="btn-freeplay">🎮 Free Play</button>
+      <button class="btn btn-accent" id="btn-freeplay" title="Play full game as White or Black with live coach">🎮 Guided Game</button>
     </div>
   </header>
 
@@ -43,10 +43,21 @@
     
     <!-- Sidebar: Story & Controls -->
     <aside class="sidebar-panel">
-      <div class="lesson-card">
+      <div class="lesson-card" id="lesson-card">
         <div class="lesson-header">
           <span class="lesson-badge" id="level-badge">♖ Level 1</span>
           <span class="turn-badge" id="turn-indicator">🌟 Your Turn!</span>
+        </div>
+
+        <!-- Dojo Category Filter Pills (Shown in Dojo Mode) -->
+        <div class="dojo-filter-bar hidden" id="dojo-filter-bar">
+          <button class="dojo-chip active" data-cat="all">🎯 Adaptive</button>
+          <button class="dojo-chip" data-cat="combo">🔥 Hard Combos</button>
+          <button class="dojo-chip" data-cat="black_tactics">⬛ Black Tactics</button>
+          <button class="dojo-chip" data-cat="mate1">👑 Mate</button>
+          <button class="dojo-chip" data-cat="fork">⚡ Forks</button>
+          <button class="dojo-chip" data-cat="pin_skewer">📌 Pins</button>
+          <button class="dojo-chip" data-cat="discovered">🥷 Discovered</button>
         </div>
 
         <h2 class="lesson-title" id="level-title">The Rook Rocket!</h2>
@@ -65,7 +76,128 @@
         <div class="controls-grid">
           <button class="btn btn-secondary" id="btn-hint">💡 Need a Hint?</button>
           <button class="btn btn-secondary" id="btn-restart">🔄 Restart</button>
-          <button class="btn btn-accent hidden" id="btn-next-puzzle">Next Puzzle ➡️</button>
+          <button class="btn btn-accent hidden" id="btn-next-puzzle" style="grid-column: span 2;">Next Puzzle ➡️</button>
+        </div>
+      </div>
+
+      <!-- Coach Guide Card (Guided Full Game Mode) -->
+      <div class="coach-guide-card hidden" id="coach-guide-card">
+        <!-- Match Setup Row: Side, Difficulty & Flip -->
+        <div class="coach-setup-bar">
+          <div class="side-toggle-group" title="Choose which color to play">
+            <button class="side-btn active" id="btn-play-white">⬜ White</button>
+            <button class="side-btn" id="btn-play-black">⬛ Black</button>
+          </div>
+          <select class="coach-difficulty-select" id="coach-difficulty-select" title="Opponent Engine Strength">
+            <option value="gentle">🐣 Gentle (~650)</option>
+            <option value="playful">🦊 Club (~1050)</option>
+            <option value="challenger" selected>⚔️ Challenger (~1400)</option>
+            <option value="master">👑 Master (~1750)</option>
+          </select>
+          <button class="btn btn-secondary btn-icon-sm" id="btn-flip-board" title="Flip Board View">🔄</button>
+        </div>
+
+        <!-- Header: Phase Badge & Turn Status -->
+        <div class="coach-header-row">
+          <span class="coach-phase-pill opening" id="coach-phase-badge">🌱 Opening</span>
+          <span class="turn-badge" id="coach-turn-indicator">🌟 Your Turn!</span>
+        </div>
+
+        <!-- Live Position Evaluation Bar -->
+        <div class="coach-eval-bar-wrap" title="Engine Position Evaluation (White vs Black)">
+          <div class="coach-eval-bar-track">
+            <div class="coach-eval-bar-fill" id="coach-eval-bar-fill" style="width: 50%;"></div>
+          </div>
+          <span class="coach-eval-score" id="coach-eval-score">+0.0</span>
+        </div>
+
+        <!-- Move Evaluation Feedback Flash (Appears after each move) -->
+        <div class="coach-eval-banner hidden" id="coach-eval-banner">
+          <span id="coach-eval-icon">👍</span>
+          <span id="coach-eval-text">Good move!</span>
+        </div>
+
+        <!-- Opponent's Last Move Decoder -->
+        <div class="coach-opp-move-box hidden" id="coach-opp-move-box">
+          <span id="coach-opp-move-text">♟️ Opponent played e5.</span>
+        </div>
+
+        <!-- Material Balance & Captured Pieces Tracker -->
+        <div class="coach-material-bar">
+          <div class="captured-side">
+            <span class="captured-side-label">White:</span>
+            <span class="captured-pieces" id="coach-captured-black" title="Black pieces captured by White"></span>
+          </div>
+          <span class="material-diff-badge" id="coach-material-diff">Even (0)</span>
+          <div class="captured-side">
+            <span class="captured-side-label">Black:</span>
+            <span class="captured-pieces" id="coach-captured-white" title="White pieces captured by Black"></span>
+          </div>
+        </div>
+
+        <!-- Opening Book Identification & GM Checklist -->
+        <div class="coach-opening-box" id="coach-opening-box">
+          <div class="coach-opening-name" id="coach-opening-name">🌱 King's Pawn Opening (1. e4)</div>
+          <div class="coach-opening-desc" id="coach-opening-desc">Stakes a claim on d5/f5 and frees Queen and Bishop.</div>
+          <div class="coach-checklist-grid" id="coach-checklist-grid">
+            <div class="checklist-chip" id="chip-center">🏔️ Center Pawn</div>
+            <div class="checklist-chip" id="chip-knights">🐎 Knights (0/2)</div>
+            <div class="checklist-chip" id="chip-bishops">♗ Bishops (0/2)</div>
+            <div class="checklist-chip" id="chip-castled">🏰 King Castled</div>
+          </div>
+        </div>
+
+        <!-- Threat & Alert Radar -->
+        <div class="coach-threat-box safe" id="coach-threat-box">
+          <div class="threat-header" id="coach-threat-title">✅ Position Secure</div>
+          <div class="threat-text" id="coach-threat-text">No friendly pieces are under undefended attack. Stay sharp!</div>
+        </div>
+
+        <!-- Coach Pawny Recommendation Speech Bubble -->
+        <div class="coach-speech-card">
+          <div class="coach-speech-header">
+            <div class="coach-avatar-tag">
+              <span>🐾 Your Coach</span>
+            </div>
+            <span class="coach-recommend-badge" id="coach-rec-badge">🎯 Plan</span>
+          </div>
+          <div class="coach-speech-body" id="coach-speech-body">
+            Claim the center with a central pawn to open lines for your Bishops and Queen!
+          </div>
+          <div class="coach-candidates hidden" id="coach-candidates"></div>
+          <div class="coach-speech-actions">
+            <button class="btn btn-secondary btn-sm" id="btn-coach-hint-piece" title="Highlight which piece to focus on without spoiling the exact square">
+              💡 Piece Hint
+            </button>
+            <button class="btn btn-secondary btn-sm" id="btn-coach-toggle-highlight" title="Reveal Coach's top candidate moves and target square">
+              👁️ Show Move
+            </button>
+            <button class="btn btn-primary btn-sm" id="btn-coach-play-rec" title="Demonstrate the recommended move on the board">
+              ⚡ Play It
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Algebraic Notation (SAN) Move Log -->
+        <div class="coach-move-log-box">
+          <div class="coach-move-log-header">
+            <span>📜 Notation Log (SAN)</span>
+            <div style="display:flex; align-items:center; gap:0.4rem;">
+              <span id="coach-ply-count">Move 1</span>
+              <button class="btn-copy-pgn" id="btn-copy-pgn" title="Copy full PGN move list for analysis">📋 PGN</button>
+            </div>
+          </div>
+          <div class="coach-move-log" id="coach-move-log">No moves played yet.</div>
+        </div>
+
+        <!-- Controls: Undo / Takeback, Restart -->
+        <div class="controls-grid">
+          <button class="btn btn-coach-undo" id="btn-coach-undo" title="Take back your last turn and try a stronger move">
+            ↶ Takeback
+          </button>
+          <button class="btn btn-secondary" id="btn-coach-restart" title="Start a fresh match">
+            🔄 New Game
+          </button>
         </div>
       </div>
     </aside>
@@ -78,6 +210,20 @@
     </section>
 
   </main>
+
+  <!-- Pawn Promotion Chooser Modal -->
+  <div class="modal-overlay hidden" id="promotion-modal">
+    <div class="modal-card promo-modal-card">
+      <h2 class="victory-title" style="font-size: 1.4rem;">👑 Choose Promotion Piece!</h2>
+      <p class="victory-msg" style="margin-bottom: 1rem; font-size: 0.92rem;">Queen is strongest (9 pts), or pick a Knight for a sneaky check/fork!</p>
+      <div class="promo-choices-grid" id="promo-choices-grid">
+        <button class="promo-choice-btn" data-promo="Q">♕<span>Queen (9)</span></button>
+        <button class="promo-choice-btn" data-promo="N">♘<span>Knight (3)</span></button>
+        <button class="promo-choice-btn" data-promo="R">♖<span>Rook (5)</span></button>
+        <button class="promo-choice-btn" data-promo="B">♗<span>Bishop (3)</span></button>
+      </div>
+    </div>
+  </div>
 
   <!-- Victory Celebration Modal -->
   <div class="modal-overlay hidden" id="victory-modal">
@@ -122,12 +268,13 @@
   <canvas id="confetti-canvas"></canvas>
 
   <!-- Game Scripts (cache-busted for instant updates) -->
-  <script src="js/sound.js?v=3.3"></script>
-  <script src="js/pieces.js?v=3.3"></script>
-  <script src="js/levels.js?v=3.3"></script>
-  <script src="js/dojo.js?v=3.3"></script>
-  <script src="js/bot.js?v=3.3"></script>
-  <script src="js/board.js?v=3.3"></script>
-  <script src="js/app.js?v=3.3"></script>
+  <script src="js/sound.js?v=4.0"></script>
+  <script src="js/pieces.js?v=4.0"></script>
+  <script src="js/levels.js?v=4.0"></script>
+  <script src="js/dojo.js?v=4.0"></script>
+  <script src="js/bot.js?v=4.0"></script>
+  <script src="js/guide.js?v=4.0"></script>
+  <script src="js/board.js?v=4.0"></script>
+  <script src="js/app.js?v=4.0"></script>
 </body>
 </html>

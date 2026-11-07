@@ -1,5 +1,6 @@
 // Interactive Chessboard Component
-// Supports Click-to-Move, Drag-and-Drop, Move Hints & Visual Effects
+// Supports White/Black Perspective Flip, Click-to-Move, Desktop & Touch Drag-and-Drop,
+// Underpromotion Picker, Coach Highlights & Threat Pulse
 
 class ChessBoardUI {
   constructor(containerEl, options = {}) {
@@ -11,10 +12,16 @@ class ChessBoardUI {
     this.lastMove = null;
     this.checkSquare = null;
     this.onMoveCallback = null;
+    this.onPromotionChoice = null; // Optional UI chooser(color, callback(promoChar))
+    this.allowPromotionChoice = false;
     this.interactive = true;
+    this.playerColor = 'w'; // 'w' | 'b'
+    this.flipped = false;
+    this.coachHighlight = null;
+    this.coachHintSquare = null; // Piece-only progressive hint square
+    this.dangerSquares = [];
 
-    this.draggedPiece = null;
-    this.dragStartSquare = null;
+    this.touchDragState = null;
 
     this.initDOM();
   }
@@ -24,14 +31,14 @@ class ChessBoardUI {
       <div class="chessboard-wrapper select-none">
         <div class="board-frame">
           <div class="board-row">
-            <div class="rank-labels">
+            <div class="rank-labels" id="rank-labels">
               ${[8, 7, 6, 5, 4, 3, 2, 1].map(r => `<span>${r}</span>`).join('')}
             </div>
             <div class="board-grid" id="grid-container">
               <!-- 64 squares -->
             </div>
           </div>
-          <div class="file-labels">
+          <div class="file-labels" id="file-labels">
             ${['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].map(f => `<span>${f}</span>`).join('')}
           </div>
         </div>
@@ -39,24 +46,57 @@ class ChessBoardUI {
     `;
 
     this.gridEl = this.container.querySelector('#grid-container');
+    this.rankLabelsEl = this.container.querySelector('#rank-labels');
+    this.fileLabelsEl = this.container.querySelector('#file-labels');
     this.createSquares();
+  }
+
+  updateCoordinateLabels() {
+    if (this.rankLabelsEl) {
+      const ranks = this.flipped ? [1, 2, 3, 4, 5, 6, 7, 8] : [8, 7, 6, 5, 4, 3, 2, 1];
+      this.rankLabelsEl.innerHTML = ranks.map(r => `<span>${r}</span>`).join('');
+    }
+    if (this.fileLabelsEl) {
+      const files = this.flipped ? ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'] : ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+      this.fileLabelsEl.innerHTML = files.map(f => `<span>${f}</span>`).join('');
+    }
+  }
+
+  setFlipped(flipped) {
+    this.flipped = !!flipped;
+    this.updateCoordinateLabels();
+    this.render();
+  }
+
+  flip() {
+    this.setFlipped(!this.flipped);
+    return this.flipped;
+  }
+
+  // Convert visual grid index (vr, vc) <-> logical board coordinate (r, c)
+  visualToLogical(vr, vc) {
+    return this.flipped ? { r: 7 - vr, c: 7 - vc } : { r: vr, c: vc };
   }
 
   createSquares() {
     this.gridEl.innerHTML = '';
-    for (let r = 0; r < 8; r++) {
-      for (let c = 0; c < 8; c++) {
-        const isLight = (r + c) % 2 === 0;
+    for (let vr = 0; vr < 8; vr++) {
+      for (let vc = 0; vc < 8; vc++) {
         const sq = document.createElement('div');
-        sq.className = `square ${isLight ? 'light' : 'dark'}`;
-        sq.dataset.row = r;
-        sq.dataset.col = c;
+        sq.className = `square ${(vr + vc) % 2 === 0 ? 'light' : 'dark'}`;
+        sq.dataset && (sq.dataset.vrow = vr);
+        sq.dataset && (sq.dataset.vcol = vc);
 
-        sq.addEventListener('click', (e) => this.handleSquareClick(r, c));
-        
-        // Touch & Drag events
+        sq.addEventListener('click', () => {
+          const { r, c } = this.visualToLogical(vr, vc);
+          this.handleSquareClick(r, c);
+        });
+
         sq.addEventListener('dragover', (e) => e.preventDefault());
-        sq.addEventListener('drop', (e) => this.handleDrop(e, r, c));
+        sq.addEventListener('drop', (e) => {
+          const { r, c } = this.visualToLogical(vr, vc);
+          this.handleDrop(e, r, c);
+        });
 
         this.gridEl.appendChild(sq);
       }
@@ -65,20 +105,30 @@ class ChessBoardUI {
 
   setBoard(matrix, options = {}) {
     this.boardState = matrix.map(row => [...row]);
-    this.options = { ...options };
+    this.options = options ? JSON.parse(JSON.stringify(options)) : {};
     this.selectedSquare = null;
     this.validMoves = [];
     this.lastMove = null;
     this.checkSquare = null;
+    this.coachHighlight = null;
+    this.coachHintSquare = null;
+    this.dangerSquares = [];
+    this.updateCoordinateLabels();
     this.render();
   }
 
   getSquareEl(r, c) {
-    return this.gridEl.children[r * 8 + c];
+    const vr = this.flipped ? (7 - r) : r;
+    const vc = this.flipped ? (7 - c) : c;
+    return this.gridEl.children[vr * 8 + vc];
+  }
+
+  canControlPiece(piece) {
+    if (!piece || piece === '*' || piece === '#') return false;
+    return ChessRules.getColor(piece) === this.playerColor;
   }
 
   render() {
-    // Check if white king or black king is in check
     const isWhiteCheck = ChessRules.isCheck(this.boardState, 'w');
     const isBlackCheck = ChessRules.isCheck(this.boardState, 'b');
     const whiteKing = ChessRules.findKing(this.boardState, 'w');
@@ -87,10 +137,14 @@ class ChessBoardUI {
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
         const sq = this.getSquareEl(r, c);
+        if (!sq) continue;
         sq.innerHTML = '';
         sq.className = `square ${(r + c) % 2 === 0 ? 'light' : 'dark'}`;
+        if (sq.dataset) {
+          sq.dataset.row = r;
+          sq.dataset.col = c;
+        }
 
-        // Highlight last move
         if (this.lastMove) {
           if ((this.lastMove.from.r === r && this.lastMove.from.c === c) ||
               (this.lastMove.to.r === r && this.lastMove.to.c === c)) {
@@ -101,12 +155,27 @@ class ChessBoardUI {
           }
         }
 
-        // Highlight selected
+        if (this.coachHintSquare && this.coachHintSquare.r === r && this.coachHintSquare.c === c) {
+          sq.classList.add('coach-from');
+        }
+
+        if (this.coachHighlight) {
+          if (this.coachHighlight.from && this.coachHighlight.from.r === r && this.coachHighlight.from.c === c) {
+            sq.classList.add('coach-from');
+          }
+          if (this.coachHighlight.to && this.coachHighlight.to.r === r && this.coachHighlight.to.c === c) {
+            sq.classList.add('coach-to');
+          }
+        }
+
+        if (this.dangerSquares && this.dangerSquares.some(pos => pos && pos.r === r && pos.c === c)) {
+          sq.classList.add('danger-attacked');
+        }
+
         if (this.selectedSquare && this.selectedSquare.r === r && this.selectedSquare.c === c) {
           sq.classList.add('selected');
         }
 
-        // Highlight King in check
         if (isWhiteCheck && whiteKing && whiteKing.r === r && whiteKing.c === c) {
           sq.classList.add('in-check');
         }
@@ -117,38 +186,35 @@ class ChessBoardUI {
         const cell = this.boardState[r][c];
         if (cell) {
           if (cell === '*') {
-            // Star collectible
             const starDiv = document.createElement('div');
             starDiv.className = 'item-star';
             starDiv.innerHTML = PIECE_SVGS.star;
             sq.appendChild(starDiv);
           } else if (cell === '#') {
-            // Stone obstacle
             const stoneDiv = document.createElement('div');
             stoneDiv.className = 'item-stone';
             stoneDiv.textContent = '🧱';
             sq.appendChild(stoneDiv);
           } else {
-            // Regular chess piece
             const pieceDiv = document.createElement('div');
             pieceDiv.className = 'piece-wrapper';
             pieceDiv.innerHTML = PIECE_SVGS[cell] || cell;
-            pieceDiv.draggable = this.interactive && ChessRules.isWhite(cell);
+            const controllable = this.interactive && this.canControlPiece(cell);
+            pieceDiv.draggable = controllable;
 
             pieceDiv.addEventListener('dragstart', (e) => this.handleDragStart(e, r, c));
+            if (controllable) {
+              pieceDiv.addEventListener('touchstart', (e) => this.handleTouchStart(e, r, c), { passive: true });
+              pieceDiv.addEventListener('touchend', (e) => this.handleTouchEnd(e));
+            }
             sq.appendChild(pieceDiv);
           }
         }
 
-        // Render valid move indicators
         const move = this.validMoves.find(m => m.r === r && m.c === c);
         if (move) {
           const hint = document.createElement('div');
-          if (move.capture) {
-            hint.className = 'move-hint-capture';
-          } else {
-            hint.className = 'move-hint-dot';
-          }
+          hint.className = move.capture ? 'move-hint-capture' : 'move-hint-dot';
           sq.appendChild(hint);
         }
       }
@@ -158,149 +224,167 @@ class ChessBoardUI {
   handleSquareClick(r, c) {
     if (!this.interactive) return;
 
-    // If already selected a piece, check if clicking a valid move square
     if (this.selectedSquare) {
       const move = this.validMoves.find(m => m.r === r && m.c === c);
       if (move) {
-        this.executeMove(this.selectedSquare, { r, c }, move);
+        this.tryPlayerMove(this.selectedSquare, { r, c }, move);
         return;
       }
     }
 
-    // Otherwise select a piece
     const piece = this.boardState[r][c];
-    if (piece && ChessRules.isWhite(piece)) {
+    if (piece && this.canControlPiece(piece)) {
       this.selectedSquare = { r, c };
       this.validMoves = ChessRules.getLegalMoves(this.boardState, r, c, this.options);
       this.render();
-    } else {
-      // Clear selection if clicking an empty or invalid square
-      if (this.selectedSquare) {
-        this.selectedSquare = null;
-        this.validMoves = [];
-        this.render();
-      }
+    } else if (this.selectedSquare) {
+      this.selectedSquare = null;
+      this.validMoves = [];
+      this.render();
     }
   }
 
   handleDragStart(e, r, c) {
     if (!this.interactive) return;
+    const piece = this.boardState[r][c];
+    if (!this.canControlPiece(piece)) return;
     this.selectedSquare = { r, c };
     this.validMoves = ChessRules.getLegalMoves(this.boardState, r, c, this.options);
     this.render();
-    e.dataTransfer.setData('text/plain', `${r},${c}`);
+    if (e.dataTransfer) {
+      e.dataTransfer.setData('text/plain', `${r},${c}`);
+    }
   }
 
   handleDrop(e, r, c) {
     e.preventDefault();
-    if (!this.selectedSquare) return;
+    if (!this.interactive || !this.selectedSquare) return;
     const move = this.validMoves.find(m => m.r === r && m.c === c);
     if (move) {
-      this.executeMove(this.selectedSquare, { r, c }, move);
+      this.tryPlayerMove(this.selectedSquare, { r, c }, move);
     }
   }
 
-  executeMove(from, to, moveData, isBotMove = false) {
+  handleTouchStart(e, r, c) {
+    if (!this.interactive) return;
+    this.touchDragState = { r, c };
+    this.selectedSquare = { r, c };
+    this.validMoves = ChessRules.getLegalMoves(this.boardState, r, c, this.options);
+    this.render();
+  }
+
+  handleTouchEnd(e) {
+    if (!this.interactive || !this.touchDragState || !e.changedTouches || !e.changedTouches[0]) return;
+    const touch = e.changedTouches[0];
+    if (typeof document !== 'undefined' && document.elementFromPoint) {
+      const el = document.elementFromPoint(touch.clientX, touch.clientY);
+      const sqEl = el && el.closest ? el.closest('.square') : null;
+      if (sqEl && sqEl.dataset && sqEl.dataset.row !== undefined) {
+        const tr = parseInt(sqEl.dataset.row, 10);
+        const tc = parseInt(sqEl.dataset.col, 10);
+        if (tr !== this.touchDragState.r || tc !== this.touchDragState.c) {
+          const move = this.validMoves.find(m => m.r === tr && m.c === tc);
+          if (move) {
+            e.preventDefault();
+            this.tryPlayerMove(this.selectedSquare, { r: tr, c: tc }, move);
+          }
+        }
+      }
+    }
+    this.touchDragState = null;
+  }
+
+  // Intercepts human pawn promotion when underpromotion picker is enabled
+  tryPlayerMove(from, to, moveData) {
+    const piece = this.boardState[from.r][from.c];
+    const isPromo = (piece === 'P' && to.r === 0) || (piece === 'p' && to.r === 7);
+
+    if (isPromo && this.allowPromotionChoice && typeof this.onPromotionChoice === 'function' && !(moveData && moveData.promotion)) {
+      const color = ChessRules.getColor(piece);
+      this.onPromotionChoice(color, (chosenType) => {
+        if (!chosenType) return;
+        this.executeMove(from, to, { ...moveData, promotion: chosenType }, false);
+      });
+      return;
+    }
+
+    this.executeMove(from, to, moveData, false);
+  }
+
+  executeMove(from, to, moveData = {}, isBotMove = false) {
     const piece = this.boardState[from.r][from.c];
     if (!piece) return;
     const target = this.boardState[to.r][to.c];
+    const boardBefore = this.boardState.map(row => [...row]);
+    const optionsBefore = JSON.parse(JSON.stringify(this.options || {}));
 
-    // Play appropriate sound safely
+    const sim = ChessRules.applyMove(this.boardState, from, to, moveData, this.options || {});
+    this.boardState = sim.board;
+    this.options = sim.options;
+
     try {
       if (target === '*') {
         sounds.playStar();
-      } else if (target && target !== '*') {
+      } else if (sim.promotedTo && !isBotMove) {
+        sounds.playWin();
+      } else if (sim.captured) {
         sounds.playCapture();
       } else {
-        sounds.playMove();
+        const oppColor = ChessRules.getColor(piece) === 'w' ? 'b' : 'w';
+        if (ChessRules.isCheck(this.boardState, oppColor)) {
+          sounds.playCheck();
+        } else {
+          sounds.playMove();
+        }
       }
     } catch (e) {
-      console.warn('Audio play error ignored:', e);
+      // Ignore audio errors in headless environments
     }
 
-    // Update board state
-    this.boardState[to.r][to.c] = piece;
-    this.boardState[from.r][from.c] = null;
-
-    // Handle Castling Rook move
-    if (moveData && moveData.castling) {
-      if (moveData.castling === 'K') {
-        this.boardState[7][5] = 'R';
-        this.boardState[7][7] = null;
-      } else if (moveData.castling === 'Q') {
-        this.boardState[7][3] = 'R';
-        this.boardState[7][0] = null;
-      } else if (moveData.castling === 'k') {
-        this.boardState[0][5] = 'r';
-        this.boardState[0][7] = null;
-      } else if (moveData.castling === 'q') {
-        this.boardState[0][3] = 'r';
-        this.boardState[0][0] = null;
-      }
-    }
-
-    // Update castling rights if King or Rook moved
-    if (this.options && this.options.castling) {
-      if (piece === 'K') {
-        this.options.castling.K = false;
-        this.options.castling.Q = false;
-      } else if (piece === 'k') {
-        this.options.castling.k = false;
-        this.options.castling.q = false;
-      } else if (piece === 'R') {
-        if (from.r === 7 && from.c === 7) this.options.castling.K = false;
-        if (from.r === 7 && from.c === 0) this.options.castling.Q = false;
-      } else if (piece === 'r') {
-        if (from.r === 0 && from.c === 7) this.options.castling.k = false;
-        if (from.r === 0 && from.c === 0) this.options.castling.q = false;
-      }
-    }
-
-    // Handle En Passant capture
-    if (moveData && moveData.enPassant) {
-      const epR = ChessRules.getColor(piece) === 'w' ? to.r + 1 : to.r - 1;
-      this.boardState[epR][to.c] = null;
-      sounds.playCapture();
-    }
-
-    // Update or clear en passant target for next turn
-    if (piece === 'P' && from.r === 6 && to.r === 4) {
-      this.options.enPassant = { r: 5, c: from.c };
-    } else if (piece === 'p' && from.r === 1 && to.r === 3) {
-      this.options.enPassant = { r: 2, c: from.c };
-    } else {
-      this.options.enPassant = null;
-    }
-
-    // Handle Pawn Promotion (Pawn reaches 8th rank)
-    if (piece === 'P' && to.r === 0) {
-      this.boardState[to.r][to.c] = 'Q'; // Auto-promote to Queen for fun & simplicity
-      try { sounds.playWin(); } catch (e) {}
-    }
-    if (piece === 'p' && to.r === 7) {
-      this.boardState[to.r][to.c] = 'q';
-      try { sounds.playCapture(); } catch (e) {}
-    }
-
-    this.lastMove = { from, to, isBot: isBotMove };
+    this.lastMove = { from, to, isBot: isBotMove, captured: sim.captured, promotedTo: sim.promotedTo };
     this.selectedSquare = null;
     this.validMoves = [];
+    this.coachHintSquare = null;
     this.render();
 
     if (this.onMoveCallback && !isBotMove) {
-      this.onMoveCallback(from, to, moveData);
+      this.onMoveCallback(from, to, { ...moveData, captured: sim.captured, promotedTo: sim.promotedTo, castling: sim.castling, enPassant: sim.enPassant }, boardBefore, optionsBefore);
     }
   }
 
   highlightHint(from, to) {
     const fromEl = this.getSquareEl(from.r, from.c);
-    const toEl = this.getSquareEl(to.r, to.c);
+    const toEl = to ? this.getSquareEl(to.r, to.c) : null;
     if (fromEl) fromEl.classList.add('hint-from');
     if (toEl) toEl.classList.add('hint-to');
     setTimeout(() => {
       if (fromEl) fromEl.classList.remove('hint-from');
       if (toEl) toEl.classList.remove('hint-to');
     }, 2500);
+  }
+
+  setCoachHintPiece(square) {
+    this.coachHintSquare = square;
+    this.coachHighlight = null;
+    this.render();
+  }
+
+  setCoachHighlight(from, to) {
+    this.coachHintSquare = null;
+    this.coachHighlight = { from, to };
+    this.render();
+  }
+
+  setDangerSquares(squares) {
+    this.dangerSquares = squares || [];
+    this.render();
+  }
+
+  clearCoachHighlights() {
+    this.coachHighlight = null;
+    this.coachHintSquare = null;
+    this.dangerSquares = [];
+    this.render();
   }
 }
 

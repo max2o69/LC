@@ -1,5 +1,4 @@
-/* Modern, Friendly Chess Teaching Game Styling */
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+/* Modern, Friendly Chess Teaching Game Styling (100% Offline-Ready) */
 
 :root {
   --bg-main: #f8fafc;
@@ -380,6 +379,30 @@ body {
   box-shadow: inset 0 0 0 4px #10b981 !important;
 }
 
+/* Coach Guided Highlights & Danger Pulse */
+.square.coach-from {
+  background-color: rgba(99, 102, 241, 0.42) !important;
+  box-shadow: inset 0 0 0 3.5px #6366f1 !important;
+  animation: pulse-coach 1.4s infinite alternate;
+}
+
+.square.coach-to {
+  background-color: rgba(16, 185, 129, 0.42) !important;
+  box-shadow: inset 0 0 0 3.5px #10b981 !important;
+  animation: pulse-coach 1.4s infinite alternate;
+}
+
+.square.danger-attacked {
+  background-color: rgba(239, 68, 68, 0.35) !important;
+  box-shadow: inset 0 0 0 3.5px #ef4444 !important;
+  animation: pulse-danger 1.1s infinite alternate;
+}
+
+@keyframes pulse-coach {
+  0% { transform: scale(1); }
+  100% { box-shadow: inset 0 0 14px 4px rgba(99, 102, 241, 0.85); }
+}
+
 /* Chess Piece Vectors inside Square */
 .piece-wrapper {
   width: 85%;
@@ -696,6 +719,262 @@ body {
   line-height: 1.35;
 }
 
+/* Coach Guide Onscreen Panel */
+.coach-guide-card {
+  background: var(--bg-card);
+  border-radius: 1.25rem;
+  border: 2px solid var(--border-color);
+  padding: 1.15rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.coach-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.coach-phase-pill {
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.coach-phase-pill.opening { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+.coach-phase-pill.middlegame { background: #fef3c7; color: #b45309; border-color: #fde68a; }
+.coach-phase-pill.endgame { background: #f3e8ff; color: #6b21a8; border-color: #e9d5ff; }
+
+/* Material & Captured Row */
+.coach-material-bar {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  gap: 0.5rem;
+}
+
+.captured-side {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  overflow: hidden;
+}
+
+.captured-side-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.captured-pieces {
+  display: inline-flex;
+  gap: 2px;
+  font-size: 0.95rem;
+  min-height: 1.2rem;
+  letter-spacing: -1px;
+}
+
+.material-diff-badge {
+  font-weight: 800;
+  font-size: 0.82rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  background: #f1f5f9;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+.material-diff-badge.plus { background: #dcfce7; color: #15803d; }
+.material-diff-badge.minus { background: #fee2e2; color: #b91c1c; }
+
+/* Opening Book & Checklist */
+.coach-opening-box {
+  background: #f0fdf4;
+  border: 1.5px solid #bbf7d0;
+  border-radius: 0.85rem;
+  padding: 0.65rem 0.85rem;
+}
+
+.coach-opening-name {
+  font-family: 'Fredoka', cursive;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #15803d;
+  margin-bottom: 0.2rem;
+}
+
+.coach-opening-desc {
+  font-size: 0.82rem;
+  color: #166534;
+  line-height: 1.35;
+}
+
+.coach-checklist-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.4rem;
+  margin-top: 0.45rem;
+}
+
+.checklist-chip {
+  background: #ffffff;
+  border: 1px solid #dcfce7;
+  border-radius: 0.5rem;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.checklist-chip.done {
+  background: #dcfce7;
+  color: #15803d;
+  border-color: #86efac;
+}
+
+/* Threat Radar Alerts */
+.coach-threat-box {
+  border-radius: 0.85rem;
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  animation: fadeIn 0.25s ease;
+}
+
+.coach-threat-box.danger {
+  background: #fef2f2;
+  border: 1.5px solid #fecaca;
+  color: #991b1b;
+}
+
+.coach-threat-box.warning {
+  background: #fffbeb;
+  border: 1.5px solid #fde68a;
+  color: #92400e;
+}
+
+.coach-threat-box.safe {
+  background: #f0fdf4;
+  border: 1.5px solid #bbf7d0;
+  color: #166534;
+}
+
+.coach-threat-box.win {
+  background: #faf5ff;
+  border: 1.5px solid #e9d5ff;
+  color: #6b21a8;
+}
+
+.threat-header {
+  font-family: 'Fredoka', cursive;
+  font-size: 0.92rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.threat-text {
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+/* Coach Recommended Move Speech Bubble */
+.coach-speech-card {
+  background: linear-gradient(135deg, #f8faff, #eff6ff);
+  border: 1.5px solid #bfdbfe;
+  border-radius: 1rem;
+  padding: 0.85rem;
+  position: relative;
+}
+
+.coach-speech-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+}
+
+.coach-avatar-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Fredoka', cursive;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #1d4ed8;
+}
+
+.coach-recommend-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.coach-speech-body {
+  font-size: 0.88rem;
+  color: #1e3a8a;
+  line-height: 1.4;
+  margin-bottom: 0.65rem;
+}
+
+.coach-speech-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Instant Move Evaluation Flash */
+.coach-eval-banner {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  animation: fadeIn 0.2s ease;
+}
+.coach-eval-banner.brilliant { background: #fef08a; color: #854d0e; border: 1.5px solid #facc15; }
+.coach-eval-banner.great { background: #dcfce7; color: #15803d; border: 1.5px solid #86efac; }
+.coach-eval-banner.good { background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe; }
+.coach-eval-banner.blunder { background: #fee2e2; color: #b91c1c; border: 1.5px solid #fca5a5; }
+
+/* Takeback / Undo Button */
+.btn-coach-undo {
+  background: #fef3c7 !important;
+  color: #92400e !important;
+  border: 1.5px solid #fde68a !important;
+  font-weight: 800 !important;
+  transition: all 0.15s ease;
+}
+.btn-coach-undo:hover {
+  background: #fde68a !important;
+  transform: translateY(-1px);
+}
+.btn-coach-undo:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
 /* Confetti Fullscreen Canvas */
 #confetti-canvas {
   position: fixed;
@@ -710,6 +989,20 @@ body {
 
 /* Responsive Breakpoints */
 @media (max-width: 860px) {
+  .game-header {
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    padding: 0.65rem 0.9rem;
+  }
+  .header-actions {
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+  }
+  .header-actions .btn {
+    font-size: 0.82rem;
+    padding: 0.45rem 0.65rem;
+  }
   .game-layout {
     flex-direction: column-reverse;
     align-items: center;
@@ -727,4 +1020,245 @@ body {
   .rank-labels {
     height: min(88vw, 400px);
   }
+}
+
+.btn-copy-pgn {
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.12rem 0.45rem;
+  border-radius: 0.4rem;
+  border: 1px solid var(--border-color);
+  background: #ffffff;
+  color: var(--primary);
+  cursor: pointer;
+}
+.btn-copy-pgn:hover {
+  background: #eef2ff;
+}
+
+
+/* ====== v4.0 Coach, Difficulty, Eval Bar, SAN Log, Dojo Filters & Promotion Picker ====== */
+.dojo-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.dojo-chip {
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.25rem 0.55rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border-color);
+  background: #f8fafc;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.dojo-chip:hover {
+  border-color: var(--primary);
+}
+
+.dojo-chip.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+.coach-setup-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.55rem;
+  border-bottom: 1.5px solid var(--border-color);
+}
+
+.side-toggle-group {
+  display: inline-flex;
+  background: #f1f5f9;
+  border-radius: 0.65rem;
+  padding: 2px;
+  border: 1px solid var(--border-color);
+}
+
+.side-btn {
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.3rem 0.6rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.side-btn.active {
+  background: #ffffff;
+  color: var(--text-main);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.coach-difficulty-select {
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.32rem 0.5rem;
+  border-radius: 0.6rem;
+  border: 1.5px solid var(--border-color);
+  background: #ffffff;
+  color: var(--text-main);
+  cursor: pointer;
+  flex: 1;
+  min-width: 125px;
+}
+
+.btn-icon-sm {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  font-size: 0.95rem;
+  border-radius: 0.6rem;
+}
+
+.btn-sm {
+  flex: 1;
+  font-size: 0.8rem;
+  padding: 0.42rem 0.4rem;
+}
+
+.coach-eval-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.coach-eval-bar-track {
+  flex: 1;
+  height: 10px;
+  background: #1e293b;
+  border-radius: 9999px;
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+}
+
+.coach-eval-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f8fafc, #e2e8f0);
+  transition: width 0.35s ease;
+}
+
+.coach-eval-score {
+  font-size: 0.78rem;
+  font-weight: 800;
+  min-width: 44px;
+  text-align: right;
+  color: var(--text-main);
+}
+
+.coach-eval-banner.inaccuracy {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1.5px solid #fde68a;
+}
+
+.coach-opp-move-box {
+  background: #f8fafc;
+  border-left: 3px solid #6366f1;
+  border-radius: 0.5rem;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.81rem;
+  color: #334155;
+  line-height: 1.35;
+}
+
+.coach-candidates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.6rem;
+}
+
+.candidate-pill {
+  font-size: 0.76rem;
+  font-weight: 800;
+  background: #ffffff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+  border-radius: 0.5rem;
+  padding: 0.22rem 0.5rem;
+  cursor: pointer;
+}
+
+.candidate-pill:hover {
+  background: #dbeafe;
+}
+
+.coach-move-log-box {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.7rem;
+}
+
+.coach-move-log-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+}
+
+.coach-move-log {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  color: var(--text-main);
+  max-height: 58px;
+  overflow-y: auto;
+  line-height: 1.45;
+}
+
+.promo-modal-card {
+  max-width: 380px;
+  padding: 1.5rem;
+}
+
+.promo-choices-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+}
+
+.promo-choice-btn {
+  background: #f8fafc;
+  border: 2px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 0.65rem 0.35rem;
+  font-size: 2rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.15s ease;
+}
+
+.promo-choice-btn span {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.promo-choice-btn:hover {
+  border-color: var(--primary);
+  background: #eef2ff;
+  transform: translateY(-2px);
 }

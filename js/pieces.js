@@ -1,4 +1,4 @@
-// Chess Pieces SVG definitions and metadata
+// Chess Pieces SVG definitions, FIDE Rules, SAN Notation & Game State Engine
 // Designed for crystal-clear rendering on any display
 
 const PIECE_INFO = {
@@ -76,7 +76,7 @@ const PIECE_INFO = {
   }
 };
 
-// Clean, high-contrast SVG pieces
+// Clean, high-contrast Staunton SVG pieces
 const PIECE_SVGS = {
   P: `<svg class="chess-piece" xmlns="http://www.w3.org/2000/svg" style="color-scheme:light only" width="45" height="45" viewBox="0 0 45 45"><path fill="#fff" stroke="#000" stroke-linecap="round" stroke-width="1.5" d="M22.5 9c-2.21 0-4 1.79-4 4 0 .89.29 1.71.78 2.38C17.33 16.5 16 18.59 16 21c0 2.03.94 3.84 2.41 5.03-3 1.06-7.41 5.55-7.41 13.47h23c0-7.92-4.41-12.41-7.41-13.47 1.47-1.19 2.41-3 2.41-5.03 0-2.41-1.33-4.5-3.28-5.62.49-.67.78-1.49.78-2.38 0-2.21-1.79-4-4-4z"/></svg>`,
 
@@ -113,10 +113,10 @@ const PIECE_SVGS = {
   </svg>`
 };
 
-// Movement Calculation Engine
+// Movement Calculation & FIDE Rules Engine
 const ChessRules = {
-  isWhite: (piece) => piece && piece === piece.toUpperCase() && piece !== '*' && piece !== '#',
-  isBlack: (piece) => piece && piece === piece.toLowerCase() && piece !== '*' && piece !== '#',
+  isWhite: (piece) => !!(piece && piece === piece.toUpperCase() && piece !== '*' && piece !== '#'),
+  isBlack: (piece) => !!(piece && piece === piece.toLowerCase() && piece !== '*' && piece !== '#'),
   getColor: (piece) => {
     if (!piece || piece === '*' || piece === '#') return null;
     return piece === piece.toUpperCase() ? 'w' : 'b';
@@ -124,14 +124,14 @@ const ChessRules = {
 
   getRawMoves(board, r, c, options = {}) {
     const piece = board[r][c];
-    if (!piece) return [];
+    if (!piece || piece === '*' || piece === '#') return [];
     const color = this.getColor(piece);
     const type = piece.toUpperCase();
     const moves = [];
 
     const isInside = (nr, nc) => nr >= 0 && nr < 8 && nc >= 0 && nc < 8;
 
-    // ROOK
+    // ROOK & QUEEN (Orthogonal)
     if (type === 'R' || type === 'Q') {
       const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
       for (const [dr, dc] of dirs) {
@@ -144,7 +144,7 @@ const ChessRules = {
           if (!target || target === '*') {
             moves.push({ r: nr, c: nc, capture: false, star: target === '*' });
           } else {
-            if (this.getColor(target) !== color) {
+            if (target !== '#' && this.getColor(target) !== color) {
               moves.push({ r: nr, c: nc, capture: true });
             }
             break;
@@ -154,7 +154,7 @@ const ChessRules = {
       }
     }
 
-    // BISHOP
+    // BISHOP & QUEEN (Diagonal)
     if (type === 'B' || type === 'Q') {
       const dirs = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
       for (const [dr, dc] of dirs) {
@@ -167,7 +167,7 @@ const ChessRules = {
           if (!target || target === '*') {
             moves.push({ r: nr, c: nc, capture: false, star: target === '*' });
           } else {
-            if (this.getColor(target) !== color) {
+            if (target !== '#' && this.getColor(target) !== color) {
               moves.push({ r: nr, c: nc, capture: true });
             }
             break;
@@ -190,7 +190,7 @@ const ChessRules = {
         const target = board[nr][nc];
         if (!target || target === '*') {
           moves.push({ r: nr, c: nc, capture: false, star: target === '*' });
-        } else if (this.getColor(target) !== color) {
+        } else if (target !== '#' && this.getColor(target) !== color) {
           moves.push({ r: nr, c: nc, capture: true });
         }
       }
@@ -207,7 +207,7 @@ const ChessRules = {
           const target = board[nr][nc];
           if (!target || target === '*') {
             moves.push({ r: nr, c: nc, capture: false, star: target === '*' });
-          } else if (this.getColor(target) !== color) {
+          } else if (target !== '#' && this.getColor(target) !== color) {
             moves.push({ r: nr, c: nc, capture: true });
           }
         }
@@ -216,20 +216,18 @@ const ChessRules = {
       // Castling (if allowed in options)
       if (options.castling && !options.ignoreCastling) {
         if (color === 'w' && r === 7 && c === 4) {
-          // Kingside (O-O)
           if (options.castling.K && !board[7][5] && !board[7][6] && board[7][7] === 'R') {
             if (!this.isSquareAttacked(board, 7, 4, 'b') &&
                 !this.isSquareAttacked(board, 7, 5, 'b') &&
                 !this.isSquareAttacked(board, 7, 6, 'b')) {
-              moves.push({ r: 7, c: 6, castling: 'K' });
+              moves.push({ r: 7, c: 6, capture: false, castling: 'K' });
             }
           }
-          // Queenside (O-O-O)
           if (options.castling.Q && !board[7][3] && !board[7][2] && !board[7][1] && board[7][0] === 'R') {
             if (!this.isSquareAttacked(board, 7, 4, 'b') &&
                 !this.isSquareAttacked(board, 7, 3, 'b') &&
                 !this.isSquareAttacked(board, 7, 2, 'b')) {
-              moves.push({ r: 7, c: 2, castling: 'Q' });
+              moves.push({ r: 7, c: 2, capture: false, castling: 'Q' });
             }
           }
         } else if (color === 'b' && r === 0 && c === 4) {
@@ -237,14 +235,14 @@ const ChessRules = {
             if (!this.isSquareAttacked(board, 0, 4, 'w') &&
                 !this.isSquareAttacked(board, 0, 5, 'w') &&
                 !this.isSquareAttacked(board, 0, 6, 'w')) {
-              moves.push({ r: 0, c: 6, castling: 'k' });
+              moves.push({ r: 0, c: 6, capture: false, castling: 'k' });
             }
           }
           if (options.castling.q && !board[0][3] && !board[0][2] && !board[0][1] && board[0][0] === 'r') {
             if (!this.isSquareAttacked(board, 0, 4, 'w') &&
                 !this.isSquareAttacked(board, 0, 3, 'w') &&
                 !this.isSquareAttacked(board, 0, 2, 'w')) {
-              moves.push({ r: 0, c: 2, castling: 'q' });
+              moves.push({ r: 0, c: 2, capture: false, castling: 'q' });
             }
           }
         }
@@ -256,27 +254,31 @@ const ChessRules = {
       const fwd = color === 'w' ? -1 : 1;
       const startRow = color === 'w' ? 6 : 1;
 
-      // 1 step forward
-      const fwdR = r + fwd;
-      if (isInside(fwdR, c) && (!board[fwdR][c] || board[fwdR][c] === '*')) {
-        moves.push({ r: fwdR, c, capture: false, star: board[fwdR][c] === '*' });
-        // 2 steps forward on first move
-        const fwdR2 = r + fwd * 2;
-        if (r === startRow && !board[fwdR][c] && (!board[fwdR2][c] || board[fwdR2][c] === '*')) {
-          moves.push({ r: fwdR2, c, capture: false, star: board[fwdR2][c] === '*' });
+      if (!options.attacksOnly) {
+        const fwdR = r + fwd;
+        if (isInside(fwdR, c) && (!board[fwdR][c] || board[fwdR][c] === '*')) {
+          moves.push({ r: fwdR, c, capture: false, star: board[fwdR][c] === '*' });
+          const fwdR2 = r + fwd * 2;
+          if (r === startRow && !board[fwdR][c] && (!board[fwdR2][c] || board[fwdR2][c] === '*')) {
+            moves.push({ r: fwdR2, c, capture: false, star: board[fwdR2][c] === '*' });
+          }
         }
       }
 
-      // Diagonal Captures
+      // Diagonal Captures (or attack control checks)
       for (const dc of [-1, 1]) {
         const nr = r + fwd;
         const nc = c + dc;
         if (isInside(nr, nc)) {
-          const target = board[nr][nc];
-          if (target && target !== '*' && this.getColor(target) !== color) {
+          if (options.attacksOnly) {
             moves.push({ r: nr, c: nc, capture: true });
-          } else if (options.enPassant && options.enPassant.r === nr && options.enPassant.c === nc) {
-            moves.push({ r: nr, c: nc, capture: true, enPassant: true });
+          } else {
+            const target = board[nr][nc];
+            if (target && target !== '*' && target !== '#' && this.getColor(target) !== color) {
+              moves.push({ r: nr, c: nc, capture: true });
+            } else if (options.enPassant && options.enPassant.r === nr && options.enPassant.c === nc) {
+              moves.push({ r: nr, c: nc, capture: true, enPassant: true });
+            }
           }
         }
       }
@@ -290,7 +292,7 @@ const ChessRules = {
       for (let c = 0; c < 8; c++) {
         const piece = board[r][c];
         if (piece && this.getColor(piece) === byColor) {
-          const moves = this.getRawMoves(board, r, c, { ignoreCastling: true });
+          const moves = this.getRawMoves(board, r, c, { ignoreCastling: true, attacksOnly: piece.toUpperCase() === 'P' });
           if (moves.some(m => m.r === targetR && m.c === targetC)) {
             return true;
           }
@@ -319,6 +321,92 @@ const ChessRules = {
     return this.isSquareAttacked(board, king.r, king.c, enemyColor);
   },
 
+  // Simulate and apply a move immutably, returning { board, options, captured, promotedTo, castling, enPassant }
+  applyMove(board, from, to, moveData = {}, options = {}) {
+    const nextBoard = board.map(row => [...row]);
+    const nextOptions = {
+      ...options,
+      castling: options && options.castling ? { ...options.castling } : undefined,
+      enPassant: null
+    };
+
+    const piece = nextBoard[from.r][from.c];
+    if (!piece) {
+      return { board: nextBoard, options: nextOptions, captured: null, promotedTo: null, castling: null, enPassant: false };
+    }
+
+    const color = this.getColor(piece);
+    const target = nextBoard[to.r][to.c];
+    let captured = (target && target !== '*' && target !== '#') ? target : null;
+    let castling = (moveData && moveData.castling) || null;
+    let enPassant = !!(moveData && moveData.enPassant);
+    let promotedTo = null;
+
+    if (!castling && (piece === 'K' || piece === 'k') && Math.abs(to.c - from.c) === 2) {
+      castling = color === 'w' ? (to.c === 6 ? 'K' : 'Q') : (to.c === 6 ? 'k' : 'q');
+    }
+
+    if (!enPassant && (piece === 'P' || piece === 'p') && from.c !== to.c && !target &&
+        options && options.enPassant && options.enPassant.r === to.r && options.enPassant.c === to.c) {
+      enPassant = true;
+    }
+
+    nextBoard[to.r][to.c] = piece;
+    nextBoard[from.r][from.c] = null;
+
+    if (castling === 'K') {
+      nextBoard[7][5] = 'R';
+      nextBoard[7][7] = null;
+    } else if (castling === 'Q') {
+      nextBoard[7][3] = 'R';
+      nextBoard[7][0] = null;
+    } else if (castling === 'k') {
+      nextBoard[0][5] = 'r';
+      nextBoard[0][7] = null;
+    } else if (castling === 'q') {
+      nextBoard[0][3] = 'r';
+      nextBoard[0][0] = null;
+    }
+
+    if (enPassant) {
+      const epR = color === 'w' ? to.r + 1 : to.r - 1;
+      captured = nextBoard[epR][to.c] || (color === 'w' ? 'p' : 'P');
+      nextBoard[epR][to.c] = null;
+    }
+
+    if (nextOptions.castling) {
+      if (piece === 'K') {
+        nextOptions.castling.K = false;
+        nextOptions.castling.Q = false;
+      } else if (piece === 'k') {
+        nextOptions.castling.k = false;
+        nextOptions.castling.q = false;
+      }
+      if ((from.r === 7 && from.c === 7) || (to.r === 7 && to.c === 7)) nextOptions.castling.K = false;
+      if ((from.r === 7 && from.c === 0) || (to.r === 7 && to.c === 0)) nextOptions.castling.Q = false;
+      if ((from.r === 0 && from.c === 7) || (to.r === 0 && to.c === 7)) nextOptions.castling.k = false;
+      if ((from.r === 0 && from.c === 0) || (to.r === 0 && to.c === 0)) nextOptions.castling.q = false;
+    }
+
+    if (piece === 'P' && from.r === 6 && to.r === 4) {
+      nextOptions.enPassant = { r: 5, c: from.c };
+    } else if (piece === 'p' && from.r === 1 && to.r === 3) {
+      nextOptions.enPassant = { r: 2, c: from.c };
+    }
+
+    if (piece === 'P' && to.r === 0) {
+      const promo = ((moveData && moveData.promotion) || 'Q').toUpperCase();
+      promotedTo = 'QRBN'.includes(promo) ? promo : 'Q';
+      nextBoard[to.r][to.c] = promotedTo;
+    } else if (piece === 'p' && to.r === 7) {
+      const promo = ((moveData && moveData.promotion) || 'q').toLowerCase();
+      promotedTo = 'qrbn'.includes(promo) ? promo : 'q';
+      nextBoard[to.r][to.c] = promotedTo;
+    }
+
+    return { board: nextBoard, options: nextOptions, captured, promotedTo, castling, enPassant };
+  },
+
   // Filters out moves that leave own king in check (Standard Chess rule)
   getLegalMoves(board, r, c, options = {}) {
     const piece = board[r][c];
@@ -326,27 +414,171 @@ const ChessRules = {
     const color = this.getColor(piece);
     const rawMoves = this.getRawMoves(board, r, c, options);
 
-    // If game mode is puzzle with no King on board, all raw moves are valid
     const king = this.findKing(board, color);
     if (!king) {
       return rawMoves;
     }
 
-    // Otherwise, simulate move and ensure own King is not in check
     return rawMoves.filter(move => {
-      const clone = board.map(row => [...row]);
-      clone[move.r][move.c] = piece;
-      clone[r][c] = null;
-      // Handle en passant simulation
-      if (move.enPassant) {
-        const epR = color === 'w' ? move.r + 1 : move.r - 1;
-        clone[epR][move.c] = null;
-      }
+      const { board: clone } = this.applyMove(board, { r, c }, { r: move.r, c: move.c }, move, options);
       return !this.isCheck(clone, color);
     });
   },
 
-  // Coordinate helpers: (7, 4) -> 'e1'
+  getAllLegalMoves(board, color, options = {}) {
+    const moves = [];
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const piece = board[r][c];
+        if (piece && this.getColor(piece) === color) {
+          const pieceMoves = this.getLegalMoves(board, r, c, options);
+          for (const m of pieceMoves) {
+            moves.push({
+              from: { r, c },
+              to: { r: m.r, c: m.c },
+              piece,
+              capture: !!m.capture,
+              castling: m.castling || null,
+              enPassant: !!m.enPassant
+            });
+          }
+        }
+      }
+    }
+    return moves;
+  },
+
+  // FIDE Insufficient Material check
+  isInsufficientMaterial(board) {
+    const minors = [];
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const p = board[r][c];
+        if (!p) continue;
+        if (p === '*' || p === '#') return false;
+        const t = p.toUpperCase();
+        if (t === 'K') continue;
+        if (t === 'P' || t === 'R' || t === 'Q') return false;
+        minors.push({ piece: p, type: t, sqColor: (r + c) % 2 });
+      }
+    }
+    if (minors.length <= 1) return true;
+    if (minors.length === 2) {
+      const [m1, m2] = minors;
+      if (m1.type === 'B' && m2.type === 'B' &&
+          this.getColor(m1.piece) !== this.getColor(m2.piece) &&
+          m1.sqColor === m2.sqColor) {
+        return true;
+      }
+    }
+    return false;
+  },
+
+  getPositionKey(board, turnColor, options = {}) {
+    const rows = board.map(r => r.map(x => x || '.').join('')).join('/');
+    const c = (options && options.castling) || {};
+    const castlingKey = `${c.K ? 'K' : ''}${c.Q ? 'Q' : ''}${c.k ? 'k' : ''}${c.q ? 'q' : ''}` || '-';
+    let epKey = '-';
+    if (options && options.enPassant) {
+      const ep = options.enPassant;
+      const pawnRow = turnColor === 'w' ? 3 : 4;
+      const friendlyPawn = turnColor === 'w' ? 'P' : 'p';
+      if ((ep.c > 0 && board[pawnRow][ep.c - 1] === friendlyPawn) ||
+          (ep.c < 7 && board[pawnRow][ep.c + 1] === friendlyPawn)) {
+        epKey = this.toAlgebraic(ep.r, ep.c);
+      }
+    }
+    return `${rows} ${turnColor} ${castlingKey} ${epKey}`;
+  },
+
+  getGameStatus(board, turnColor, options = {}, positionCounts = {}, halfMoveClock = 0) {
+    const legalMoves = this.getAllLegalMoves(board, turnColor, options);
+    const inCheck = this.isCheck(board, turnColor);
+
+    if (legalMoves.length === 0) {
+      if (inCheck) {
+        return {
+          over: true,
+          result: turnColor === 'w' ? 'black' : 'white',
+          winner: turnColor === 'w' ? 'b' : 'w',
+          reason: 'checkmate'
+        };
+      }
+      return { over: true, result: 'draw', winner: null, reason: 'stalemate' };
+    }
+
+    if (this.isInsufficientMaterial(board)) {
+      return { over: true, result: 'draw', winner: null, reason: 'insufficient_material' };
+    }
+
+    const posKey = this.getPositionKey(board, turnColor, options);
+    if (positionCounts && (positionCounts[posKey] || 0) >= 3) {
+      return { over: true, result: 'draw', winner: null, reason: 'threefold_repetition' };
+    }
+
+    if (halfMoveClock >= 100) {
+      return { over: true, result: 'draw', winner: null, reason: 'fifty_move_rule' };
+    }
+
+    return { over: false, inCheck, legalMovesCount: legalMoves.length };
+  },
+
+  // Standard Algebraic Notation (e.g., e4, Nf3, Bxc6, O-O, exd5, e8=Q#)
+  toSAN(boardBefore, from, to, moveData = {}, optionsBefore = {}) {
+    const piece = boardBefore[from.r][from.c];
+    if (!piece) return `${this.toAlgebraic(from.r, from.c)}-${this.toAlgebraic(to.r, to.c)}`;
+
+    const color = this.getColor(piece);
+    const oppColor = color === 'w' ? 'b' : 'w';
+    const type = piece.toUpperCase();
+    const sim = this.applyMove(boardBefore, from, to, moveData, optionsBefore);
+
+    let san = '';
+    if (sim.castling === 'K' || sim.castling === 'k') {
+      san = 'O-O';
+    } else if (sim.castling === 'Q' || sim.castling === 'q') {
+      san = 'O-O-O';
+    } else {
+      const destSq = this.toAlgebraic(to.r, to.c);
+      const isCap = !!(sim.captured || (moveData && moveData.capture));
+
+      if (type === 'P') {
+        san = isCap ? `${'abcdefgh'[from.c]}x${destSq}` : destSq;
+        if (sim.promotedTo) {
+          san += `=${sim.promotedTo.toUpperCase()}`;
+        }
+      } else {
+        let disambig = '';
+        const peers = [];
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) {
+            if ((r !== from.r || c !== from.c) && boardBefore[r][c] === piece) {
+              const peerMoves = this.getLegalMoves(boardBefore, r, c, optionsBefore);
+              if (peerMoves.some(m => m.r === to.r && m.c === to.c)) {
+                peers.push({ r, c });
+              }
+            }
+          }
+        }
+        if (peers.length > 0) {
+          const sameFile = peers.some(p => p.c === from.c);
+          const sameRank = peers.some(p => p.r === from.r);
+          if (!sameFile) disambig = 'abcdefgh'[from.c];
+          else if (!sameRank) disambig = `${8 - from.r}`;
+          else disambig = this.toAlgebraic(from.r, from.c);
+        }
+        san = `${type}${disambig}${isCap ? 'x' : ''}${destSq}`;
+      }
+    }
+
+    if (this.findKing(sim.board, oppColor) && this.isCheck(sim.board, oppColor)) {
+      const oppLegal = this.getAllLegalMoves(sim.board, oppColor, sim.options);
+      san += oppLegal.length === 0 ? '#' : '+';
+    }
+
+    return san;
+  },
+
   toAlgebraic(r, c) {
     const files = 'abcdefgh';
     return `${files[c]}${8 - r}`;
